@@ -1,0 +1,39 @@
+---
+title: "Lindsay_LAGOS_Exploration"
+author: "Lindsay Roth"
+date: "11/4/2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+getwd()
+
+library(tidyverse)
+library(lubridate)
+library(LAGOSNE)
+
+LAGOSdata <- lagosne_load()
+
+# Exploring the data types that are available
+LAGOSlocus <- LAGOSdata$locus
+LAGOSstate <- LAGOSdata$state
+LAGOSnutrient <- LAGOSdata$epi_nutr
+LAGOScounty <- LAGOSdata$county
+LAGOSiws <- LAGOSdata$iws
+LAGOSiwslulc <- LAGOSdata$iws.lulc
+LAGOSgeo <- LAGOSdata$lakes.geo
+LAGOSlimno <- LAGOSdata$lakes_limno
+
+
+
+# Tell R to treat lakeid as a factor, not a numeric value
+LAGOSlocus$lagoslakeid <- as.factor(LAGOSlocus$lagoslakeid)
+LAGOSnutrient$lagoslakeid <- as.factor(LAGOSnutrient$lagoslakeid)
+
+```
+
+
