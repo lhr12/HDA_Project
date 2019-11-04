@@ -1,0 +1,90 @@
+---
+title: "Jake_LAGOS_Wrangling"
+author: "Jake Greif"
+date: "11/4/2019"
+output: pdf_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+packages <- c("LAGOSNE","tidyverse","dplyr")
+invisible(lapply(packages, library, character.only = TRUE)) 
+
+# read in LAGOS data
+LAGOSdata <- lagosne_load()
+
+LAGOSlocus <- LAGOSdata$locus
+LAGOSstate <- LAGOSdata$state
+LAGOSnutrient <- LAGOSdata$epi_nutr
+LAGOSgeo <- LAGOSdata$lakes.geo
+LAGOSlimno <- LAGOSdata$lakes_limno
+LAGOSiws <- LAGOSdata$iws
+
+# Join LAGOS data
+LAGOScountylulc <- LAGOSdata$county.lulc
+
+LAGOSiws.lulc <- LAGOSdata$iws.lulc
+
+LAGOSlocus.Ohio <- LAGOSlocus %>% filter(state_zoneid == "State_6")
+
+LAGOSiws.Ohio <- LAGOSlocus.Ohio %>% left_join(LAGOSiws.lulc, by = "lagoslakeid")
+
+LAGOSiws.Ohio <- LAGOSlocus.Ohio %>% left_join(LAGOSiws, by = "lagoslakeid")
+
+# Summarize/find distribution of watershed area
+summary(LAGOSiws.Ohio$iws_ha)
+
+  # Find median of 2nd and 3rd quantiles
+(75.7+13.56)/2 # Median = 44.63
+
+(557.49+75.7)/2 # Median = 316.595
+
+LAGOSiws.median <- LAGOSiws.Ohio %>%
+ filter(iws_ha > 44.63 & iws_ha < 316.595)
+
+# Summarize/find distribution of lake area
+summary(LAGOSiws.median$lake_area_ha)
+
+(4.949+6.972)/2 # Median = 5.9605
+(6.972+12.867)/2 # Median = 9.9195
+
+# Dataset of watersheds with middle 25% of lake area and watershed area
+LAGOSiws.median <- LAGOSiws.Ohio %>%
+ filter(lake_area_ha > 5.9605 & lake_area_ha < 9.9195) %>%
+ filter(iws_ha > 44.63 & iws_ha < 316.595)
+
+# Visualize distribution of lake and watershed areas
+ggplot(LAGOSiws.median, aes(x=lake_area_ha)) + 
+  geom_histogram(bins = 10)
+
+length(which(LAGOSiws.median$lake_area_ha > 5.9605 & LAGOSiws.median$lake_area_ha < 7))
+length(which(LAGOSiws.median$lake_area_ha > 7 & LAGOSiws.median$lake_area_ha < 8))
+length(which(LAGOSiws.median$lake_area_ha > 8 & LAGOSiws.median$lake_area_ha < 9))
+length(which(LAGOSiws.median$lake_area_ha > 9 & LAGOSiws.median$lake_area_ha < 9.9195))
+
+ggplot(LAGOSiws.median, aes(x=iws_ha)) + 
+  geom_histogram(bins = 10)
+
+length(which(LAGOSiws.median$iws_ha > 44.63 & LAGOSiws.median$iws_ha < 120))
+length(which(LAGOSiws.median$iws_ha > 120 & LAGOSiws.median$iws_ha < 185))
+length(which(LAGOSiws.median$iws_ha > 185 & LAGOSiws.median$iws_ha < 260))
+length(which(LAGOSiws.median$iws_ha > 260 & LAGOSiws.median$iws_ha < 316.595))
+
+# All lakes that have an area within 6-8 ha, and a watershed area within 45-120 ha.
+LAGOSiws.median.final <- LAGOSiws.Ohio %>%
+ filter(lake_area_ha > 5.9605 & lake_area_ha < 8) %>%
+ filter(iws_ha > 44.63 & iws_ha < 120)
+
+# All lakes that have an area within 6-10 ha, and a watershed area within 45-120 ha.
+LAGOSiws.median.final2 <- LAGOSiws.Ohio %>%
+ filter(lake_area_ha > 5.9605 & lake_area_ha < 9.9195) %>%
+ filter(iws_ha > 44.63 & iws_ha < 120)
+```
+
+There are 26 lakes with a surface area between 6-7 ha, and 26 between 7-8 ha.
+There are 50 watersheds with an area between 44.63-120 ha.
