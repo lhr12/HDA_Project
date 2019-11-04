@@ -24,14 +24,9 @@ LAGOSdata <- lagosne_load()
 
 # creating specific lagos files
 LAGOSlocus <- LAGOSdata$locus
-LAGOSstate <- LAGOSdata$state
 LAGOSnutrient <- LAGOSdata$epi_nutr
-LAGOScounty <- LAGOSdata$county
-LAGOSiws <- LAGOSdata$iws
 LAGOSiwslulc <- LAGOSdata$iws.lulc
-LAGOSgeo <- LAGOSdata$lakes.geo
-LAGOSlimno <- LAGOSdata$lakes_limno
-LAGOScountylulc <- LAGOSdata$county.lulc
+
 
 
 #filtering just Ohio
@@ -45,8 +40,20 @@ class(LAGOSnutrient$sampledate)
 LAGOSnutrient.skinny <- LAGOSnutrient %>%
   filter(sampledate > "2010-12-31" & sampledate < "2012-01-01")
 
+#creating ohio nutrients
+LAGOSnutrient.Ohio <- left_join(LAGOSlocus.Ohio, LAGOSnutrient.skinny, by = "lagoslakeid")
+
+#making sure class is the same
+class(LAGOSnutrient.Ohio$lagoslakeid)
+LAGOSnutrient.Ohio$lagoslakeid <- as.numeric(LAGOSnutrient.Ohio$lagoslakeid)
+class(LAGOSiwslulc$lagoslakeid)
+LAGOSiwslulc$lagoslakeid <- as.numeric(LAGOSiwslulc$lagoslakeid)
+
+
 #joining with nutrient
-LAGOSiws.nutrient.Ohio <- LAGOSnutrient.skinny %>% left_join(LAGOSiws.Ohio, by = "lagoslakeid")
+LAGOSiws.nutrient.Ohio <-  left_join(LAGOSnutrient.Ohio, LAGOSiwslulc, by = "lagoslakeid")
+
+
 
 #selecting columns we want
 LAGOSiws.Ohio.skinny <- LAGOSiws.nutrient.Ohio %>%
