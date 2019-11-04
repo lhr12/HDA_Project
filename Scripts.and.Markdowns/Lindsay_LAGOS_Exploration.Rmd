@@ -3,6 +3,8 @@ title: "Lindsay_LAGOS_Exploration"
 author: "Lindsay Roth"
 date: "11/4/2019"
 output: pdf_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -12,13 +14,15 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 getwd()
 
+#load packages
 library(tidyverse)
 library(lubridate)
 library(LAGOSNE)
 
+#load LAGOS data
 LAGOSdata <- lagosne_load()
 
-# Exploring the data types that are available
+# creating specific lagos files
 LAGOSlocus <- LAGOSdata$locus
 LAGOSstate <- LAGOSdata$state
 LAGOSnutrient <- LAGOSdata$epi_nutr
@@ -27,13 +31,65 @@ LAGOSiws <- LAGOSdata$iws
 LAGOSiwslulc <- LAGOSdata$iws.lulc
 LAGOSgeo <- LAGOSdata$lakes.geo
 LAGOSlimno <- LAGOSdata$lakes_limno
+LAGOScountylulc <- LAGOSdata$county.lulc
 
 
+#filtering just Ohio
+LAGOSlocus.Ohio <- LAGOSlocus %>% filter(state_zoneid == "State_6")
 
-# Tell R to treat lakeid as a factor, not a numeric value
-LAGOSlocus$lagoslakeid <- as.factor(LAGOSlocus$lagoslakeid)
-LAGOSnutrient$lagoslakeid <- as.factor(LAGOSnutrient$lagoslakeid)
+#joining Ohio locus with iwslulc
+LAGOSiws.Ohio <- LAGOSlocus.Ohio %>% left_join(LAGOSiwslulc, by = "lagoslakeid")
+
+#filter nutrient data to only 2011
+class(LAGOSnutrient$sampledate)
+LAGOSnutrient.skinny <- LAGOSnutrient %>%
+  filter(sampledate > "2010-12-31" & sampledate < "2012-01-01")
+
+#joining with nutrient
+LAGOSiws.nutrient.Ohio <- LAGOSnutrient.skinny %>% left_join(LAGOSiws.Ohio, by = "lagoslakeid")
+
+#selecting columns we want
+LAGOSiws.Ohio.skinny <- LAGOSiws.nutrient.Ohio %>%
+  select(sampledate, chla, dkn, doc, nh4, no2, no2no3, srp, tdn, tdp, 
+         tkn, tn, toc, ton, tp, secchi,lagoslakeid, nhd_lat, 
+        nhd_long, lake_area_ha, lake_perim_meters,
+        iws_zoneid.x, county_zoneid, state_zoneid, elevation_m, 
+         iws_nlcd2011_pct_11, 
+         iws_nlcd2011_pct_21, iws_nlcd2011_pct_22, iws_nlcd2011_pct_23, 
+         iws_nlcd2011_pct_24, iws_nlcd2011_pct_31, iws_nlcd2011_pct_41, 
+         iws_nlcd2011_pct_42, iws_nlcd2011_pct_43, iws_nlcd2011_pct_52, 
+         iws_nlcd2011_pct_71, iws_nlcd2011_pct_81, iws_nlcd2011_pct_82, 
+         iws_nlcd2011_pct_90, iws_nlcd2011_pct_95)
+
+LAGOS.Ohio.processed <- LAGOSiws.Ohio.skinny %>%
+  mutate(iws_pct_1 = iws_nlcd2011_pct_11,
+         iws_pct_2 = iws_nlcd2011_pct_21 + iws_nlcd2011_pct_22 +
+           iws_nlcd2011_pct_23 + iws_nlcd2011_pct_24, 
+         iws_pct_3 = iws_nlcd2011_pct_31,
+         iws_pct_4 = iws_nlcd2011_pct_41 + iws_nlcd2011_pct_42 + 
+           iws_nlcd2011_pct_43,
+         iws_pct_5 = iws_nlcd2011_pct_52,
+         iws_pct_7 = iws_nlcd2011_pct_71,
+         iws_pct_8 = iws_nlcd2011_pct_81 + iws_nlcd2011_pct_82,
+         iws_pct_9 = iws_nlcd2011_pct_90 + iws_nlcd2011_pct_95,
+         pct_total = iws_pct_1 + iws_pct_2 + 
+           iws_pct_3 + iws_pct_4 + iws_pct_5 + iws_pct_7 + 
+           iws_pct_8 + iws_pct_9)
+
+summary(LAGOS.Ohio.processed$pct_total)
+summary(LAGOS.Ohio.processed$iws_pct_1)
+summary(LAGOS.Ohio.processed$iws_pct_2)
+summary(LAGOS.Ohio.processed$iws_pct_3)
+summary(LAGOS.Ohio.processed$iws_pct_4)
+summary(LAGOS.Ohio.processed$iws_pct_5)
+summary(LAGOS.Ohio.processed$iws_pct_7)
+summary(LAGOS.Ohio.processed$iws_pct_8)
+summary(LAGOS.Ohio.processed$iws_pct_9)
 
 ```
 
+
+```{r}
+
+```
 
