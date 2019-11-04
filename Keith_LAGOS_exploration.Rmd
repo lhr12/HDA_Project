@@ -1,6 +1,8 @@
 ---
 title: "Keith_LAGOS_Exploration"
 output: pdf_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -8,8 +10,14 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-```{r }
-read.csv("Z:/HydrologicDataProject2/LAGOS_variables.csv")
+```{r LAGOSNE setup}
+#install.packages("LAGOSNE")
+
+#packages <- c("LAGOSNE")
+#invisible(lapply(packages, library, character.only = TRUE)) 
+
+#lagosne_get()
+
 ```
 
 ```{r}
