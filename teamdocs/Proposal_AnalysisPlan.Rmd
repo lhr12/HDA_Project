@@ -1,0 +1,75 @@
+---
+title: "Proposal and Analysis Plan"
+author: "Keith Bollt, Jake Greif, Felipe Raby-Amadori, Lindsay Roth"
+date: "October 25, 2019"
+output: pdf_document
+geometry: margin=2.54cm
+editor_options: 
+  chunk_output_type: console
+---
+
+## What questions will your team address?
+
+1. What are the predictors of nutrients based on land use in watersheds with similar physical characteristics in the state of Ohio?
+
+2. How do you characterize seasonal variation between the predictors of nutrients?
+
+## What hypotheses will your team address? 
+
+* Hypotheses should relate directly to your questions. Each numbered hypothesis should match up with the corresponding numbered question. 
+* There may be multiple working hypotheses for a single question. If this is the case, note each hypothesis as 1a, 1b. etc.
+
+1a. Higher proportions of natural (forested and grassland) land use will be positively correlated with water quality (indicated by Nitrogen and Phosphorus levels) due to higher rates of nutrient uptake in plants and lower outputs of nutrients in runoff.
+
+1b. Higher proportions of urban and agricultural land use will be negatively correlated with water quality due to higher rates of nutrient runoff.
+
+1c. Higher amounts of atmospheric deposition will be negatively correlated with water quality due to increased precipitation and dryfall into watersheds.
+
+2. Agricultural land use will be a more significant contributor to nutrient loading during fertilization seasons while urban land use will be the significant contributor to nutrient loading during the opposite seasons. 
+
+
+## What dataset(s) will your team analyze?
+LAGOS dataset
+
+
+## How will you set up and manage your project repository? 
+We will create a github project. Each team member will commit often with detailed commit messages.
+
+
+## Create a table of variables you will analyze.
+
+* Column 1: Variable
+-total nitrogen, total phosphorus, iws land use 11-95, atmospheric nitrogen deposition
+* Column 2: Units (if known)
+-
+* Column 3: Dependent (response) or independent (predictor) variable?
+- tn and tp will be response, the others will be predictors
+* Column 4: To which hypothesis(es) does this variable pertain?
+-all of our hypotheses will use these variables, with hypothesis 2 comparing seasons.
+
+```{r ,echo=FALSE}
+Variables.table <- read.csv("./LAGOS_variables_v2.csv")
+library(knitr)
+library(kableExtra)
+kable(Variables.table)
+```
+
+*Note: You may not know all of the individual variables you plan to analyze at this point. It is sufficient to describe what type of variable you anticipate using (e.g., land cover) and decide on specifics later*
+
+## What tasks will your team conduct? 
+
+### Data acquisition
+
+Determine the variables we need to grab from the LAGOS dataset and make dataframes including those variables.
+
+### Data exploration
+
+We will make correlation plots, box/violin plots, qqnorm/qqline to test for normality.
+
+### Data wrangling
+
+We'll create gathered datasets from the greater LAGOS database and filter the rows and columns we need for our analysis.
+
+### Data analysis and visualization
+
+We will run linear models to determine which variables are the most significant predictors of nutrients.  We will visualize our results in maps, scatterplots, tables. 

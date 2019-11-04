@@ -1,0 +1,39 @@
+---
+title: "Task_List"
+author: "Jake Greif"
+date: "10/30/2019"
+output: word_document
+---
+
+## Tasks:
+
+> Make raw LAGOS data files
+> Divide waterheds by land use
+  > Pick a threshold for % of a specific land use
+> Wrangle data
+> Exploratory analysis
+  > box plots
+  > Q-Q plots
+  > shapiro-wilks test
+> Analyze data
+  > correlation plots
+  > linear model
+    > seasonality (Mann-Kendall?)
+    > Parametric or non-parametric depending on exploratory analysis
+  > Multivariate tests
+    > principle component analysis, ANCOVA
+> Visualize results
+  > graphs, maps, etc.
+> Write paper
+> Prepare presentation
+
+Notes:
+-find a way to account for precipitation when looking at seasonality
+-keep in mind regional differences that pop up after 2016 (ohio river basin vs. great lakes)
+-divide watersheds across state by land use (split into categories)
+-multivariate analyses might be necessary
+--prinicple analysis, multiple linear regressions (ANCOVA)
+--ANCOVA falls within glm
+-keep issues of non-normality in mind
+-can split up models by third category to work on issues of normality
+

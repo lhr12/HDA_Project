@@ -1,0 +1,36 @@
+---
+title: "Felipe_LAGOS_Exploration"
+author: "Felipe Raby Amadori"
+date: "10/28/2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+packages <- c("LAGOSNE","tidyverse","dplyr")
+invisible(lapply(packages, library, character.only = TRUE)) 
+
+LAGOSdata <- lagosne_load()
+
+LAGOSlocus <- LAGOSdata$locus
+LAGOSstate <- LAGOSdata$state
+LAGOSnutrient <- LAGOSdata$epi_nutr
+LAGOSgeo <- LAGOSdata$lakes.geo
+
+LAGOScountylulc <- LAGOSdata$county.lulc
+
+LAGOSiws.lulc <- LAGOSdata$iws.lulc
+
+LAGOSlocus.Ohio <- LAGOSlocus %>% filter(state_zoneid == "State_6")
+
+LAGOSiws.Ohio <- LAGOSlocus.Ohio %>% left_join(LAGOSiws.lulc, by = "lagoslakeid")
+
+ggplot(LAGOSiws.Ohio, aes(x=lake_area_ha)) + 
+  geom_histogram()
+
+
+```
+

@@ -1,0 +1,30 @@
+Variable,Units (If Known),Dependent or Independent,What Hypothesis(es)
+tp,µg/L,Dependent,1+2
+tn,µg/L,Dependent,1+2
+No data,Land Use Classification,Independent,1+2
+Open Water,Land Use Classification,Independent,1+2
+"Residential, low intensity",Land Use Classification,Independent,1+2
+"Developed, open space.",Land Use Classification,Independent,1+2
+"Residential, high intensity",Land Use Classification,Independent,1+2
+"Developed, low intensity. ",Land Use Classification,Independent,1+2
+Commercial/industrial/transportation,Land Use Classification,Independent,1+2
+"Developed, medium intensity.",Land Use Classification,Independent,1+2
+"Developed, high Intensity. ",Land Use Classification,Independent,1+2
+Bare rock/sand/clay,Land Use Classification,Independent,1+2
+Quarries/strip mines/gravel pits measured in 1992,Land Use Classification,Independent,1+2
+Transitional (barren) measured in 1992,Land Use Classification,Independent,1+2
+Deciduous forest,Land Use Classification,Independent,1+2
+Evergreen forest,Land Use Classification,Independent,1+2
+Mixed forest,Land Use Classification,Independent,1+2
+Shrubland measured in 1992.,Land Use Classification,Independent,1+2
+Scrub/shrub.,Land Use Classification,Independent,1+2
+Orchards/vineyards/,Land Use Classification,Independent,1+2
+Grasslands/herbaceous,Land Use Classification,Independent,1+2
+Pasture/hay,Land Use Classification,Independent,1+2
+Row crops,Land Use Classification,Independent,1+2
+Small grains measured in 1992.,Land Use Classification,Independent,1+2
+ Urban/recreational grasses measured in 1992.,Land Use Classification,Independent,1+2
+"Woody wetlands. Note, this variable not calculated in 1992",Land Use Classification,Independent,1+2
+Woody wetlands measured in 1992.,Land Use Classification,Independent,1+2
+Emergent herbaceous wetlands measured in 1992. ,Land Use Classification,Independent,1+2
+Emergent herbaceous wetlands.,Land Use Classification,Independent,1+2

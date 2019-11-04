@@ -1,0 +1,14 @@
+Variable,Units,Dependent_or_Independent,What_Hypotheses
+tp,µg/L,Dependent,1+2
+tn,µg/L,Dependent,1+2
+Open Water,Land Use Classification,Independent,1+2
+Urban,Land Use Classification,Independent,1+2
+Bare rock/sand/clay,Land Use Classification,Independent,1+2
+Forest,Land Use Classification,Independent,1+2
+Scrub/shrub.,Land Use Classification,Independent,1+2
+Orchards/vineyards/,Land Use Classification,Independent,1+2
+Grasslands/herbaceous,Land Use Classification,Independent,1+2
+Pasture/hay,Land Use Classification,Independent,1+2
+Row crops,Land Use Classification,Independent,1+2
+Wetlands,Land Use Classification,Independent,1+2
+Season,Categorical,Independent,2
