@@ -1,0 +1,19 @@
+---
+title: "Lindsay_LAGOS_Exploration"
+author: "Lindsay Roth"
+date: "11/4/2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(LAGOSNE)
+
+
+
+```
+
+
