@@ -82,17 +82,17 @@ Emergent herbaceous wetlands
 We did some simplification of land use. For example, we combined several types of developed land into an "Urban" land use cover. All of these variables are independent variables in our study and will be used to test research questions one and two.
 
 Open Water
-Urban
-Bare rock/sand/clay
-Forest
-Scrub/shrub
+Urban: Contains "Residential, low intensity", "Developed, open space.", "Residential, high intensity", "Developed, low intensity. ", Commercial/industrial/transportation, "Developed, medium intensity.","Developed, high Intensity. "
+Bare rock/sand/clay: Contains Bare rock/sand/clay, Quarries/strip mines/gravel pits measured in 1992, Transitional (barren) measured in 1992
+Forest: Contains Deciduous forest, Evergreen forest, Mixed forest
+Scrub/shrub: Contains Shrubland measured in 1992, Scrub/shrub
 Orchards/vineyards
 Grasslands/herbaceous
 Pasture/hay
-Row crops
-Wetlands
+Row crops: Contains Row crops, Small grains measured in 1992, Urban/recreational grasses measured in 1992
+Wetlands: Contains "Woody wetlands. Note, this variable not calculated in 1992", Woody wetlands measured in 1992, Emergent herbaceous wetlands measured in 1992, Emergent herbaceous wetlands
 
-In addition, our master raw dataset contains the following two dependent variables:
+In addition, our master raw dataset contains the following two independent variables:
 
 EPA Level III Ecoregion: From the Ohio Level III Ecoregion shapefile. This will be used to test questions one and two.
 Season of data collection: Winter (December-February), Spring (March-May), Summer (June-August), Fall (September-November). This variable will be used to test research question two.

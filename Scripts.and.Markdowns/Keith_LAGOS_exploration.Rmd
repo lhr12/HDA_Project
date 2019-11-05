@@ -16,7 +16,9 @@ knitr::opts_chunk$set(echo = TRUE)
 #packages <- c("LAGOSNE")
 #invisible(lapply(packages, library, character.only = TRUE)) 
 
-#lagosne_get()
+lagosne_get()
+
+LAGOSdata <- lagosne_load()
 
 ```
 
