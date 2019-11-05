@@ -26,20 +26,63 @@ LAGOSdata <- lagosne_load()
 LAGOSlocus <- LAGOSdata$locus
 LAGOSnutrient <- LAGOSdata$epi_nutr
 LAGOSiwslulc <- LAGOSdata$iws.lulc
+```
 
 
+```{r}
+###### Locus and IWS.lulc
 
-#filtering just Ohio
+##filtering Locus for Ohio
 LAGOSlocus.Ohio <- LAGOSlocus %>% filter(state_zoneid == "State_6")
 
-#joining Ohio locus with iwslulc
+##joining Ohio locus with iwslulc
 LAGOSiws.Ohio <- LAGOSlocus.Ohio %>% left_join(LAGOSiwslulc, by = "lagoslakeid")
 
-#filter nutrient data to only 2011
-class(LAGOSnutrient$sampledate)
-LAGOSnutrient.skinny <- LAGOSnutrient %>%
-  filter(sampledate > "2010-12-31" & sampledate < "2012-01-01")
+##selecting 2006 lulc
+LAGOSiws2006.Ohio <- LAGOSiws.Ohio %>% select(-c("iws_nlcd1992_ha_0":"iws_nlcd2001_pct_95"), -c("iws_nlcd2011_ha_0":"iws_nlcd2011_pct_95"))
+```
 
+
+```{r}
+###### Nutrient
+
+LAGOSlocus.skinny <- LAGOSlocus %>% select("lagoslakeid", "state_zoneid")
+
+colnames(LAGOSlocus)
+
+#adding state info and filter nutrient data to only 2006
+LAGOSnutrient2006.skinny <- LAGOSnutrient %>%
+  left_join(LAGOSlocus.skinny, by = "lagoslakeid") %>%
+  filter(state_zoneid == "State_6") %>%
+  filter(sampledate > "2005-12-31" & sampledate < "2007-01-01")
+```
+
+
+```{r}
+##Joining iws.lulc and nutrient
+LAGOSiws.nutrient.2006.Ohio <-  left_join(LAGOSnutrient2006.skinny, LAGOSiws2006.Ohio, by = c("lagoslakeid", "state_zoneid"))
+```
+
+
+
+
+```{r}
+# Looking at the data
+
+ggplot(LAGOSiws.nutrient.2006.Ohio, aes(x = sampledate, y = tn, color = lagoslakeid)) +
+  scale_color_viridis_c(option = "plasma") +
+geom_line() 
+
+ggplot(LAGOSiws.nutrient.2006.Ohio, aes(x = sampledate, y = tp, color = lagoslakeid)) +
+  scale_color_viridis_c(option = "plasma") +
+geom_line() 
+
+```
+
+
+FRA: I didn't look at anything from this point
+
+```{r}
 #creating ohio nutrients
 LAGOSnutrient.Ohio <- left_join(LAGOSlocus.Ohio, LAGOSnutrient.skinny, by = "lagoslakeid")
 
@@ -52,9 +95,10 @@ LAGOSiwslulc$lagoslakeid <- as.numeric(LAGOSiwslulc$lagoslakeid)
 
 #joining with nutrient
 LAGOSiws.nutrient.Ohio <-  left_join(LAGOSnutrient.Ohio, LAGOSiwslulc, by = "lagoslakeid")
+```
 
 
-
+```{r}
 #selecting columns we want
 LAGOSiws.Ohio.skinny <- LAGOSiws.nutrient.Ohio %>%
   select(sampledate, chla, dkn, doc, nh4, no2, no2no3, srp, tdn, tdp, 
