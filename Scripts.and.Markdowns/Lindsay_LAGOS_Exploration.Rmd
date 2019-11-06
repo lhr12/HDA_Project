@@ -23,6 +23,7 @@ library(LAGOSNE)
 LAGOSdata <- lagosne_load()
 
 # creating specific lagos files
+LAGOSstate <- LAGOSdata$state
 LAGOSlocus <- LAGOSdata$locus
 LAGOSnutrient <- LAGOSdata$epi_nutr
 LAGOSiwslulc <- LAGOSdata$iws.lulc
@@ -32,14 +33,14 @@ LAGOSiwslulc <- LAGOSdata$iws.lulc
 ```{r}
 ###### Locus and IWS.lulc
 
-##filtering Locus for Ohio
-LAGOSlocus.Ohio <- LAGOSlocus %>% filter(state_zoneid == "State_6")
+##filtering Locus for MN
+LAGOSlocus.MN <- LAGOSlocus %>% filter(state_zoneid == "State_14")
 
-##joining Ohio locus with iwslulc
-LAGOSiws.Ohio <- LAGOSlocus.Ohio %>% left_join(LAGOSiwslulc, by = "lagoslakeid")
+##joining MN locus with iwslulc
+LAGOSiws.MN <- LAGOSlocus.MN %>% left_join(LAGOSiwslulc, by = "lagoslakeid")
 
 ##selecting 2006 lulc
-LAGOSiws2006.Ohio <- LAGOSiws.Ohio %>% select(-c("iws_nlcd1992_ha_0":"iws_nlcd2001_pct_95"), -c("iws_nlcd2011_ha_0":"iws_nlcd2011_pct_95"))
+LAGOSiws2006.MN <- LAGOSiws.MN %>% select(-c("iws_nlcd1992_ha_0":"iws_nlcd2001_pct_95"), -c("iws_nlcd2011_ha_0":"iws_nlcd2011_pct_95"))
 ```
 
 
@@ -53,14 +54,14 @@ colnames(LAGOSlocus)
 #adding state info and filter nutrient data to only 2006
 LAGOSnutrient2006.skinny <- LAGOSnutrient %>%
   left_join(LAGOSlocus.skinny, by = "lagoslakeid") %>%
-  filter(state_zoneid == "State_6") %>%
+  filter(state_zoneid == "State_14") %>%
   filter(sampledate > "2005-12-31" & sampledate < "2007-01-01")
 ```
 
 
 ```{r}
 ##Joining iws.lulc and nutrient
-LAGOSiws.nutrient.2006.Ohio <-  left_join(LAGOSnutrient2006.skinny, LAGOSiws2006.Ohio, by = c("lagoslakeid", "state_zoneid"))
+LAGOSiws.nutrient.2006.MN <-  left_join(LAGOSnutrient2006.skinny, LAGOSiws2006.MN, by = c("lagoslakeid", "state_zoneid"))
 ```
 
 
@@ -69,11 +70,11 @@ LAGOSiws.nutrient.2006.Ohio <-  left_join(LAGOSnutrient2006.skinny, LAGOSiws2006
 ```{r}
 # Looking at the data
 
-ggplot(LAGOSiws.nutrient.2006.Ohio, aes(x = sampledate, y = tn, color = lagoslakeid)) +
+ggplot(LAGOSiws.nutrient.2006.MN, aes(x = sampledate, y = tn, color = lagoslakeid)) +
   scale_color_viridis_c(option = "plasma") +
 geom_line() 
 
-ggplot(LAGOSiws.nutrient.2006.Ohio, aes(x = sampledate, y = tp, color = lagoslakeid)) +
+ggplot(LAGOSiws.nutrient.2006.MN, aes(x = sampledate, y = tp, color = lagoslakeid)) +
   scale_color_viridis_c(option = "plasma") +
 geom_line() 
 
