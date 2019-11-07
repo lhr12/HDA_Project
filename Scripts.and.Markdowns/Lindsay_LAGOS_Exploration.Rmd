@@ -197,7 +197,7 @@ geom_line()
 ```
 
 
-```{r Ohio_lulc_Summary_columns}
+```{r Create_Full_df}
 
 LAGOS.MN.processed <- LAGOSiws.nutrient.2011.MN %>%
   mutate(Urban.pct = iws_nlcd2011_pct_11,
