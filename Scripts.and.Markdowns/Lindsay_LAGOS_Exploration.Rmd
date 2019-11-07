@@ -133,7 +133,7 @@ LAGOSiws.MN <- LAGOSlocus.MN %>% left_join(LAGOSiwslulc, by = "lagoslakeid")
 ##selecting 2011 lulc
 LAGOSiws2011.MN <- LAGOSiws.MN %>% 
   select(lagoslakeid,state_zoneid,
-         iws_nlcd2001_pct_11, iws_nlcd2011_pct_21, iws_nlcd2011_pct_22,
+         iws_nlcd2011_pct_11, iws_nlcd2011_pct_21, iws_nlcd2011_pct_22,
          iws_nlcd2011_pct_23, iws_nlcd2011_pct_24, iws_nlcd2011_pct_31,
          iws_nlcd2011_pct_41, iws_nlcd2011_pct_42, iws_nlcd2011_pct_43,
          iws_nlcd2011_pct_52, iws_nlcd2011_pct_71, iws_nlcd2011_pct_81,
@@ -155,15 +155,14 @@ sapply(LAGOSnutrient.MN.skinny, summary)
 ```
 
 
-```{r, Final_MN_df}
+```{r, Joined_MN_df}
 ##Joining iws.lulc and nutrient
 LAGOSiws.nutrient.2011.MN <-  left_join(LAGOSnutrient.MN.skinny, LAGOSiws2011.MN, by = c("lagoslakeid")) 
 
 LAGOSiws.nutrient.2011.MN <- LAGOSiws.nutrient.2011.MN %>%
   select(lagoslakeid, nhd_lat, nhd_long, lake_area_ha, lake_perim_meters,
-         iws_zoneid, state_zoneid.x, elevation_m, sampledate, chla, dkn, 
-         doc, nh4, no2, no2no3, srp, tdn, tdp, tn, toc, ton, tp, secchi, 
-         iws_nlcd2001_pct_11, iws_nlcd2011_pct_21, iws_nlcd2011_pct_22, 
+         iws_zoneid, state_zoneid.x, elevation_m, sampledate, chla,secchi, 
+         iws_nlcd2011_pct_11, iws_nlcd2011_pct_21, iws_nlcd2011_pct_22, 
          iws_nlcd2011_pct_23, iws_nlcd2011_pct_24, iws_nlcd2011_pct_31, 
          iws_nlcd2011_pct_41, iws_nlcd2011_pct_42, iws_nlcd2011_pct_43, 
          iws_nlcd2011_pct_52, iws_nlcd2011_pct_71, iws_nlcd2011_pct_81, 
@@ -200,20 +199,24 @@ geom_line()
 
 ```{r Ohio_lulc_Summary_columns}
 
-LAGOS.Ohio.processed <- LAGOSiws.Ohio.skinny %>%
-  mutate(iws_pct_1 = iws_nlcd2011_pct_11,
-         iws_pct_2 = iws_nlcd2011_pct_21 + iws_nlcd2011_pct_22 +
+LAGOS.MN.processed <- LAGOSiws.nutrient.2011.MN %>%
+  mutate(Urban.pct = iws_nlcd2011_pct_11,
+         Ag.pct = iws_nlcd2011_pct_21 + iws_nlcd2011_pct_22 +
            iws_nlcd2011_pct_23 + iws_nlcd2011_pct_24, 
-         iws_pct_3 = iws_nlcd2011_pct_31,
-         iws_pct_4 = iws_nlcd2011_pct_41 + iws_nlcd2011_pct_42 + 
-           iws_nlcd2011_pct_43,
-         iws_pct_5 = iws_nlcd2011_pct_52,
-         iws_pct_7 = iws_nlcd2011_pct_71,
-         iws_pct_8 = iws_nlcd2011_pct_81 + iws_nlcd2011_pct_82,
-         iws_pct_9 = iws_nlcd2011_pct_90 + iws_nlcd2011_pct_95,
-         pct_total = iws_pct_1 + iws_pct_2 + 
-           iws_pct_3 + iws_pct_4 + iws_pct_5 + iws_pct_7 + 
-           iws_pct_8 + iws_pct_9)
+         Natural.pct = iws_nlcd2011_pct_31 + iws_nlcd2011_pct_41 + 
+           iws_nlcd2011_pct_42 + iws_nlcd2011_pct_43 + 
+           iws_nlcd2011_pct_71 + iws_nlcd2011_pct_81 + 
+           iws_nlcd2011_pct_82) %>%
+  select(-c(iws_nlcd2011_pct_11, iws_nlcd2011_pct_21, iws_nlcd2011_pct_22, 
+            iws_nlcd2011_pct_23, iws_nlcd2011_pct_24, iws_nlcd2011_pct_31, 
+            iws_nlcd2011_pct_41, iws_nlcd2011_pct_42, iws_nlcd2011_pct_43, 
+            iws_nlcd2011_pct_52, iws_nlcd2011_pct_71, iws_nlcd2011_pct_81, 
+            iws_nlcd2011_pct_82, iws_nlcd2011_pct_90, iws_nlcd2011_pct_95)) %>%
+  na.omit()
 
+sapply(LAGOS.MN.processed, summary)
+
+write.csv(x =  LAGOS.MN.processed, row.names = FALSE,
+          file =  "./data/raw/LAGOS_MN_Full.csv")
 
 ```
