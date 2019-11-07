@@ -220,3 +220,42 @@ write.csv(x =  LAGOS.MN.processed, row.names = FALSE,
           file =  "./data/raw/LAGOS_MN_Full.csv")
 
 ```
+
+
+```{r Visualize_Data_Round_2}
+ggplot(LAGOS.MN.processed, aes(x = sampledate, y = secchi, color = lagoslakeid)) +
+  scale_color_viridis_c(option = "plasma") +
+geom_line() 
+
+ggplot(LAGOS.MN.processed, aes(x = sampledate, y = chla, color = lagoslakeid)) +
+  scale_color_viridis_c(option = "plasma") +
+geom_line() 
+
+ggplot(LAGOS.MN.processed, aes(x = secchi, y = Urban.pct, color = as.numeric(sampledate))) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+ggplot(LAGOS.MN.processed, aes(x = secchi, y = Ag.pct, color = as.numeric(sampledate))) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+ggplot(LAGOS.MN.processed, aes(x = secchi, y = Natural.pct, color = as.numeric(sampledate))) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+ggplot(LAGOS.MN.processed, aes(x = chla, y = Urban.pct, color = as.numeric(sampledate))) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+ggplot(LAGOS.MN.processed, aes(x = chla, y = Ag.pct, color = as.numeric(sampledate))) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+ggplot(LAGOS.MN.processed, aes(x = chla, y = Natural.pct, color = as.numeric(sampledate))) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+
+
+```
+
