@@ -29,6 +29,7 @@ LAGOSstate <- LAGOSdata$state
 LAGOSlocus <- LAGOSdata$locus
 LAGOSnutrient <- LAGOSdata$epi_nutr
 LAGOSiwslulc <- LAGOSdata$iws.lulc
+LAGOSiws <- LAGOSdata$iws
 
 
 ```
@@ -127,22 +128,23 @@ LAGOSnutrient.VT <- LAGOSlocus.VT %>%
 
 
 ```{r, Joining_MN_Nutrient_lulc}
+#getting the area of the iws
+LAGOSiws.area <- select(LAGOSiws, "lagoslakeid", "iws_ha")
 
-#joining MN locus with iwslulc
-LAGOSiws.MN <- LAGOSlocus.MN %>% left_join(LAGOSiwslulc, by = "lagoslakeid")
 
+#joining MN locus with iwslulc and adding the area of IWS
+LAGOSiws.MN <- LAGOSlocus.MN %>% left_join(LAGOSiwslulc, by = "lagoslakeid") %>% left_join(LAGOSiws.area, by = "lagoslakeid")
 
 ##selecting 2011 lulc
 LAGOSiws2011.MN <- LAGOSiws.MN %>% 
-  select(lagoslakeid,state_zoneid,
+  select(lagoslakeid,state_zoneid, lake_area_ha, iws_ha,
          iws_nlcd2011_pct_11, iws_nlcd2011_pct_21, iws_nlcd2011_pct_22,
          iws_nlcd2011_pct_23, iws_nlcd2011_pct_24, iws_nlcd2011_pct_31,
          iws_nlcd2011_pct_41, iws_nlcd2011_pct_42, iws_nlcd2011_pct_43,
          iws_nlcd2011_pct_52, iws_nlcd2011_pct_71, iws_nlcd2011_pct_81,
          iws_nlcd2011_pct_82, iws_nlcd2011_pct_90, iws_nlcd2011_pct_95)
 
-#1 = urban, 2 = ag, 3 = rangeland, 4 = forest, 5 = water
-#6 = wetland, 7 = barren land, 8 = tundra, 9 = snow/ice
+LAGOSiws2011.MN <- mutate(LAGOSiws2011.MN, LakeIWS.Ratio = lake_area_ha/iws_ha)
 
 
 ```
