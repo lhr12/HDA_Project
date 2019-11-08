@@ -11,136 +11,704 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r}
+```{r Setup_Load_Data}
 getwd()
 
 #load packages
 library(tidyverse)
 library(lubridate)
 library(LAGOSNE)
+library(sf)
+library(maps)
 
 #load LAGOS data
 LAGOSdata <- lagosne_load()
 
 # creating specific lagos files
+LAGOSstate <- LAGOSdata$state
 LAGOSlocus <- LAGOSdata$locus
 LAGOSnutrient <- LAGOSdata$epi_nutr
 LAGOSiwslulc <- LAGOSdata$iws.lulc
+
+
 ```
 
 
-```{r}
-###### Locus and IWS.lulc
+```{r, Checking_Each_State_for_Nutrient_Data}
+#checking each state for nutrient data
 
-##filtering Locus for Ohio
-LAGOSlocus.Ohio <- LAGOSlocus %>% filter(state_zoneid == "State_6")
+#State 1: Maine
+LAGOSlocus.Maine <- LAGOSlocus %>% filter(state_zoneid == "State_1")
+LAGOSnutrient.Maine <- LAGOSlocus.Maine %>%
+  left_join(LAGOSnutrient, by = "lagoslakeid") 
+sapply(LAGOSnutrient.Maine, summary)
 
-##joining Ohio locus with iwslulc
-LAGOSiws.Ohio <- LAGOSlocus.Ohio %>% left_join(LAGOSiwslulc, by = "lagoslakeid")
+#State 2: Mass
+LAGOSlocus.Mass <- LAGOSlocus %>% filter(state_zoneid == "State_2")
+LAGOSnutrient.Mass <- LAGOSlocus.Mass %>%
+  left_join(LAGOSnutrient, by = "lagoslakeid") 
 
-##selecting 2006 lulc
-LAGOSiws2006.Ohio <- LAGOSiws.Ohio %>% select(-c("iws_nlcd1992_ha_0":"iws_nlcd2001_pct_95"), -c("iws_nlcd2011_ha_0":"iws_nlcd2011_pct_95"))
+#State 3: Michigan
+LAGOSlocus.Mich <- LAGOSlocus %>% filter (state_zoneid == "State_3")
+LAGOSnutrient.Mich <- LAGOSlocus.Mich %>%
+  left_join(LAGOSnutrient, by = "lagoslakeid") 
+
+#State 4: New Jersey
+LAGOSlocus.NJ <- LAGOSlocus %>% filter (state_zoneid == "State_4")
+LAGOSnutrient.NJ <- LAGOSlocus.NJ %>%
+  left_join(LAGOSnutrient, by = "lagoslakeid") 
+
+#State 5: New York
+LAGOSlocus.NY <- LAGOSlocus %>% filter (state_zoneid == "State_5")
+LAGOSnutrient.NY <- LAGOSlocus.NY %>%
+  left_join(LAGOSnutrient, by = "lagoslakeid") 
+
+#State 6: Ohio
+LAGOSlocus.Ohio <- LAGOSlocus %>% filter (state_zoneid == "State_6")
+LAGOSnutrient.Ohio <- LAGOSlocus.Ohio %>%
+  left_join(LAGOSnutrient, by = "lagoslakeid") 
+
+#State 7: Pennsylvania
+LAGOSlocus.Penn <- LAGOSlocus %>% filter (state_zoneid == "State_7")
+LAGOSnutrient.Penn <- LAGOSlocus.Penn %>%
+  left_join(LAGOSnutrient, by = "lagoslakeid") 
+
+#State 8: Rhode Island
+LAGOSlocus.RI <- LAGOSlocus %>% filter (state_zoneid == "State_8")
+LAGOSnutrient.RI <- LAGOSlocus.RI %>%
+  left_join(LAGOSnutrient, by = "lagoslakeid") 
+
+#State 9: Wisconsin
+LAGOSlocus.WI <- LAGOSlocus %>% filter (state_zoneid == "State_9")
+LAGOSnutrient.WI <- LAGOSlocus.WI %>%
+  left_join(LAGOSnutrient, by = "lagoslakeid") 
+
+#State 10: Connecticut
+LAGOSlocus.CT <- LAGOSlocus %>% filter (state_zoneid == "State_10")
+LAGOSnutrient.CT <- LAGOSlocus.CT %>%
+  left_join(LAGOSnutrient, by = "lagoslakeid") 
+
+#State 11: Illinois
+LAGOSlocus.IL <- LAGOSlocus %>% filter (state_zoneid == "State_11")
+LAGOSnutrient.IL <- LAGOSlocus.IL %>%
+  left_join(LAGOSnutrient, by = "lagoslakeid") 
+
+#State 12: Indiana
+LAGOSlocus.Indi <- LAGOSlocus %>% filter (state_zoneid == "State_12")
+LAGOSnutrient.Indi <- LAGOSlocus.Indi %>%
+  left_join(LAGOSnutrient, by = "lagoslakeid") 
+
+#State 13: Iowa
+LAGOSlocus.Iowa <- LAGOSlocus %>% filter (state_zoneid == "State_13")
+LAGOSnutrient.Iowa <- LAGOSlocus.Iowa %>%
+  left_join(LAGOSnutrient, by = "lagoslakeid")
+
+#State 14: Minnesota
+LAGOSlocus.MN <- LAGOSlocus %>% filter (state_zoneid == "State_14")
+LAGOSnutrient.MN <- LAGOSlocus.MN %>%
+  left_join(LAGOSnutrient, by = "lagoslakeid") 
+
+#State 15: Missouri
+LAGOSlocus.Mis <- LAGOSlocus %>% filter (state_zoneid == "State_15")
+LAGOSnutrient.Mis <- LAGOSlocus.Mis %>%
+  left_join(LAGOSnutrient, by = "lagoslakeid") 
+
+#State 16: New Hampshire
+LAGOSlocus.NH <- LAGOSlocus %>% filter (state_zoneid == "State_16")
+LAGOSnutrient.NH <- LAGOSlocus.NH %>%
+  left_join(LAGOSnutrient, by = "lagoslakeid") 
+
+#State 17: Vermont
+LAGOSlocus.VT <- LAGOSlocus %>% filter (state_zoneid == "State_17")
+LAGOSnutrient.VT <- LAGOSlocus.VT %>%
+  left_join(LAGOSnutrient, by = "lagoslakeid") 
+
 ```
 
 
-```{r}
-###### Nutrient
+```{r, Joining_MN_Nutrient_lulc}
 
-LAGOSlocus.skinny <- LAGOSlocus %>% select("lagoslakeid", "state_zoneid")
+#joining MN locus with iwslulc
+LAGOSiws.MN <- LAGOSlocus.MN %>% left_join(LAGOSiwslulc, by = "lagoslakeid")
 
-colnames(LAGOSlocus)
 
-#adding state info and filter nutrient data to only 2006
-LAGOSnutrient2006.skinny <- LAGOSnutrient %>%
-  left_join(LAGOSlocus.skinny, by = "lagoslakeid") %>%
-  filter(state_zoneid == "State_6") %>%
-  filter(sampledate > "2005-12-31" & sampledate < "2007-01-01")
+##selecting 2011 lulc
+LAGOSiws2011.MN <- LAGOSiws.MN %>% 
+  select(lagoslakeid,state_zoneid,
+         iws_nlcd2011_pct_11, iws_nlcd2011_pct_21, iws_nlcd2011_pct_22,
+         iws_nlcd2011_pct_23, iws_nlcd2011_pct_24, iws_nlcd2011_pct_31,
+         iws_nlcd2011_pct_41, iws_nlcd2011_pct_42, iws_nlcd2011_pct_43,
+         iws_nlcd2011_pct_52, iws_nlcd2011_pct_71, iws_nlcd2011_pct_81,
+         iws_nlcd2011_pct_82, iws_nlcd2011_pct_90, iws_nlcd2011_pct_95)
+
+#1 = urban, 2 = ag, 3 = rangeland, 4 = forest, 5 = water
+#6 = wetland, 7 = barren land, 8 = tundra, 9 = snow/ice
+
+
 ```
 
 
-```{r}
+```{r, Filter_Nutrient_Dates}
+#filtering state nutrient data
+LAGOSnutrient.MN.skinny <- LAGOSnutrient.MN %>%
+  filter(sampledate > "2009-12-31" & sampledate < "2013-01-01")
+
+sapply(LAGOSnutrient.MN.skinny, summary)
+```
+
+
+```{r, Joined_MN_df}
 ##Joining iws.lulc and nutrient
-LAGOSiws.nutrient.2006.Ohio <-  left_join(LAGOSnutrient2006.skinny, LAGOSiws2006.Ohio, by = c("lagoslakeid", "state_zoneid"))
+LAGOSiws.nutrient.2011.MN <-  left_join(LAGOSnutrient.MN.skinny, LAGOSiws2011.MN, by = c("lagoslakeid")) 
+
+LAGOSiws.nutrient.2011.MN <- LAGOSiws.nutrient.2011.MN %>%
+  select(lagoslakeid, nhd_lat, nhd_long, lake_area_ha, lake_perim_meters,
+         iws_zoneid, state_zoneid.x, elevation_m, sampledate, chla,secchi, 
+         iws_nlcd2011_pct_11, iws_nlcd2011_pct_21, iws_nlcd2011_pct_22, 
+         iws_nlcd2011_pct_23, iws_nlcd2011_pct_24, iws_nlcd2011_pct_31, 
+         iws_nlcd2011_pct_41, iws_nlcd2011_pct_42, iws_nlcd2011_pct_43, 
+         iws_nlcd2011_pct_52, iws_nlcd2011_pct_71, iws_nlcd2011_pct_81, 
+         iws_nlcd2011_pct_82, iws_nlcd2011_pct_90, iws_nlcd2011_pct_95)
+
+sapply(LAGOSiws.nutrient.2011.MN, summary)
+
+
+
 ```
 
 
-
-
-```{r}
+```{r, Visualize_data}
 # Looking at the data
 
-ggplot(LAGOSiws.nutrient.2006.Ohio, aes(x = sampledate, y = tn, color = lagoslakeid)) +
+ggplot(LAGOSiws.nutrient.2011.MN, aes(x = sampledate, y = tn, color = lagoslakeid)) +
   scale_color_viridis_c(option = "plasma") +
 geom_line() 
 
-ggplot(LAGOSiws.nutrient.2006.Ohio, aes(x = sampledate, y = tp, color = lagoslakeid)) +
+ggplot(LAGOSiws.nutrient.2011.MN, aes(x = sampledate, y = tp, color = lagoslakeid)) +
+  scale_color_viridis_c(option = "plasma") +
+geom_line() 
+
+ggplot(LAGOSiws.nutrient.2011.MN, aes(x = sampledate, y = secchi, color = lagoslakeid)) +
+  scale_color_viridis_c(option = "plasma") +
+geom_line() 
+
+ggplot(LAGOSiws.nutrient.2011.MN, aes(x = sampledate, y = chla, color = lagoslakeid)) +
   scale_color_viridis_c(option = "plasma") +
 geom_line() 
 
 ```
 
 
-#########################  FRA: I didn't look at anything from this point ##########################################
+```{r Create_Full_df}
 
-```{r}
-#creating ohio nutrients
-LAGOSnutrient.Ohio <- left_join(LAGOSlocus.Ohio, LAGOSnutrient.skinny, by = "lagoslakeid")
-
-#making sure class is the same
-class(LAGOSnutrient.Ohio$lagoslakeid)
-LAGOSnutrient.Ohio$lagoslakeid <- as.numeric(LAGOSnutrient.Ohio$lagoslakeid)
-class(LAGOSiwslulc$lagoslakeid)
-LAGOSiwslulc$lagoslakeid <- as.numeric(LAGOSiwslulc$lagoslakeid)
-
-
-#joining with nutrient
-LAGOSiws.nutrient.Ohio <-  left_join(LAGOSnutrient.Ohio, LAGOSiwslulc, by = "lagoslakeid")
-```
-
-
-```{r}
-#selecting columns we want
-LAGOSiws.Ohio.skinny <- LAGOSiws.nutrient.Ohio %>%
-  select(sampledate, chla, dkn, doc, nh4, no2, no2no3, srp, tdn, tdp, 
-         tkn, tn, toc, ton, tp, secchi,lagoslakeid, nhd_lat, 
-        nhd_long, lake_area_ha, lake_perim_meters,
-        iws_zoneid.x, county_zoneid, state_zoneid, elevation_m, 
-         iws_nlcd2011_pct_11, 
-         iws_nlcd2011_pct_21, iws_nlcd2011_pct_22, iws_nlcd2011_pct_23, 
-         iws_nlcd2011_pct_24, iws_nlcd2011_pct_31, iws_nlcd2011_pct_41, 
-         iws_nlcd2011_pct_42, iws_nlcd2011_pct_43, iws_nlcd2011_pct_52, 
-         iws_nlcd2011_pct_71, iws_nlcd2011_pct_81, iws_nlcd2011_pct_82, 
-         iws_nlcd2011_pct_90, iws_nlcd2011_pct_95)
-
-LAGOS.Ohio.processed <- LAGOSiws.Ohio.skinny %>%
-  mutate(iws_pct_1 = iws_nlcd2011_pct_11,
-         iws_pct_2 = iws_nlcd2011_pct_21 + iws_nlcd2011_pct_22 +
+LAGOS.MN.processed <- LAGOSiws.nutrient.2011.MN %>%
+  mutate(Urban.pct = iws_nlcd2011_pct_11,
+         Ag.pct = iws_nlcd2011_pct_21 + iws_nlcd2011_pct_22 +
            iws_nlcd2011_pct_23 + iws_nlcd2011_pct_24, 
-         iws_pct_3 = iws_nlcd2011_pct_31,
-         iws_pct_4 = iws_nlcd2011_pct_41 + iws_nlcd2011_pct_42 + 
-           iws_nlcd2011_pct_43,
-         iws_pct_5 = iws_nlcd2011_pct_52,
-         iws_pct_7 = iws_nlcd2011_pct_71,
-         iws_pct_8 = iws_nlcd2011_pct_81 + iws_nlcd2011_pct_82,
-         iws_pct_9 = iws_nlcd2011_pct_90 + iws_nlcd2011_pct_95,
-         pct_total = iws_pct_1 + iws_pct_2 + 
-           iws_pct_3 + iws_pct_4 + iws_pct_5 + iws_pct_7 + 
-           iws_pct_8 + iws_pct_9)
+         Natural.pct = iws_nlcd2011_pct_31 + iws_nlcd2011_pct_41 + 
+           iws_nlcd2011_pct_42 + iws_nlcd2011_pct_43 + 
+           iws_nlcd2011_pct_71 + iws_nlcd2011_pct_81 + 
+           iws_nlcd2011_pct_82) %>%
+  select(-c(iws_nlcd2011_pct_11, iws_nlcd2011_pct_21, iws_nlcd2011_pct_22, 
+            iws_nlcd2011_pct_23, iws_nlcd2011_pct_24, iws_nlcd2011_pct_31, 
+            iws_nlcd2011_pct_41, iws_nlcd2011_pct_42, iws_nlcd2011_pct_43, 
+            iws_nlcd2011_pct_52, iws_nlcd2011_pct_71, iws_nlcd2011_pct_81, 
+            iws_nlcd2011_pct_82, iws_nlcd2011_pct_90, iws_nlcd2011_pct_95)) %>%
+  na.omit()
 
-summary(LAGOS.Ohio.processed$pct_total)
-summary(LAGOS.Ohio.processed$iws_pct_1)
-summary(LAGOS.Ohio.processed$iws_pct_2)
-summary(LAGOS.Ohio.processed$iws_pct_3)
-summary(LAGOS.Ohio.processed$iws_pct_4)
-summary(LAGOS.Ohio.processed$iws_pct_5)
-summary(LAGOS.Ohio.processed$iws_pct_7)
-summary(LAGOS.Ohio.processed$iws_pct_8)
-summary(LAGOS.Ohio.processed$iws_pct_9)
+sapply(LAGOS.MN.processed, summary)
+
+write.csv(x =  LAGOS.MN.processed, row.names = FALSE,
+          file =  "./data/raw/LAGOS_MN_Full.csv")
 
 ```
 
 
+```{r Visualize_Data_Round_2}
+ggplot(LAGOS.MN.processed, aes(x = sampledate, y = secchi, color = lagoslakeid)) +
+  scale_color_viridis_c(option = "plasma") +
+geom_line() 
+
+ggplot(LAGOS.MN.processed, aes(x = sampledate, y = chla, color = lagoslakeid)) +
+  scale_color_viridis_c(option = "plasma") +
+geom_line() 
+
+ggplot(LAGOS.MN.processed, aes(x = secchi, y = Urban.pct, color = as.numeric(sampledate))) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+ggplot(LAGOS.MN.processed, aes(x = secchi, y = Ag.pct, color = as.numeric(sampledate))) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+ggplot(LAGOS.MN.processed, aes(x = secchi, y = Natural.pct, color = as.numeric(sampledate))) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+ggplot(LAGOS.MN.processed, aes(x = chla, y = Urban.pct, color = as.numeric(sampledate))) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+ggplot(LAGOS.MN.processed, aes(x = chla, y = Ag.pct, color = as.numeric(sampledate))) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+ggplot(LAGOS.MN.processed, aes(x = chla, y = Natural.pct, color = as.numeric(sampledate))) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+
+
+```
+
+##### Felipe ######
+
 ```{r}
+# What is sapply(LAGOS.MN.processed, summary) doing?
+
+LAGOS.MN.processed <- LAGOS.MN.processed %>%
+  mutate(DOY = yday(sampledate)) %>%
+  mutate(Month = month(sampledate))
+```
+
+
+```{r}
+#By DOY
+
+ggplot(LAGOS.MN.processed, aes(x = secchi, y = Urban.pct, color = DOY)) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+ggplot(LAGOS.MN.processed, aes(x = secchi, y = Ag.pct, color = DOY)) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+ggplot(LAGOS.MN.processed, aes(x = secchi, y = Natural.pct, color = DOY)) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+ggplot(LAGOS.MN.processed, aes(x = chla, y = Urban.pct, color = DOY)) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+ggplot(LAGOS.MN.processed, aes(x = chla, y = Ag.pct, color = DOY)) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+ggplot(LAGOS.MN.processed, aes(x = chla, y = Natural.pct, color = DOY)) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+```
+
+```{r}
+#By Month (could be season)
+
+ggplot(LAGOS.MN.processed, aes(x = secchi, y = Urban.pct, color = Month)) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+ggplot(LAGOS.MN.processed, aes(x = secchi, y = Ag.pct, color = Month)) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+ggplot(LAGOS.MN.processed, aes(x = secchi, y = Natural.pct, color = Month)) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+ggplot(LAGOS.MN.processed, aes(x = chla, y = Urban.pct, color = Month)) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+ggplot(LAGOS.MN.processed, aes(x = chla, y = Ag.pct, color = Month)) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+ggplot(LAGOS.MN.processed, aes(x = chla, y = Natural.pct, color = Month)) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+```
+
+```{r}
+LAGOS.MN.processed.January <- filter(LAGOS.MN.processed, Month == 1)
+LAGOS.MN.processed.February <- filter(LAGOS.MN.processed, Month == 2)
+LAGOS.MN.processed.March <- filter(LAGOS.MN.processed, Month == 3)
+LAGOS.MN.processed.April <- filter(LAGOS.MN.processed, Month == 4)
+LAGOS.MN.processed.May <- filter(LAGOS.MN.processed, Month == 5)
+LAGOS.MN.processed.June <- filter(LAGOS.MN.processed, Month == 6)
+LAGOS.MN.processed.July <- filter(LAGOS.MN.processed, Month == 7)
+LAGOS.MN.processed.August <- filter(LAGOS.MN.processed, Month == 8)
+LAGOS.MN.processed.Sept <- filter(LAGOS.MN.processed, Month == 9)
+LAGOS.MN.processed.Oct <- filter(LAGOS.MN.processed, Month == 10)
+LAGOS.MN.processed.Nov <- filter(LAGOS.MN.processed, Month == 11)
+LAGOS.MN.processed.Dec <- filter(LAGOS.MN.processed, Month == 12)
+```
+
+
+```{r}
+#Chla scatterplots
+
+ggplot(LAGOS.MN.processed.January, aes(x = Natural.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("Chla")) +
+ggtitle("Natural % vs Chla Scatterplot, January") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.February, aes(x = Natural.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("Chla")) +
+ggtitle("Natural % vs Chla Scatterplot, February") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.March, aes(x = Natural.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("Chla")) +
+ggtitle("Natural % vs Chla Scatterplot, March") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.April, aes(x = Natural.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("Chla")) +
+ggtitle("Natural % vs Chla Scatterplot, April") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.May, aes(x = Natural.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("Chla")) +
+ggtitle("Natural % vs Chla Scatterplot, May") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.June, aes(x = Natural.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("Chla")) +
+ggtitle("Natural % vs Chla Scatterplot, June") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.July, aes(x = Natural.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("Chla")) +
+ggtitle("Natural % vs Chla Scatterplot, July") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.August, aes(x = Natural.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("Chla")) +
+ggtitle("Natural % vs Chla Scatterplot, August") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Sept, aes(x = Natural.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("Chla")) +
+ggtitle("Natural % vs Chla Scatterplot, Sept") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Oct, aes(x = Natural.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("Chla")) +
+ggtitle("Natural % vs Chla Scatterplot, Oct") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Nov, aes(x = Natural.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("Chla")) +
+ggtitle("Natural % vs Chla Scatterplot, Nov") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Dec, aes(x = Natural.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("Chla")) +
+ggtitle("Natural % vs Chla Scatterplot, Dec") +
+theme(plot.title = element_text(hjust = 0.5))
+
+
+
+
+```
+
+```{r}
+#secchi scatterplots
+
+ggplot(LAGOS.MN.processed.January, aes(x = Natural.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, January") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.February, aes(x = Natural.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, February") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.March, aes(x = Natural.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, March") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.April, aes(x = Natural.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, April") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.May, aes(x = Natural.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, May") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.June, aes(x = Natural.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, June") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.July, aes(x = Natural.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, July") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.August, aes(x = Natural.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, August") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Sept, aes(x = Natural.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, Sept") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Oct, aes(x = Natural.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, Oct") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Nov, aes(x = Natural.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, Nov") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Dec, aes(x = Natural.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, Dec") +
+theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+```{r}
+LAGOS.MN.processed.sf <- st_as_sf(LAGOS.MN.processed, coords = c("nhd_long", "nhd_lat"), crs = 4326)
+
+# generate a map of U.S. states
+states <- st_as_sf(map(database = "state", plot = FALSE, fill = TRUE, col = "white"))
+
+# filter MN
+states.MN <- filter(states, ID %in%
+c("minnesota"))
+
+
+#Maybe use means and not so many data for each lake.
+
+secchiplot.MN <- ggplot() +
+geom_sf(data = states.MN, fill = "white")+
+geom_sf(data = LAGOS.MN.processed.sf, aes(size = Urban.pct, color = secchi),
+alpha = 0.7, show.legend = "point")+
+scale_color_viridis_c(option = "inferno") +
+labs(color = "Average \n Secchi \n Depth (m)", size = "Urban \n Area \n %") +
+theme(legend.position = "right", legend.text = element_text(size = 7),
+legend.title = element_text(size = 8),
+legend.margin = margin(0,0,0,0)) 
+#+guides(color = F) # This line removes the color gradient
+print(secchiplot.MN)
+
+secchiplot.MN <- ggplot() +
+geom_sf(data = states.MN, fill = "white")+
+geom_sf(data = LAGOS.MN.processed.sf, aes(size = Urban.pct, color = secchi),
+alpha = 0.7, show.legend = "point")+
+scale_color_viridis_c(option = "inferno") +
+labs(color = "Average \n Secchi \n Depth (m)", size = "Urban \n Area \n %") +
+theme(legend.position = "right", legend.text = element_text(size = 7),
+legend.title = element_text(size = 8),
+legend.margin = margin(0,0,0,0)) 
+#+guides(color = F) # This line removes the color gradient
+print(secchiplot.MN)
+
+chlaplot.MN <- ggplot() +
+geom_sf(data = states.MN, fill = "white")+
+geom_sf(data = LAGOS.MN.processed.sf, aes(size = Urban.pct, color = chla),
+alpha = 0.7, show.legend = "point")+
+scale_color_viridis_c(option = "inferno") +
+labs(color = "chla", size = "Urban \n Area \n %") +
+theme(legend.position = "right", legend.text = element_text(size = 7),
+legend.title = element_text(size = 8),
+legend.margin = margin(0,0,0,0)) 
+#+guides(color = F) # This line removes the color gradient
+print(chlaplot.MN)
+
+```
+
+
+
+
+
+############## Not done
+
+######## Make a map showing the variables with circles. Including the ecoregions.
+
+
+```{r}
+#secchi scatterplots Urban
+
+ggplot(LAGOS.MN.processed.January, aes(x = Natural.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, January") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.February, aes(x = Natural.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, February") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.March, aes(x = Natural.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, March") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.April, aes(x = Natural.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, April") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.May, aes(x = Natural.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, May") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.June, aes(x = Natural.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, June") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.July, aes(x = Natural.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, July") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.August, aes(x = Natural.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, August") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Sept, aes(x = Natural.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, Sept") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Oct, aes(x = Natural.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, Oct") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Nov, aes(x = Natural.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, Nov") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Dec, aes(x = Natural.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, Dec") +
+theme(plot.title = element_text(hjust = 0.5))
 
 ```
 
