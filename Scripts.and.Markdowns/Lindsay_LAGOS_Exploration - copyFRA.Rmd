@@ -149,7 +149,7 @@ LAGOSiws2011.MN <- LAGOSiws.MN %>%
 
 
 ```{r, Filter_Nutrient_Dates}
-#filtering state nutrient data
+#filtering state nutrient data #FRA. We can expand this range
 LAGOSnutrient.MN.skinny <- LAGOSnutrient.MN %>%
   filter(sampledate > "2009-12-31" & sampledate < "2013-01-01")
 
@@ -180,13 +180,13 @@ sapply(LAGOSiws.nutrient.2011.MN, summary)
 ```{r, Visualize_data}
 # Looking at the data
 
-ggplot(LAGOSiws.nutrient.2011.MN, aes(x = sampledate, y = tn, color = lagoslakeid)) +
-  scale_color_viridis_c(option = "plasma") +
-geom_line() 
-
-ggplot(LAGOSiws.nutrient.2011.MN, aes(x = sampledate, y = tp, color = lagoslakeid)) +
-  scale_color_viridis_c(option = "plasma") +
-geom_line() 
+# ggplot(LAGOSiws.nutrient.2011.MN, aes(x = sampledate, y = tn, color = lagoslakeid)) +
+#   scale_color_viridis_c(option = "plasma") +
+# geom_line() 
+# 
+# ggplot(LAGOSiws.nutrient.2011.MN, aes(x = sampledate, y = tp, color = lagoslakeid)) +
+#   scale_color_viridis_c(option = "plasma") +
+# geom_line() 
 
 ggplot(LAGOSiws.nutrient.2011.MN, aes(x = sampledate, y = secchi, color = lagoslakeid)) +
   scale_color_viridis_c(option = "plasma") +
@@ -200,6 +200,8 @@ geom_line()
 
 
 ```{r Create_Full_df}
+#####CHECK THE NUMBER OF LAND USE
+#####CAREFUL WITH ROCK AND FOREST IN THE SAME CATEGORY
 
 LAGOS.MN.processed <- LAGOSiws.nutrient.2011.MN %>%
   mutate(Urban.pct = iws_nlcd2011_pct_11,
