@@ -204,13 +204,14 @@ geom_line()
 #####CAREFUL WITH ROCK AND FOREST IN THE SAME CATEGORY
 
 LAGOS.MN.processed <- LAGOSiws.nutrient.2011.MN %>%
-  mutate(Urban.pct = iws_nlcd2011_pct_11,
-         Ag.pct = iws_nlcd2011_pct_21 + iws_nlcd2011_pct_22 +
+  mutate(Water.pct = iws_nlcd2011_pct_11,
+         Urban.pct = iws_nlcd2011_pct_21 + iws_nlcd2011_pct_22 +
            iws_nlcd2011_pct_23 + iws_nlcd2011_pct_24, 
-         Natural.pct = iws_nlcd2011_pct_31 + iws_nlcd2011_pct_41 + 
+         Undeveloped.pct = iws_nlcd2011_pct_31 + iws_nlcd2011_pct_41 + 
            iws_nlcd2011_pct_42 + iws_nlcd2011_pct_43 + 
-           iws_nlcd2011_pct_71 + iws_nlcd2011_pct_81 + 
-           iws_nlcd2011_pct_82) %>%
+           iws_nlcd2011_pct_52 + 
+           iws_nlcd2011_pct_90 + iws_nlcd2011_pct_95,
+         Ag.pct =  iws_nlcd2011_pct_81 + iws_nlcd2011_pct_82 + iws_nlcd2011_pct_71) %>%
   select(-c(iws_nlcd2011_pct_11, iws_nlcd2011_pct_21, iws_nlcd2011_pct_22, 
             iws_nlcd2011_pct_23, iws_nlcd2011_pct_24, iws_nlcd2011_pct_31, 
             iws_nlcd2011_pct_41, iws_nlcd2011_pct_42, iws_nlcd2011_pct_43, 
@@ -243,7 +244,7 @@ ggplot(LAGOS.MN.processed, aes(x = secchi, y = Ag.pct, color = as.numeric(sample
   scale_color_viridis_c(option = "plasma") +
   geom_point()
 
-ggplot(LAGOS.MN.processed, aes(x = secchi, y = Natural.pct, color = as.numeric(sampledate))) +
+ggplot(LAGOS.MN.processed, aes(x = secchi, y = Undeveloped.pct, color = as.numeric(sampledate))) +
   scale_color_viridis_c(option = "plasma") +
   geom_point()
 
@@ -255,7 +256,7 @@ ggplot(LAGOS.MN.processed, aes(x = chla, y = Ag.pct, color = as.numeric(sampleda
   scale_color_viridis_c(option = "plasma") +
   geom_point()
 
-ggplot(LAGOS.MN.processed, aes(x = chla, y = Natural.pct, color = as.numeric(sampledate))) +
+ggplot(LAGOS.MN.processed, aes(x = chla, y = Undeveloped.pct, color = as.numeric(sampledate))) +
   scale_color_viridis_c(option = "plasma") +
   geom_point()
 
@@ -266,11 +267,16 @@ ggplot(LAGOS.MN.processed, aes(x = chla, y = Natural.pct, color = as.numeric(sam
 ##### Felipe ######
 
 ```{r}
-# What is sapply(LAGOS.MN.processed, summary) doing?
+
 
 LAGOS.MN.processed <- LAGOS.MN.processed %>%
   mutate(DOY = yday(sampledate)) %>%
   mutate(Month = month(sampledate))
+
+write.csv(x =  LAGOS.MN.processed, row.names = FALSE,
+          file =  "./data/processed/LAGOS_MN_Full2.csv")
+
+
 ```
 
 
@@ -285,7 +291,7 @@ ggplot(LAGOS.MN.processed, aes(x = secchi, y = Ag.pct, color = DOY)) +
   scale_color_viridis_c(option = "plasma") +
   geom_point()
 
-ggplot(LAGOS.MN.processed, aes(x = secchi, y = Natural.pct, color = DOY)) +
+ggplot(LAGOS.MN.processed, aes(x = secchi, y = Undeveloped.pct, color = DOY)) +
   scale_color_viridis_c(option = "plasma") +
   geom_point()
 
@@ -297,7 +303,7 @@ ggplot(LAGOS.MN.processed, aes(x = chla, y = Ag.pct, color = DOY)) +
   scale_color_viridis_c(option = "plasma") +
   geom_point()
 
-ggplot(LAGOS.MN.processed, aes(x = chla, y = Natural.pct, color = DOY)) +
+ggplot(LAGOS.MN.processed, aes(x = chla, y = Undeveloped.pct, color = DOY)) +
   scale_color_viridis_c(option = "plasma") +
   geom_point()
 
@@ -314,7 +320,7 @@ ggplot(LAGOS.MN.processed, aes(x = secchi, y = Ag.pct, color = Month)) +
   scale_color_viridis_c(option = "plasma") +
   geom_point()
 
-ggplot(LAGOS.MN.processed, aes(x = secchi, y = Natural.pct, color = Month)) +
+ggplot(LAGOS.MN.processed, aes(x = secchi, y = Undeveloped.pct, color = Month)) +
   scale_color_viridis_c(option = "plasma") +
   geom_point()
 
@@ -326,7 +332,7 @@ ggplot(LAGOS.MN.processed, aes(x = chla, y = Ag.pct, color = Month)) +
   scale_color_viridis_c(option = "plasma") +
   geom_point()
 
-ggplot(LAGOS.MN.processed, aes(x = chla, y = Natural.pct, color = Month)) +
+ggplot(LAGOS.MN.processed, aes(x = chla, y = Undeveloped.pct, color = Month)) +
   scale_color_viridis_c(option = "plasma") +
   geom_point()
 
@@ -351,7 +357,7 @@ LAGOS.MN.processed.Dec <- filter(LAGOS.MN.processed, Month == 12)
 ```{r}
 #Chla scatterplots
 
-ggplot(LAGOS.MN.processed.January, aes(x = Natural.pct, y = chla)) +
+ggplot(LAGOS.MN.processed.January, aes(x = Undeveloped.pct, y = chla)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
@@ -359,7 +365,7 @@ ylab(expression("Chla")) +
 ggtitle("Natural % vs Chla Scatterplot, January") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.February, aes(x = Natural.pct, y = chla)) +
+ggplot(LAGOS.MN.processed.February, aes(x = Undeveloped.pct, y = chla)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
@@ -367,7 +373,7 @@ ylab(expression("Chla")) +
 ggtitle("Natural % vs Chla Scatterplot, February") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.March, aes(x = Natural.pct, y = chla)) +
+ggplot(LAGOS.MN.processed.March, aes(x = Undeveloped.pct, y = chla)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
@@ -375,7 +381,7 @@ ylab(expression("Chla")) +
 ggtitle("Natural % vs Chla Scatterplot, March") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.April, aes(x = Natural.pct, y = chla)) +
+ggplot(LAGOS.MN.processed.April, aes(x = Undeveloped.pct, y = chla)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
@@ -383,7 +389,7 @@ ylab(expression("Chla")) +
 ggtitle("Natural % vs Chla Scatterplot, April") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.May, aes(x = Natural.pct, y = chla)) +
+ggplot(LAGOS.MN.processed.May, aes(x = Undeveloped.pct, y = chla)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
@@ -391,7 +397,7 @@ ylab(expression("Chla")) +
 ggtitle("Natural % vs Chla Scatterplot, May") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.June, aes(x = Natural.pct, y = chla)) +
+ggplot(LAGOS.MN.processed.June, aes(x = Undeveloped.pct, y = chla)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
@@ -399,7 +405,7 @@ ylab(expression("Chla")) +
 ggtitle("Natural % vs Chla Scatterplot, June") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.July, aes(x = Natural.pct, y = chla)) +
+ggplot(LAGOS.MN.processed.July, aes(x = Undeveloped.pct, y = chla)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
@@ -407,7 +413,7 @@ ylab(expression("Chla")) +
 ggtitle("Natural % vs Chla Scatterplot, July") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.August, aes(x = Natural.pct, y = chla)) +
+ggplot(LAGOS.MN.processed.August, aes(x = Undeveloped.pct, y = chla)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
@@ -415,7 +421,7 @@ ylab(expression("Chla")) +
 ggtitle("Natural % vs Chla Scatterplot, August") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.Sept, aes(x = Natural.pct, y = chla)) +
+ggplot(LAGOS.MN.processed.Sept, aes(x = Undeveloped.pct, y = chla)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
@@ -423,7 +429,7 @@ ylab(expression("Chla")) +
 ggtitle("Natural % vs Chla Scatterplot, Sept") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.Oct, aes(x = Natural.pct, y = chla)) +
+ggplot(LAGOS.MN.processed.Oct, aes(x = Undeveloped.pct, y = chla)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
@@ -431,7 +437,7 @@ ylab(expression("Chla")) +
 ggtitle("Natural % vs Chla Scatterplot, Oct") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.Nov, aes(x = Natural.pct, y = chla)) +
+ggplot(LAGOS.MN.processed.Nov, aes(x = Undeveloped.pct, y = chla)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
@@ -439,7 +445,7 @@ ylab(expression("Chla")) +
 ggtitle("Natural % vs Chla Scatterplot, Nov") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.Dec, aes(x = Natural.pct, y = chla)) +
+ggplot(LAGOS.MN.processed.Dec, aes(x = Undeveloped.pct, y = chla)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
@@ -455,7 +461,7 @@ theme(plot.title = element_text(hjust = 0.5))
 ```{r}
 #secchi scatterplots
 
-ggplot(LAGOS.MN.processed.January, aes(x = Natural.pct, y = secchi)) +
+ggplot(LAGOS.MN.processed.January, aes(x = Undeveloped.pct, y = secchi)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
@@ -463,7 +469,7 @@ ylab(expression("secchi")) +
 ggtitle("Natural % vs secchi Scatterplot, January") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.February, aes(x = Natural.pct, y = secchi)) +
+ggplot(LAGOS.MN.processed.February, aes(x = Undeveloped.pct, y = secchi)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
@@ -471,7 +477,7 @@ ylab(expression("secchi")) +
 ggtitle("Natural % vs secchi Scatterplot, February") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.March, aes(x = Natural.pct, y = secchi)) +
+ggplot(LAGOS.MN.processed.March, aes(x = Undeveloped.pct, y = secchi)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
@@ -479,7 +485,7 @@ ylab(expression("secchi")) +
 ggtitle("Natural % vs secchi Scatterplot, March") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.April, aes(x = Natural.pct, y = secchi)) +
+ggplot(LAGOS.MN.processed.April, aes(x = Undeveloped.pct, y = secchi)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
@@ -487,7 +493,7 @@ ylab(expression("secchi")) +
 ggtitle("Natural % vs secchi Scatterplot, April") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.May, aes(x = Natural.pct, y = secchi)) +
+ggplot(LAGOS.MN.processed.May, aes(x = Undeveloped.pct, y = secchi)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
@@ -495,7 +501,7 @@ ylab(expression("secchi")) +
 ggtitle("Natural % vs secchi Scatterplot, May") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.June, aes(x = Natural.pct, y = secchi)) +
+ggplot(LAGOS.MN.processed.June, aes(x = Undeveloped.pct, y = secchi)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
@@ -503,7 +509,7 @@ ylab(expression("secchi")) +
 ggtitle("Natural % vs secchi Scatterplot, June") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.July, aes(x = Natural.pct, y = secchi)) +
+ggplot(LAGOS.MN.processed.July, aes(x = Undeveloped.pct, y = secchi)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
@@ -511,7 +517,7 @@ ylab(expression("secchi")) +
 ggtitle("Natural % vs secchi Scatterplot, July") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.August, aes(x = Natural.pct, y = secchi)) +
+ggplot(LAGOS.MN.processed.August, aes(x = Undeveloped.pct, y = secchi)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
@@ -519,7 +525,7 @@ ylab(expression("secchi")) +
 ggtitle("Natural % vs secchi Scatterplot, August") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.Sept, aes(x = Natural.pct, y = secchi)) +
+ggplot(LAGOS.MN.processed.Sept, aes(x = Undeveloped.pct, y = secchi)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
@@ -527,7 +533,7 @@ ylab(expression("secchi")) +
 ggtitle("Natural % vs secchi Scatterplot, Sept") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.Oct, aes(x = Natural.pct, y = secchi)) +
+ggplot(LAGOS.MN.processed.Oct, aes(x = Undeveloped.pct, y = secchi)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
@@ -535,7 +541,7 @@ ylab(expression("secchi")) +
 ggtitle("Natural % vs secchi Scatterplot, Oct") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.Nov, aes(x = Natural.pct, y = secchi)) +
+ggplot(LAGOS.MN.processed.Nov, aes(x = Undeveloped.pct, y = secchi)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
@@ -543,7 +549,7 @@ ylab(expression("secchi")) +
 ggtitle("Natural % vs secchi Scatterplot, Nov") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.Dec, aes(x = Natural.pct, y = secchi)) +
+ggplot(LAGOS.MN.processed.Dec, aes(x = Undeveloped.pct, y = secchi)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
@@ -616,7 +622,7 @@ print(chlaplot.MN)
 ```{r}
 #secchi scatterplots Urban
 
-ggplot(LAGOS.MN.processed.January, aes(x = Natural.pct, y = secchi)) +
+ggplot(LAGOS.MN.processed.January, aes(x = Undeveloped.pct, y = secchi)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
@@ -624,7 +630,7 @@ ylab(expression("secchi")) +
 ggtitle("Natural % vs secchi Scatterplot, January") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.February, aes(x = Natural.pct, y = secchi)) +
+ggplot(LAGOS.MN.processed.February, aes(x = Undeveloped.pct, y = secchi)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
@@ -632,7 +638,7 @@ ylab(expression("secchi")) +
 ggtitle("Natural % vs secchi Scatterplot, February") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.March, aes(x = Natural.pct, y = secchi)) +
+ggplot(LAGOS.MN.processed.March, aes(x = Undeveloped.pct, y = secchi)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
@@ -640,7 +646,7 @@ ylab(expression("secchi")) +
 ggtitle("Natural % vs secchi Scatterplot, March") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.April, aes(x = Natural.pct, y = secchi)) +
+ggplot(LAGOS.MN.processed.April, aes(x = Undeveloped.pct, y = secchi)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
@@ -648,7 +654,7 @@ ylab(expression("secchi")) +
 ggtitle("Natural % vs secchi Scatterplot, April") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.May, aes(x = Natural.pct, y = secchi)) +
+ggplot(LAGOS.MN.processed.May, aes(x = Undeveloped.pct, y = secchi)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
@@ -656,7 +662,7 @@ ylab(expression("secchi")) +
 ggtitle("Natural % vs secchi Scatterplot, May") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.June, aes(x = Natural.pct, y = secchi)) +
+ggplot(LAGOS.MN.processed.June, aes(x = Undeveloped.pct, y = secchi)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
@@ -664,7 +670,7 @@ ylab(expression("secchi")) +
 ggtitle("Natural % vs secchi Scatterplot, June") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.July, aes(x = Natural.pct, y = secchi)) +
+ggplot(LAGOS.MN.processed.July, aes(x = Undeveloped.pct, y = secchi)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
@@ -672,7 +678,7 @@ ylab(expression("secchi")) +
 ggtitle("Natural % vs secchi Scatterplot, July") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.August, aes(x = Natural.pct, y = secchi)) +
+ggplot(LAGOS.MN.processed.August, aes(x = Undeveloped.pct, y = secchi)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
@@ -680,7 +686,7 @@ ylab(expression("secchi")) +
 ggtitle("Natural % vs secchi Scatterplot, August") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.Sept, aes(x = Natural.pct, y = secchi)) +
+ggplot(LAGOS.MN.processed.Sept, aes(x = Undeveloped.pct, y = secchi)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
@@ -688,7 +694,7 @@ ylab(expression("secchi")) +
 ggtitle("Natural % vs secchi Scatterplot, Sept") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.Oct, aes(x = Natural.pct, y = secchi)) +
+ggplot(LAGOS.MN.processed.Oct, aes(x = Undeveloped.pct, y = secchi)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
@@ -696,7 +702,7 @@ ylab(expression("secchi")) +
 ggtitle("Natural % vs secchi Scatterplot, Oct") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.Nov, aes(x = Natural.pct, y = secchi)) +
+ggplot(LAGOS.MN.processed.Nov, aes(x = Undeveloped.pct, y = secchi)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
@@ -704,7 +710,7 @@ ylab(expression("secchi")) +
 ggtitle("Natural % vs secchi Scatterplot, Nov") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.Dec, aes(x = Natural.pct, y = secchi)) +
+ggplot(LAGOS.MN.processed.Dec, aes(x = Undeveloped.pct, y = secchi)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
