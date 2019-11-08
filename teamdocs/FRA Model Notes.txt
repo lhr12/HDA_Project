@@ -1,0 +1,12 @@
+Do the season column
+Transform dates to Julian Day?
+Define the land use classes (hopefully four or five)
+
+One test alternative is create a dataframe for each season or month (if you want). and analyze them separately.
+
+Is lake ID a variable that we want to use? probably not. 
+
+Graph that we can do is response variable versus types of land use. and color or fill by Julian Day. Or Day of the year.
+
+
+For the seasonality just divide the dataframe in season an see if the coeff change a lot. Always use mixed effects for ecoregions.

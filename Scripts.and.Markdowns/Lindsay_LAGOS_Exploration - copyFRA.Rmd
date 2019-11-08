@@ -1,0 +1,146 @@
+---
+title: "Lindsay_LAGOS_Exploration"
+author: "Lindsay Roth"
+date: "11/4/2019"
+output: pdf_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+getwd()
+
+#load packages
+library(tidyverse)
+library(lubridate)
+library(LAGOSNE)
+
+#load LAGOS data
+LAGOSdata <- lagosne_load()
+
+# creating specific lagos files
+LAGOSlocus <- LAGOSdata$locus
+LAGOSnutrient <- LAGOSdata$epi_nutr
+LAGOSiwslulc <- LAGOSdata$iws.lulc
+```
+
+
+```{r}
+###### Locus and IWS.lulc
+
+##filtering Locus for Ohio
+LAGOSlocus.Ohio <- LAGOSlocus %>% filter(state_zoneid == "State_6")
+
+##joining Ohio locus with iwslulc
+LAGOSiws.Ohio <- LAGOSlocus.Ohio %>% left_join(LAGOSiwslulc, by = "lagoslakeid")
+
+##selecting 2006 lulc
+LAGOSiws2006.Ohio <- LAGOSiws.Ohio %>% select(-c("iws_nlcd1992_ha_0":"iws_nlcd2001_pct_95"), -c("iws_nlcd2011_ha_0":"iws_nlcd2011_pct_95"))
+```
+
+
+```{r}
+###### Nutrient
+
+LAGOSlocus.skinny <- LAGOSlocus %>% select("lagoslakeid", "state_zoneid")
+
+colnames(LAGOSlocus)
+
+#adding state info and filter nutrient data to only 2006
+LAGOSnutrient2006.skinny <- LAGOSnutrient %>%
+  left_join(LAGOSlocus.skinny, by = "lagoslakeid") %>%
+  filter(state_zoneid == "State_6") %>%
+  filter(sampledate > "2005-12-31" & sampledate < "2007-01-01")
+```
+
+
+```{r}
+##Joining iws.lulc and nutrient
+LAGOSiws.nutrient.2006.Ohio <-  left_join(LAGOSnutrient2006.skinny, LAGOSiws2006.Ohio, by = c("lagoslakeid", "state_zoneid"))
+```
+
+
+
+
+```{r}
+# Looking at the data
+
+ggplot(LAGOSiws.nutrient.2006.Ohio, aes(x = sampledate, y = tn, color = lagoslakeid)) +
+  scale_color_viridis_c(option = "plasma") +
+geom_line() 
+
+ggplot(LAGOSiws.nutrient.2006.Ohio, aes(x = sampledate, y = tp, color = lagoslakeid)) +
+  scale_color_viridis_c(option = "plasma") +
+geom_line() 
+
+```
+
+
+#########################  FRA: I didn't look at anything from this point ##########################################
+
+```{r}
+#creating ohio nutrients
+LAGOSnutrient.Ohio <- left_join(LAGOSlocus.Ohio, LAGOSnutrient.skinny, by = "lagoslakeid")
+
+#making sure class is the same
+class(LAGOSnutrient.Ohio$lagoslakeid)
+LAGOSnutrient.Ohio$lagoslakeid <- as.numeric(LAGOSnutrient.Ohio$lagoslakeid)
+class(LAGOSiwslulc$lagoslakeid)
+LAGOSiwslulc$lagoslakeid <- as.numeric(LAGOSiwslulc$lagoslakeid)
+
+
+#joining with nutrient
+LAGOSiws.nutrient.Ohio <-  left_join(LAGOSnutrient.Ohio, LAGOSiwslulc, by = "lagoslakeid")
+```
+
+
+```{r}
+#selecting columns we want
+LAGOSiws.Ohio.skinny <- LAGOSiws.nutrient.Ohio %>%
+  select(sampledate, chla, dkn, doc, nh4, no2, no2no3, srp, tdn, tdp, 
+         tkn, tn, toc, ton, tp, secchi,lagoslakeid, nhd_lat, 
+        nhd_long, lake_area_ha, lake_perim_meters,
+        iws_zoneid.x, county_zoneid, state_zoneid, elevation_m, 
+         iws_nlcd2011_pct_11, 
+         iws_nlcd2011_pct_21, iws_nlcd2011_pct_22, iws_nlcd2011_pct_23, 
+         iws_nlcd2011_pct_24, iws_nlcd2011_pct_31, iws_nlcd2011_pct_41, 
+         iws_nlcd2011_pct_42, iws_nlcd2011_pct_43, iws_nlcd2011_pct_52, 
+         iws_nlcd2011_pct_71, iws_nlcd2011_pct_81, iws_nlcd2011_pct_82, 
+         iws_nlcd2011_pct_90, iws_nlcd2011_pct_95)
+
+LAGOS.Ohio.processed <- LAGOSiws.Ohio.skinny %>%
+  mutate(iws_pct_1 = iws_nlcd2011_pct_11,
+         iws_pct_2 = iws_nlcd2011_pct_21 + iws_nlcd2011_pct_22 +
+           iws_nlcd2011_pct_23 + iws_nlcd2011_pct_24, 
+         iws_pct_3 = iws_nlcd2011_pct_31,
+         iws_pct_4 = iws_nlcd2011_pct_41 + iws_nlcd2011_pct_42 + 
+           iws_nlcd2011_pct_43,
+         iws_pct_5 = iws_nlcd2011_pct_52,
+         iws_pct_7 = iws_nlcd2011_pct_71,
+         iws_pct_8 = iws_nlcd2011_pct_81 + iws_nlcd2011_pct_82,
+         iws_pct_9 = iws_nlcd2011_pct_90 + iws_nlcd2011_pct_95,
+         pct_total = iws_pct_1 + iws_pct_2 + 
+           iws_pct_3 + iws_pct_4 + iws_pct_5 + iws_pct_7 + 
+           iws_pct_8 + iws_pct_9)
+
+summary(LAGOS.Ohio.processed$pct_total)
+summary(LAGOS.Ohio.processed$iws_pct_1)
+summary(LAGOS.Ohio.processed$iws_pct_2)
+summary(LAGOS.Ohio.processed$iws_pct_3)
+summary(LAGOS.Ohio.processed$iws_pct_4)
+summary(LAGOS.Ohio.processed$iws_pct_5)
+summary(LAGOS.Ohio.processed$iws_pct_7)
+summary(LAGOS.Ohio.processed$iws_pct_8)
+summary(LAGOS.Ohio.processed$iws_pct_9)
+
+```
+
+
+```{r}
+
+```
+
