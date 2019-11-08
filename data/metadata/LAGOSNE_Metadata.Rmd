@@ -7,6 +7,7 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+Keith, edit this to reflect the new landuse grouping, and that the dependent variables are secchi depth (m) and chlorophyll a (mg/L)
 ## Information About the LAGOSNE Dataset
 
 The Lake Multi-Scaled Geospatial and Temporal Database (LAGOSNE) is a collection of several data modules that contain information on lakes in the northern United States. The modules contain data from thousands of lakes in 17 states in the northeastern and midwestern United States, from Missouri to Maine. The dataset includes a complete list of all lakes bigger than 4 hectacres in the 17 state area, and water quality data on a large number of lakes, spanning every state. The purpose of collecting this data in one place is to facilitate the continued understanding of water quality in these lakes through open-source access. More information about the general composition of the LAGOSNE dataset can be found at

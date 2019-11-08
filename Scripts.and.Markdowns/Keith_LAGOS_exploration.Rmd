@@ -29,8 +29,11 @@ invisible(lapply(packages, library, character.only = TRUE))
 library(tidyverse)
 library(lubridate)
 library(LAGOSNE)
+library(ggplot2)
 
 invisible(lapply(packages, library, character.only = TRUE)) 
+
+theme_set(theme_classic())
 
 #load LAGOS data
 LAGOSdata <- lagosne_load()
@@ -42,7 +45,30 @@ LAGOSiwslulc <- LAGOSdata$iws.lulc
 LAGOSgeo <- LAGOSdata$lakes.geo
 ```
 
-```{r filtering to test for new states}
+```{r adding a season column}
+#we are creating growing seasons; early, prime, late. They will be based off of water temperature and day of year
+# Visualization
 
+
+seasonvisualizationplot <- ggplot(LAGOS.MN.processed, aes(x = DOY, y = chla))+
+  geom_point()
+print(seasonvisualizationplot)
+
+LAGOS.MN.processed$EarlyTrue <- LAGOS.MN.processed$DOY < 136
+LAGOS.MN.processed$PrimeTrue <- LAGOS.MN.processed$DOY >=136 & LAGOS.MN.processed$DOY < 273
+LAGOS.MN.processed$LateTrue <- LAGOS.MN.processed$DOY > 273
+
+LAGOS.MN.processed$Spring %>% 
+  mutate("Early" = "TRUE")
+
+LAGOS.MN.processed$Season <- LAGOS.MN.processed$DOY
+LAGOS.MN.processed$Season <- LAGOS.MN.processed$Season(Early = runif(DOY <= 200),
+                   Prime = runif(200 < DOY < 250),
+                   Late = runif(DOY >= 250),
+                   )
+
+LAGOS.MN.processed$Season %>%
+  select(EarlyTrue) %>%
+  (Spring = c(TRUE))
 ```
 
