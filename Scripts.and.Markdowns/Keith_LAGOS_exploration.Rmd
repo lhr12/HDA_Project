@@ -8,19 +8,41 @@ editor_options:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
+Questions for the group:
+1) Should we combine land use into ag, undeveloped, urban?
+2) Can bioregions capture urban land use?
 
 ```{r LAGOSNE setup}
+
+#Install packages if necessary
+
 #install.packages("LAGOSNE")
+#install.packages("lubridate")
+#install.packages("tidyverse")
 
-#packages <- c("LAGOSNE")
-#invisible(lapply(packages, library, character.only = TRUE)) 
+#lagosne_get(dest_folder = LAGOSNE:::lagos_path(), overwrite = TRUE)
 
-#lagosne_get()
+invisible(lapply(packages, library, character.only = TRUE)) 
 
+
+#load packages
+library(tidyverse)
+library(lubridate)
+library(LAGOSNE)
+
+invisible(lapply(packages, library, character.only = TRUE)) 
+
+#load LAGOS data
+LAGOSdata <- lagosne_load()
+
+# creating specific lagos files
+LAGOSlocus <- LAGOSdata$locus
+LAGOSnutrient <- LAGOSdata$epi_nutr
+LAGOSiwslulc <- LAGOSdata$iws.lulc
+LAGOSgeo <- LAGOSdata$lakes.geo
 ```
 
-```{r}
-#Today
+```{r filtering to test for new states}
+
 ```
 
