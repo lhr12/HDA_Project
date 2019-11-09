@@ -10,3 +10,6 @@ Graph that we can do is response variable versus types of land use. and color or
 
 
 For the seasonality just divide the dataframe in season an see if the coeff change a lot. Always use mixed effects for ecoregions.
+
+Should we include area of lake as variable? (we saw in class that is significant)
+
