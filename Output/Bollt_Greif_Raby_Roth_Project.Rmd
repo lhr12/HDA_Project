@@ -6,8 +6,8 @@ output:
     number_sections: yes
 geometry: margin=2.54cm
 title: Experiment Title
-subtitle: Web address for GitHub repository
-author: Your Name
+subtitle: https://github.com/lhr12/HDA_Project
+author: Keith Bollt, Jake Greif, Felipe Raby-Amadori, & Lindsay Roth
 abstract: "Experimental overview. This section should be no longer than 250 words."
 fontsize: 12pt
 mainfont: Times New Roman
