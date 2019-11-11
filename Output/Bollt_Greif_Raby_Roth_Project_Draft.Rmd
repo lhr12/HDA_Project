@@ -5,10 +5,10 @@ output:
     fig_caption: yes
     number_sections: yes
 geometry: margin=2.54cm
-title: Experiment Title
+title: Impacts of Land Use on Water Quality in Minnesota 
 subtitle: https://github.com/lhr12/HDA_Project
 author: Keith Bollt, Jake Greif, Felipe Raby-Amadori, & Lindsay Roth
-abstract: "Experimental overview. This section should be no longer than 250 words."
+abstract: "Abstract tbd"
 fontsize: 12pt
 mainfont: Times New Roman
 ---
@@ -41,7 +41,18 @@ mainfont: Times New Roman
 
 <Paragraph detailing the rationale for your analysis. What is the significant application and/or interest in this topic? Connect to environmental topic(s)/challenge(s).>
 
+*Land use has a large impact on nutrient runoff into streams, lakes, and other water bodies
+*Minnesota has wide variety of land uses.  Inlcudes large urban centers, natural lands, and agricultural area. 
+*Nutrient management has been a challenge for states in the effort to control harmful algal blooms and coastal dead zones.
+*Understanding the causes of nutrient problems will better inform management strategies.
+
 <Paragraph detailing your research question(s) and goals. What do you want to find out? Include a sentence (or a few) on the dataset you are using to answer this question - just enough to give your reader an idea of where you are going with the analysis.>
+
+Research questions:
+
+1. What are the predictors of nutrients based on land use in watersheds in the state of Minnesota?
+
+2. How do you characterize seasonal variation between the predictors of nutrients?
 
 \newpage
 
