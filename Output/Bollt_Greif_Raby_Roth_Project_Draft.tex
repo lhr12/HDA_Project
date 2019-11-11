@@ -30,6 +30,47 @@
             pdfborder={0 0 0},
             breaklinks=true}
 \urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs}
 \usepackage{graphicx,grffile}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
@@ -111,10 +152,6 @@ document\textgreater{}
 \section{Research Question and
 Rationale}\label{research-question-and-rationale}}
 
-\textless{}Paragraph detailing the rationale for your analysis. What is
-the significant application and/or interest in this topic? Connect to
-environmental topic(s)/challenge(s).\textgreater{}
-
 \begin{itemize}
 \tightlist
 \item
@@ -130,11 +167,6 @@ environmental topic(s)/challenge(s).\textgreater{}
   Understanding the causes of nutrient problems will better inform
   management strategies.
 \end{itemize}
-
-\textless{}Paragraph detailing your research question(s) and goals. What
-do you want to find out? Include a sentence (or a few) on the dataset
-you are using to answer this question - just enough to give your reader
-an idea of where you are going with the analysis.\textgreater{}
 
 Research questions:
 
@@ -160,12 +192,6 @@ size, and ecoregion.
 \hypertarget{dataset-information}{%
 \section{Dataset Information}\label{dataset-information}}
 
-\textless{}Information on how the dataset for this analysis were
-collected, the data contained in the dataset, and any important pieces
-of information that are relevant to your analyses. This section should
-contain much of same information as the README file for the dataset but
-formatted in a way that is more narrative.\textgreater{}
-
 The data used in this analysis include data from the Lake Multi-Scaled
 Geospatial and Temporal Database (LAGOSNE) and the EPA ecoregion spatial
 datasets.
@@ -188,10 +214,35 @@ selected Level III ecoregions because they appear to offer a descriptive
 narrative of the land use patterns of Minnesota without making a
 `distinction without a difference'.
 
-\textless{}Add a table that summarizes your data structure. This table
-can be made in markdown text or inserted as a \texttt{kable} function in
-an R chunk. If the latter, do not include the code used to generate your
-table.\textgreater{}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Variables.table <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"../Output/Variable_Descriptions_Table.csv"}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(knitr)}
+\KeywordTok{kable}\NormalTok{(Variables.table)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}llll@{}}
+\toprule
+Column.Name & Description & Units & Variable.Type\tabularnewline
+\midrule
+\endhead
+chla & Chlorophyll a & mg/L & Depedent\tabularnewline
+secchi & Secchi depth & m & Depedent\tabularnewline
+Urban.pct & Percent urban land cover & \% & Independent-
+fixed\tabularnewline
+Undeveloped.pct & Percent natural land cover & \% & Independent-
+fixed\tabularnewline
+Ag.pct & Percent agricultural land cover & \% & Independent-
+fixed\tabularnewline
+LakeIWS.Ratio & Lake surface area to watershed area ratio & N/A &
+Independent- fixed\tabularnewline
+Season & Early, prime, and late growing ``seasons'' & N/A & Independent-
+fixed\tabularnewline
+US\_L3NAME & Level 3 ecoregions & N/A & Independent-
+random\tabularnewline
+\bottomrule
+\end{longtable}
 
 \newpage
 
@@ -199,27 +250,10 @@ table.\textgreater{}
 \section{Exploratory Data Analysis and
 Wrangling}\label{exploratory-data-analysis-and-wrangling}}
 
-\textless{}Include R chunks for 5+ lines of summary code (display code
-and output), 3+ exploratory graphs (display graphs only), and any
-wrangling you do to your dataset(s).\textgreater{}
-
-\textless{}Include text sections to accompany these R chunks to explain
-the reasoning behind your workflow, and the rationale for your
-approach.\textgreater{}
-
 \newpage
 
 \hypertarget{analysis}{%
 \section{Analysis}\label{analysis}}
-
-\textless{}Include R chunks for 3+ statistical tests (display code and
-output) and 3+ final visualization graphs (display graphs
-only).\textgreater{}
-
-\textless{}Include text sections to accompany these R chunks to explain
-the reasoning behind your workflow, rationale for your approach, and the
-justification of meeting or failing to meet assumptions of
-tests.\textgreater{}
 
 \begin{itemize}
 \tightlist
@@ -246,11 +280,6 @@ the strongest relationships between land use and the response variables.
 
 \hypertarget{summary-and-conclusions}{%
 \section{Summary and Conclusions}\label{summary-and-conclusions}}
-
-\textless{}Summarize your major findings from your analyses. What
-conclusions do you draw from your findings? Make sure to apply this to a
-broader application for the research question you have
-answered.\textgreater{}
 
 \begin{itemize}
 \tightlist
