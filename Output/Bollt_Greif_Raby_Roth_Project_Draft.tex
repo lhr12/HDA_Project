@@ -1,0 +1,263 @@
+\documentclass[12pt,]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+    \setmainfont[]{Times New Roman}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=2.54cm]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={Impacts of Land Use on Water Quality in Minnesota},
+            pdfauthor={Keith Bollt, Jake Greif, Felipe Raby-Amadori, \& Lindsay Roth},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\providecommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{Impacts of Land Use on Water Quality in Minnesota}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+  \subtitle{\url{https://github.com/lhr12/HDA_Project}}
+  \author{Keith Bollt, Jake Greif, Felipe Raby-Amadori, \& Lindsay Roth}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+    \date{}
+    \predate{}\postdate{}
+  
+
+\begin{document}
+\maketitle
+\begin{abstract}
+Abstract tbd
+\end{abstract}
+
+\textless{}Information in these brackets are used for annotating the
+RMarkdown file. They will not appear in the final version of the PDF
+document\textgreater{}
+
+\newpage
+\tableofcontents 
+\newpage
+\listoftables 
+\newpage
+\listoffigures 
+\newpage
+
+\textless{}Note: set up autoreferencing for figures and tables in your
+document\textgreater{}
+
+\hypertarget{research-question-and-rationale}{%
+\section{Research Question and
+Rationale}\label{research-question-and-rationale}}
+
+\textless{}Paragraph detailing the rationale for your analysis. What is
+the significant application and/or interest in this topic? Connect to
+environmental topic(s)/challenge(s).\textgreater{}
+
+\begin{itemize}
+\tightlist
+\item
+  Land use has a large impact on nutrient runoff into streams, lakes,
+  and other water bodies
+\item
+  Minnesota has wide variety of land uses. Inlcudes large urban centers,
+  natural lands, and agricultural area.
+\item
+  Nutrient management has been a challenge for states in the effort to
+  control harmful algal blooms and coastal dead zones.
+\item
+  Understanding the causes of nutrient problems will better inform
+  management strategies.
+\end{itemize}
+
+\textless{}Paragraph detailing your research question(s) and goals. What
+do you want to find out? Include a sentence (or a few) on the dataset
+you are using to answer this question - just enough to give your reader
+an idea of where you are going with the analysis.\textgreater{}
+
+Research questions:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  What are the predictors of nutrients based on land use in watersheds
+  in the state of Minnesota?
+\item
+  How do you characterize seasonal variation between the predictors of
+  nutrients?
+\end{enumerate}
+
+Goals: * Determine how land use, watershed size, and ecoregion explain
+variation in nutrient loading indicators. * Discern whether there a
+seasonal trends in nutrient loading indicators based on land use types,
+watershed size, and ecoregion. * Provide insight to inform decisions
+about nutrient managment practices based on land use types, watershed
+size, and ecoregion.
+
+\newpage
+
+\hypertarget{dataset-information}{%
+\section{Dataset Information}\label{dataset-information}}
+
+\textless{}Information on how the dataset for this analysis were
+collected, the data contained in the dataset, and any important pieces
+of information that are relevant to your analyses. This section should
+contain much of same information as the README file for the dataset but
+formatted in a way that is more narrative.\textgreater{}
+
+The data used in this analysis include data from the Lake Multi-Scaled
+Geospatial and Temporal Database (LAGOSNE) and the EPA ecoregion spatial
+datasets.
+
+LAGOSNE is a collection of several data modules that contain information
+on lakes in the northern United States. The modules contain data from
+thousands of lakes in 17 states in the northeastern and midwestern
+United States, from Missouri to Maine. The dataset includes a complete
+list of all lakes bigger than 4 hectacres in the 17 state area, and
+water quality data on a large number of lakes, spanning every state.
+
+Ecoregions are used by planning managers to understand the type of land
+use that occurs in different regions of the United States. There are
+different levels of ecoregions. Level 1 divides North America into 15
+ecological regions, while Level IV offers fine ecological resolution for
+each state. This data was published by the U.S. EPA Office of Research
+and Development (ORD) - National Health and Environmental Effects
+Research Laboratory (NHEERL). For the purposes of our project, we
+selected Level III ecoregions because they appear to offer a descriptive
+narrative of the land use patterns of Minnesota without making a
+`distinction without a difference'.
+
+\textless{}Add a table that summarizes your data structure. This table
+can be made in markdown text or inserted as a \texttt{kable} function in
+an R chunk. If the latter, do not include the code used to generate your
+table.\textgreater{}
+
+\newpage
+
+\hypertarget{exploratory-data-analysis-and-wrangling}{%
+\section{Exploratory Data Analysis and
+Wrangling}\label{exploratory-data-analysis-and-wrangling}}
+
+\textless{}Include R chunks for 5+ lines of summary code (display code
+and output), 3+ exploratory graphs (display graphs only), and any
+wrangling you do to your dataset(s).\textgreater{}
+
+\textless{}Include text sections to accompany these R chunks to explain
+the reasoning behind your workflow, and the rationale for your
+approach.\textgreater{}
+
+\newpage
+
+\hypertarget{analysis}{%
+\section{Analysis}\label{analysis}}
+
+\textless{}Include R chunks for 3+ statistical tests (display code and
+output) and 3+ final visualization graphs (display graphs
+only).\textgreater{}
+
+\textless{}Include text sections to accompany these R chunks to explain
+the reasoning behind your workflow, rationale for your approach, and the
+justification of meeting or failing to meet assumptions of
+tests.\textgreater{}
+
+\begin{itemize}
+\tightlist
+\item
+  First we will create correlation plots in order to eliminate variables
+  with a correlation greater than 0.8.
+\item
+  Then we will run Shapiro-Wilkes tests to determine normality and the
+  need for possible data transformations.
+\item
+  After determining the distributions of the data, then we will generate
+  mixed effect linear models with chlorophyll a and secchi depth as
+  response variables, land use and watershed size as fixed effects, and
+  ecoregion as a random effect.
+\end{itemize}
+
+Final figures will include: * 6 maps of the state, each showing the
+relationship between land use and both response variables. Ecoregion
+will be included as a base layer for each map. * Scatter plots showing
+the strongest relationships between land use and the response variables.
+* Table showing results of linear model.
+
+\newpage
+
+\hypertarget{summary-and-conclusions}{%
+\section{Summary and Conclusions}\label{summary-and-conclusions}}
+
+\textless{}Summarize your major findings from your analyses. What
+conclusions do you draw from your findings? Make sure to apply this to a
+broader application for the research question you have
+answered.\textgreater{}
+
+\begin{itemize}
+\tightlist
+\item
+  Conclusions will include a discussion of our results within the
+  context of MN nutrient management plan.
+\end{itemize}
+
+
+\end{document}
