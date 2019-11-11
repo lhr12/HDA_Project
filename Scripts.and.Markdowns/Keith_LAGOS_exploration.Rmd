@@ -26,7 +26,6 @@ library(lubridate)
 library(LAGOSNE)
 library(ggplot2)
 
-invisible(lapply(packages, library, character.only = TRUE)) 
 
 theme_set(theme_classic())
 
@@ -46,9 +45,7 @@ LAGOSiwslulc <- LAGOSdata$iws.lulc
 LAGOSiws <- LAGOSdata$iws
 ```
 
-```{r adding a season column}
 
-```
 
 
 ```{r adding a season column}
