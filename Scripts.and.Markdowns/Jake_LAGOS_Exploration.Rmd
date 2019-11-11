@@ -11,6 +11,7 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+## Initial Exploratory Code, MN code on line 95
 ```{r}
 packages <- c("LAGOSNE","tidyverse","dplyr")
 invisible(lapply(packages, library, character.only = TRUE)) 
@@ -90,3 +91,159 @@ LAGOSiws.median.final2 <- LAGOSiws.Ohio %>%
  filter(lake_area_ha > 5.9605 & lake_area_ha < 9.9195) %>%
  filter(iws_ha > 44.63 & iws_ha < 120)
 ```
+
+## MN Exploration, narrowing down watersheds by lake and watershed size
+```{r}
+# Read in MN data
+
+#MN.All <- read.csv("./data/processed/LAGOS_MN_Full2.csv")
+
+#load packages
+library(tidyverse)
+library(lubridate)
+library(LAGOSNE)
+
+#load LAGOS data
+LAGOSdata <- lagosne_load()
+
+# creating specific lagos files
+LAGOSstate <- LAGOSdata$state
+LAGOSlocus <- LAGOSdata$locus
+LAGOSnutrient <- LAGOSdata$epi_nutr
+LAGOSiwslulc <- LAGOSdata$iws.lulc
+LAGOSiws <- LAGOSdata$iws
+
+#State 14: Minnesota
+LAGOSlocus.MN <- LAGOSlocus %>% filter (state_zoneid == "State_14")
+LAGOSnutrient.MN <- LAGOSlocus.MN %>%
+  left_join(LAGOSnutrient, by = "lagoslakeid") 
+
+#joining MN locus with iwslulc
+LAGOSiwslulc.MN <- LAGOSlocus.MN %>% left_join(LAGOSiwslulc, by = "lagoslakeid")
+
+# joining MN iwsMN with iws
+LAGOSiws.MN <- LAGOSiwslulc.MN %>% left_join(LAGOSiws, by = "lagoslakeid")
+
+##selecting 2011 lulc
+LAGOSiws2011.MN <- LAGOSiws.MN %>% 
+  select(lagoslakeid,state_zoneid, iws_ha,
+         iws_nlcd2011_pct_11, iws_nlcd2011_pct_21, iws_nlcd2011_pct_22,
+         iws_nlcd2011_pct_23, iws_nlcd2011_pct_24, iws_nlcd2011_pct_31,
+         iws_nlcd2011_pct_41, iws_nlcd2011_pct_42, iws_nlcd2011_pct_43,
+         iws_nlcd2011_pct_52, iws_nlcd2011_pct_71, iws_nlcd2011_pct_81,
+         iws_nlcd2011_pct_82, iws_nlcd2011_pct_90, iws_nlcd2011_pct_95)
+
+#1 = urban, 2 = ag, 3 = rangeland, 4 = forest, 5 = water
+#6 = wetland, 7 = barren land, 8 = tundra, 9 = snow/ice
+
+#filtering state nutrient data
+LAGOSnutrient.MN.skinny <- LAGOSnutrient.MN %>%
+  filter(sampledate > "2009-12-31" & sampledate < "2013-01-01")
+
+##Joining iws.lulc and nutrient
+LAGOSiws.nutrient.2011.MN <-  left_join(LAGOSnutrient.MN.skinny, LAGOSiws2011.MN, by = c("lagoslakeid")) 
+
+LAGOSiws.nutrient.2011.MN <- LAGOSiws.nutrient.2011.MN %>%
+  select(lagoslakeid, nhd_lat, nhd_long, lake_area_ha, lake_perim_meters,
+         iws_zoneid, state_zoneid.x, elevation_m, sampledate, chla,secchi, 
+         iws_nlcd2011_pct_11, iws_nlcd2011_pct_21, iws_nlcd2011_pct_22, 
+         iws_nlcd2011_pct_23, iws_nlcd2011_pct_24, iws_nlcd2011_pct_31, 
+         iws_nlcd2011_pct_41, iws_nlcd2011_pct_42, iws_nlcd2011_pct_43, 
+         iws_nlcd2011_pct_52, iws_nlcd2011_pct_71, iws_nlcd2011_pct_81, 
+         iws_nlcd2011_pct_82, iws_nlcd2011_pct_90, iws_nlcd2011_pct_95)
+
+LAGOS.MN.processed <- LAGOSiws.nutrient.2011.MN %>%
+  mutate(Urban.pct = iws_nlcd2011_pct_11,
+         Ag.pct = iws_nlcd2011_pct_21 + iws_nlcd2011_pct_22 +
+           iws_nlcd2011_pct_23 + iws_nlcd2011_pct_24, 
+         Natural.pct = iws_nlcd2011_pct_31 + iws_nlcd2011_pct_41 + 
+           iws_nlcd2011_pct_42 + iws_nlcd2011_pct_43 + 
+           iws_nlcd2011_pct_71 + iws_nlcd2011_pct_81 + 
+           iws_nlcd2011_pct_82) %>%
+  select(-c(iws_nlcd2011_pct_11, iws_nlcd2011_pct_21, iws_nlcd2011_pct_22, 
+            iws_nlcd2011_pct_23, iws_nlcd2011_pct_24, iws_nlcd2011_pct_31, 
+            iws_nlcd2011_pct_41, iws_nlcd2011_pct_42, iws_nlcd2011_pct_43, 
+            iws_nlcd2011_pct_52, iws_nlcd2011_pct_71, iws_nlcd2011_pct_81, 
+            iws_nlcd2011_pct_82, iws_nlcd2011_pct_90, iws_nlcd2011_pct_95)) %>%
+  na.omit()
+
+# Average chla and secchi to consolidate rows
+ChlA.averaged <- aggregate(chla ~ lagoslakeid, LAGOS.MN.processed, FUN = mean)
+Secchi.averaged <- aggregate(secchi ~ lagoslakeid, LAGOS.MN.processed, FUN = mean)
+
+# Join averages
+chla.sec.join <- full_join(ChlA.averaged, Secchi.averaged, by = "lagoslakeid")
+
+# Join spatial data to chla.sec.join
+LAGOS.MN.av <- left_join(chla.sec.join, LAGOSiws2011.MN, by = "lagoslakeid") %>%
+      left_join(LAGOSlocus, "lagoslakeid") %>%
+    mutate(Urban.pct = iws_nlcd2011_pct_11,
+         Ag.pct = iws_nlcd2011_pct_21 + iws_nlcd2011_pct_22 +
+           iws_nlcd2011_pct_23 + iws_nlcd2011_pct_24, 
+         Natural.pct = iws_nlcd2011_pct_31 + iws_nlcd2011_pct_41 + 
+           iws_nlcd2011_pct_42 + iws_nlcd2011_pct_43 + 
+           iws_nlcd2011_pct_71 + iws_nlcd2011_pct_81 + 
+           iws_nlcd2011_pct_82) %>%
+  select(c(lagoslakeid, chla, secchi, Urban.pct, Ag.pct, Natural.pct, iws_ha, lake_area_ha))
+
+
+```
+
+```{r}
+# Summarize/find distribution of watershed area
+summary(LAGOS.MN.av$iws_ha)
+
+  # Find median of 2nd and 3rd quantiles
+(185.9+433.7)/2 # Median = 309.8
+
+(433.7+1057.1)/2 # Median = 745.4
+
+LAGOSiws.median <- LAGOS.MN.av %>%
+ filter(iws_ha > 309.8 & iws_ha < 745.4)
+# 426 watersheds
+
+# Summarize/find distribution of lake area
+summary(LAGOSiws.median$lake_area_ha)
+
+(46.077+75.564)/2 # Median = 60.8205
+(75.564+131.883)/2 # Median = 103.7235
+
+# Dataset of watersheds with middle 25% of lake area and watershed area
+LAGOSiws.median <- LAGOS.MN.av %>%
+ filter(lake_area_ha > 60.8205 & lake_area_ha < 103.7235) %>%
+ filter(iws_ha > 309.8 & iws_ha < 745.4)
+
+# Visualize distribution of lake and watershed areas
+ggplot(LAGOSiws.median, aes(x=lake_area_ha)) + 
+  geom_histogram(bins = 10)
+
+length(which(LAGOSiws.median$lake_area_ha > 60.8205 & LAGOSiws.median$lake_area_ha < 70))
+length(which(LAGOSiws.median$lake_area_ha > 70 & LAGOSiws.median$lake_area_ha < 80))
+length(which(LAGOSiws.median$lake_area_ha > 80 & LAGOSiws.median$lake_area_ha < 90))
+length(which(LAGOSiws.median$lake_area_ha > 90 & LAGOSiws.median$lake_area_ha < 103.7235))
+
+ggplot(LAGOSiws.median, aes(x=iws_ha)) + 
+  geom_histogram(bins = 10)
+
+length(which(LAGOSiws.median$iws_ha > 309.8 & LAGOSiws.median$iws_ha < 420))
+length(which(LAGOSiws.median$iws_ha > 420 & LAGOSiws.median$iws_ha < 530))
+length(which(LAGOSiws.median$iws_ha > 530 & LAGOSiws.median$iws_ha < 640))
+length(which(LAGOSiws.median$iws_ha > 640 & LAGOSiws.median$iws_ha < 745.4))
+```
+
+The quantile within the middle 50% of lake area with the most lakes is 90-103.7235 ha.
+The quantile within the middle 50% of watershed area with the most lakes is 309.8-420 ha.
+
+```{r}
+# All lakes that have an area within 90-103.7 ha, and a watershed area within 309.8-420 ha.
+LAGOSiws.median.final <- LAGOS.MN.av %>%
+ filter(lake_area_ha > 90 & lake_area_ha < 103.7235) %>%
+ filter(iws_ha > 309.8 & iws_ha < 420)
+
+# All lakes that have an area within 80-103.7 ha, and a watershed area within 309.8-530 ha.
+LAGOSiws.median.final2 <- LAGOS.MN.av %>%
+ filter(lake_area_ha > 80 & lake_area_ha < 103.7235) %>%
+ filter(iws_ha > 309.8 & iws_ha < 530)
+```
+
+With the constraints in the above chunk, the number of available lakes is 10 and 32, respectively.
