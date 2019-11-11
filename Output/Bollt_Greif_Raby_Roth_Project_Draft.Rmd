@@ -11,6 +11,8 @@ author: Keith Bollt, Jake Greif, Felipe Raby-Amadori, & Lindsay Roth
 abstract: "Abstract tbd"
 fontsize: 12pt
 mainfont: Times New Roman
+editor_options: 
+  chunk_output_type: console
 ---
 
 <Information in these brackets are used for annotating the RMarkdown file. They will not appear in the final version of the PDF document>
@@ -65,7 +67,11 @@ LAGOSNE is a collection of several data modules that contain information on lake
 
 Ecoregions are used by planning managers to understand the type of land use that occurs in different regions of the United States. There are different levels of ecoregions. Level 1 divides North America into 15 ecological regions, while Level IV offers fine ecological resolution for each state. This data was published by the U.S. EPA Office of Research and Development (ORD) - National Health and Environmental Effects Research Laboratory (NHEERL). For the purposes of our project, we selected Level III ecoregions because they appear to offer a descriptive narrative of the land use patterns of Minnesota without making a 'distinction without a difference'.
 
-<Add a table that summarizes your data structure. This table can be made in markdown text or inserted as a `kable` function in an R chunk. If the latter, do not include the code used to generate your table.>
+```{r ,echo=TRUE}
+Variables.table <- read.csv("./Output/Variable_Descriptions_Table.csv")
+library(knitr)
+kable(Variables.table)
+```
 
 \newpage
 

@@ -1,0 +1,9 @@
+﻿Column Name,Description,Units,Variable Type
+chla,Chlorophyll a,mg/L,Depedent
+secchi,Secchi depth,m,Depedent
+Urban.pct,Percent urban land cover,%,Independent- fixed
+Undeveloped.pct,Percent natural land cover,%,Independent- fixed
+Ag.pct,Percent agricultural land cover,%,Independent- fixed
+LakeIWS.Ratio,Lake surface area to watershed area ratio,N/A,Independent- fixed
+Season,"Early, prime, and late growing ""seasons""",N/A,Independent- fixed
+US_L3NAME,Level 3 ecoregions,N/A,Independent- random
