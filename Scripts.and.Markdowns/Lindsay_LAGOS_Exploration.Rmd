@@ -31,7 +31,6 @@ LAGOSiwslulc <- LAGOSdata$iws.lulc
 
 ```
 
-
 ```{r, Checking_Each_State_for_Nutrient_Data}
 #checking each state for nutrient data
 
@@ -123,7 +122,6 @@ LAGOSnutrient.VT <- LAGOSlocus.VT %>%
 
 ```
 
-
 ```{r, Joining_MN_Nutrient_lulc}
 
 #joining MN locus with iwslulc
@@ -145,7 +143,6 @@ LAGOSiws2011.MN <- LAGOSiws.MN %>%
 
 ```
 
-
 ```{r, Filter_Nutrient_Dates}
 #filtering state nutrient data
 LAGOSnutrient.MN.skinny <- LAGOSnutrient.MN %>%
@@ -153,7 +150,6 @@ LAGOSnutrient.MN.skinny <- LAGOSnutrient.MN %>%
 
 sapply(LAGOSnutrient.MN.skinny, summary)
 ```
-
 
 ```{r, Joined_MN_df}
 ##Joining iws.lulc and nutrient
@@ -173,7 +169,6 @@ sapply(LAGOSiws.nutrient.2011.MN, summary)
 
 
 ```
-
 
 ```{r, Visualize_data}
 # Looking at the data
@@ -195,7 +190,6 @@ ggplot(LAGOSiws.nutrient.2011.MN, aes(x = sampledate, y = chla, color = lagoslak
 geom_line() 
 
 ```
-
 
 ```{r Create_Full_df}
 
@@ -221,7 +215,6 @@ sapply(LAGOS.MN.processed, summary)
           #file =  "./data/raw/LAGOS_MN_Full.csv")
 
 ```
-
 
 ```{r Visualize_Data_Round_2}
 ggplot(LAGOS.MN.processed, aes(x = sampledate, y = secchi, color = lagoslakeid)) +
@@ -272,7 +265,6 @@ LAGOS.MN.processed <- LAGOS.MN.processed %>%
 
 
 ```
-
 
 ```{r Plot_by_DOY}
 #By DOY
@@ -574,7 +566,6 @@ print(chlaplot.MN)
 
 ```
 
-
 ```{r Undeveloped_Chla_Scatterplots}
 #Chla scatterplots
 
@@ -797,19 +788,7 @@ LAGOS.MN.processed.Ecoreg.sf <- st_join(LAGOS.MN.processed.UTM.sf, MN.Ecoregions
 
 ```
 
-
-
-
-
-
-
-
-############## Not done
-
-######## Make a map showing the variables with circles. Including the ecoregions.
-
-
-```{r}
+```{r Urban_Secchi_Scatterplots}
 #secchi scatterplots Urban
 
 ggplot(LAGOS.MN.processed.January, aes(x = Urban.pct, y = secchi)) +
@@ -910,3 +889,305 @@ theme(plot.title = element_text(hjust = 0.5))
 
 ```
 
+```{r Urban_Chla_Scatterplots}
+#secchi scatterplots Urban
+
+ggplot(LAGOS.MN.processed.January, aes(x = Urban.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Urban %")) +
+ylab(expression("chla")) +
+ggtitle("Urban % vs chla Scatterplot, January") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.February, aes(x = Urban.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Urban %")) +
+ylab(expression("chla")) +
+ggtitle("Urban % vs chla Scatterplot, February") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.March, aes(x = Urban.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Urban %")) +
+ylab(expression("chla")) +
+ggtitle("Urban % vs chla Scatterplot, March") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.April, aes(x = Urban.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Urban %")) +
+ylab(expression("chla")) +
+ggtitle("Urban % vs chla Scatterplot, April") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.May, aes(x = Urban.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Urban %")) +
+ylab(expression("chla")) +
+ggtitle("Urban % vs chla Scatterplot, May") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.June, aes(x = Urban.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Urban %")) +
+ylab(expression("chla")) +
+ggtitle("Urban % vs chla Scatterplot, June") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.July, aes(x = Urban.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Urban %")) +
+ylab(expression("chla")) +
+ggtitle("Urban % vs chla Scatterplot, July") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.August, aes(x = Urban.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Urban %")) +
+ylab(expression("chla")) +
+ggtitle("Urban % vs chla Scatterplot, August") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Sept, aes(x = Urban.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Urban %")) +
+ylab(expression("chla")) +
+ggtitle("Urban % vs chla Scatterplot, Sept") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Oct, aes(x = Urban.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Urban %")) +
+ylab(expression("chla")) +
+ggtitle("Urban % vs chla Scatterplot, Oct") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Nov, aes(x = Urban.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Urban %")) +
+ylab(expression("chla")) +
+ggtitle("Urban % vs chla Scatterplot, Nov") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Dec, aes(x = Urban.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Urban %")) +
+ylab(expression("chla")) +
+ggtitle("Urban % vs chla Scatterplot, Dec") +
+theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+```{r Ag_Secchi_Scatterplots}
+#secchi scatterplots Urban
+
+ggplot(LAGOS.MN.processed.January, aes(x = Ag.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Agriculture %")) +
+ylab(expression("secchi")) +
+ggtitle("Agriculture % vs secchi Scatterplot, January") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.February, aes(x = Ag.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Agriculture %")) +
+ylab(expression("secchi")) +
+ggtitle("Agriculture % vs secchi Scatterplot, February") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.March, aes(x = Ag.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Agriculture %")) +
+ylab(expression("secchi")) +
+ggtitle("Agriculture % vs secchi Scatterplot, March") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.April, aes(x = Ag.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Agriculture %")) +
+ylab(expression("secchi")) +
+ggtitle("Agriculture % vs secchi Scatterplot, April") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.May, aes(x = Ag.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Agriculture %")) +
+ylab(expression("secchi")) +
+ggtitle("Agriculture % vs secchi Scatterplot, May") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.June, aes(x = Ag.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Agriculture %")) +
+ylab(expression("secchi")) +
+ggtitle("Agriculture % vs secchi Scatterplot, June") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.July, aes(x = Ag.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Agriculture %")) +
+ylab(expression("secchi")) +
+ggtitle("Agriculture % vs secchi Scatterplot, July") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.August, aes(x = Ag.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Agriculture %")) +
+ylab(expression("secchi")) +
+ggtitle("Agriculture % vs secchi Scatterplot, August") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Sept, aes(x = Ag.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Agriculture %")) +
+ylab(expression("secchi")) +
+ggtitle("Agriculture % vs secchi Scatterplot, Sept") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Oct, aes(x = Ag.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Agriculture %")) +
+ylab(expression("secchi")) +
+ggtitle("Agriculture % vs secchi Scatterplot, Oct") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Nov, aes(x = Ag.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Agriculture %")) +
+ylab(expression("secchi")) +
+ggtitle("Agriculture % vs secchi Scatterplot, Nov") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Dec, aes(x = Ag.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Agriculture %")) +
+ylab(expression("secchi")) +
+ggtitle("Agriculture % vs secchi Scatterplot, Dec") +
+theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+```{r Ag_Chla_Scatterplots}
+#secchi scatterplots Urban
+
+ggplot(LAGOS.MN.processed.January, aes(x = Ag.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Agriculture %")) +
+ylab(expression("chla")) +
+ggtitle("Agriculture % vs chla Scatterplot, January") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.February, aes(x = Ag.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Agriculture %")) +
+ylab(expression("chla")) +
+ggtitle("Agriculture % vs chla Scatterplot, February") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.March, aes(x = Ag.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Agriculture %")) +
+ylab(expression("chla")) +
+ggtitle("Agriculture % vs chla Scatterplot, March") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.April, aes(x = Ag.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Agriculture %")) +
+ylab(expression("chla")) +
+ggtitle("Agriculture % vs chla Scatterplot, April") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.May, aes(x = Ag.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Agriculture %")) +
+ylab(expression("chla")) +
+ggtitle("Agriculture % vs chla Scatterplot, May") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.June, aes(x = Ag.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Agriculture %")) +
+ylab(expression("chla")) +
+ggtitle("Agriculture % vs chla Scatterplot, June") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.July, aes(x = Ag.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Agriculture %")) +
+ylab(expression("chla")) +
+ggtitle("Agriculture % vs chla Scatterplot, July") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.August, aes(x = Ag.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Agriculture %")) +
+ylab(expression("chla")) +
+ggtitle("Agriculture % vs chla Scatterplot, August") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Sept, aes(x = Ag.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Agriculture %")) +
+ylab(expression("chla")) +
+ggtitle("Agriculture % vs chla Scatterplot, Sept") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Oct, aes(x = Ag.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Agriculture %")) +
+ylab(expression("chla")) +
+ggtitle("Agriculture % vs chla Scatterplot, Oct") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Nov, aes(x = Ag.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Agriculture %")) +
+ylab(expression("chla")) +
+ggtitle("Agriculture % vs chla Scatterplot, Nov") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Dec, aes(x = Ag.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Agriculture %")) +
+ylab(expression("chla")) +
+ggtitle("Agriculture % vs chla Scatterplot, Dec") +
+theme(plot.title = element_text(hjust = 0.5))
+
+```
