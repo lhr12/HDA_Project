@@ -28,7 +28,7 @@ LAGOSlocus <- LAGOSdata$locus
 LAGOSnutrient <- LAGOSdata$epi_nutr
 LAGOSiwslulc <- LAGOSdata$iws.lulc
 
-
+theme_set(theme_classic())
 ```
 
 ```{r, Checking_Each_State_for_Nutrient_Data}
