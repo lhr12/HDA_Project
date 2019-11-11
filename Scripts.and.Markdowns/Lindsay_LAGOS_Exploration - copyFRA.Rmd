@@ -166,7 +166,7 @@ LAGOSiws.nutrient.2011.MN <-  left_join(LAGOSnutrient.MN.skinny, LAGOSiws2011.MN
 
 LAGOSiws.nutrient.2011.MN <- LAGOSiws.nutrient.2011.MN %>%
   select(lagoslakeid, nhd_lat, nhd_long, lake_area_ha, lake_perim_meters,
-         iws_zoneid, state_zoneid.x, elevation_m, sampledate, chla,secchi, 
+         iws_zoneid, iws_ha, LakeIWS.Ratio, state_zoneid.x, elevation_m, sampledate, chla,secchi, 
          iws_nlcd2011_pct_11, iws_nlcd2011_pct_21, iws_nlcd2011_pct_22, 
          iws_nlcd2011_pct_23, iws_nlcd2011_pct_24, iws_nlcd2011_pct_31, 
          iws_nlcd2011_pct_41, iws_nlcd2011_pct_42, iws_nlcd2011_pct_43, 
@@ -354,6 +354,231 @@ LAGOS.MN.processed.Sept <- filter(LAGOS.MN.processed, Month == 9)
 LAGOS.MN.processed.Oct <- filter(LAGOS.MN.processed, Month == 10)
 LAGOS.MN.processed.Nov <- filter(LAGOS.MN.processed, Month == 11)
 LAGOS.MN.processed.Dec <- filter(LAGOS.MN.processed, Month == 12)
+```
+
+```{r summaries.per.month.or.season}
+
+LAGOS.MN.Summary.January <- LAGOS.MN.processed.January %>%
+group_by(lagoslakeid) %>%
+summarise(secchi.mean = mean(secchi),
+          chla.mean = mean(chla),
+          lake.area = mean(lake_area_ha),
+          iws.area = mean(iws_ha),
+          LakeIWS.Ratio = mean(LakeIWS.Ratio),
+          Water.pct = mean(Water.pct),
+          Urban.pct = mean(Urban.pct),
+          Undeveloped.pct = mean(Undeveloped.pct),
+          Ag.pct = mean(Ag.pct),
+          lat = mean(nhd_lat),
+          long = mean(nhd_long)) %>%
+  drop_na()
+  
+LAGOS.MN.Summary.February <- LAGOS.MN.processed.February %>%
+group_by(lagoslakeid) %>%
+summarise(secchi.mean = mean(secchi),
+          chla.mean = mean(chla),
+          lake.area = mean(lake_area_ha),
+          iws.area = mean(iws_ha),
+          LakeIWS.Ratio = mean(LakeIWS.Ratio),
+          Water.pct = mean(Water.pct),
+          Urban.pct = mean(Urban.pct),
+          Undeveloped.pct = mean(Undeveloped.pct),
+          Ag.pct = mean(Ag.pct),
+          lat = mean(nhd_lat),
+          long = mean(nhd_long)) %>%
+  drop_na()
+
+LAGOS.MN.Summary.March <- LAGOS.MN.processed.March %>%
+group_by(lagoslakeid) %>%
+summarise(secchi.mean = mean(secchi),
+          chla.mean = mean(chla),
+          lake.area = mean(lake_area_ha),
+          iws.area = mean(iws_ha),
+          LakeIWS.Ratio = mean(LakeIWS.Ratio),
+          Water.pct = mean(Water.pct),
+          Urban.pct = mean(Urban.pct),
+          Undeveloped.pct = mean(Undeveloped.pct),
+          Ag.pct = mean(Ag.pct),
+          lat = mean(nhd_lat),
+          long = mean(nhd_long)) %>%
+  drop_na()
+
+LAGOS.MN.Summary.April <- LAGOS.MN.processed.April %>%
+group_by(lagoslakeid) %>%
+summarise(secchi.mean = mean(secchi),
+          chla.mean = mean(chla),
+          lake.area = mean(lake_area_ha),
+          iws.area = mean(iws_ha),
+          LakeIWS.Ratio = mean(LakeIWS.Ratio),
+          Water.pct = mean(Water.pct),
+          Urban.pct = mean(Urban.pct),
+          Undeveloped.pct = mean(Undeveloped.pct),
+          Ag.pct = mean(Ag.pct),
+          lat = mean(nhd_lat),
+          long = mean(nhd_long)) %>%
+  drop_na()
+
+LAGOS.MN.Summary.May <- LAGOS.MN.processed.May %>%
+group_by(lagoslakeid) %>%
+summarise(secchi.mean = mean(secchi),
+          chla.mean = mean(chla),
+          lake.area = mean(lake_area_ha),
+          iws.area = mean(iws_ha),
+          LakeIWS.Ratio = mean(LakeIWS.Ratio),
+          Water.pct = mean(Water.pct),
+          Urban.pct = mean(Urban.pct),
+          Undeveloped.pct = mean(Undeveloped.pct),
+          Ag.pct = mean(Ag.pct),
+          lat = mean(nhd_lat),
+          long = mean(nhd_long)) %>%
+  drop_na()
+
+LAGOS.MN.Summary.June <- LAGOS.MN.processed.June %>%
+group_by(lagoslakeid) %>%
+summarise(secchi.mean = mean(secchi),
+          chla.mean = mean(chla),
+          lake.area = mean(lake_area_ha),
+          iws.area = mean(iws_ha),
+          LakeIWS.Ratio = mean(LakeIWS.Ratio),
+          Water.pct = mean(Water.pct),
+          Urban.pct = mean(Urban.pct),
+          Undeveloped.pct = mean(Undeveloped.pct),
+          Ag.pct = mean(Ag.pct),
+          lat = mean(nhd_lat),
+          long = mean(nhd_long)) %>%
+  drop_na()
+
+LAGOS.MN.Summary.July <- LAGOS.MN.processed.July %>%
+group_by(lagoslakeid) %>%
+summarise(secchi.mean = mean(secchi),
+          chla.mean = mean(chla),
+          lake.area = mean(lake_area_ha),
+          iws.area = mean(iws_ha),
+          LakeIWS.Ratio = mean(LakeIWS.Ratio),
+          Water.pct = mean(Water.pct),
+          Urban.pct = mean(Urban.pct),
+          Undeveloped.pct = mean(Undeveloped.pct),
+          Ag.pct = mean(Ag.pct),
+          lat = mean(nhd_lat),
+          long = mean(nhd_long)) %>%
+  drop_na()
+
+LAGOS.MN.Summary.August <- LAGOS.MN.processed.August %>%
+group_by(lagoslakeid) %>%
+summarise(secchi.mean = mean(secchi),
+          chla.mean = mean(chla),
+          lake.area = mean(lake_area_ha),
+          iws.area = mean(iws_ha),
+          LakeIWS.Ratio = mean(LakeIWS.Ratio),
+          Water.pct = mean(Water.pct),
+          Urban.pct = mean(Urban.pct),
+          Undeveloped.pct = mean(Undeveloped.pct),
+          Ag.pct = mean(Ag.pct),
+          lat = mean(nhd_lat),
+          long = mean(nhd_long)) %>%
+  drop_na()
+
+LAGOS.MN.Summary.Sept <-LAGOS.MN.processed.Sept %>%
+group_by(lagoslakeid) %>%
+summarise(secchi.mean = mean(secchi),
+          chla.mean = mean(chla),
+          lake.area = mean(lake_area_ha),
+          iws.area = mean(iws_ha),
+          LakeIWS.Ratio = mean(LakeIWS.Ratio),
+          Water.pct = mean(Water.pct),
+          Urban.pct = mean(Urban.pct),
+          Undeveloped.pct = mean(Undeveloped.pct),
+          Ag.pct = mean(Ag.pct),
+          lat = mean(nhd_lat),
+          long = mean(nhd_long)) %>%
+  drop_na()
+
+LAGOS.MN.Summary.Oct <- LAGOS.MN.processed.Oct %>%
+group_by(lagoslakeid) %>%
+summarise(secchi.mean = mean(secchi),
+          chla.mean = mean(chla),
+          lake.area = mean(lake_area_ha),
+          iws.area = mean(iws_ha),
+          LakeIWS.Ratio = mean(LakeIWS.Ratio),
+          Water.pct = mean(Water.pct),
+          Urban.pct = mean(Urban.pct),
+          Undeveloped.pct = mean(Undeveloped.pct),
+          Ag.pct = mean(Ag.pct),
+          lat = mean(nhd_lat),
+          long = mean(nhd_long)) %>%
+  drop_na()
+
+LAGOS.MN.Summary.Nov <- LAGOS.MN.processed.Nov %>%
+group_by(lagoslakeid) %>%
+summarise(secchi.mean = mean(secchi),
+          chla.mean = mean(chla),
+          lake.area = mean(lake_area_ha),
+          iws.area = mean(iws_ha),
+          LakeIWS.Ratio = mean(LakeIWS.Ratio),
+          Water.pct = mean(Water.pct),
+          Urban.pct = mean(Urban.pct),
+          Undeveloped.pct = mean(Undeveloped.pct),
+          Ag.pct = mean(Ag.pct),
+          lat = mean(nhd_lat),
+          long = mean(nhd_long)) %>%
+  drop_na()
+
+LAGOS.MN.Summary.Dec <- LAGOS.MN.processed.Dec %>%
+group_by(lagoslakeid) %>%
+summarise(secchi.mean = mean(secchi),
+          chla.mean = mean(chla),
+          lake.area = mean(lake_area_ha),
+          iws.area = mean(iws_ha),
+          LakeIWS.Ratio = mean(LakeIWS.Ratio),
+          Water.pct = mean(Water.pct),
+          Urban.pct = mean(Urban.pct),
+          Undeveloped.pct = mean(Undeveloped.pct),
+          Ag.pct = mean(Ag.pct),
+          lat = mean(nhd_lat),
+          long = mean(nhd_long)) %>%
+  drop_na()
+
+#Only Sept because smallest Secchi depth (not 100% sure)
+LAGOS.MN.Summary.Sept.sf <- st_as_sf(LAGOS.MN.Summary.Sept, coords = c("long", "lat"), crs = 4326)
+
+#Only Oct because highest Chla (not 100% sure)
+LAGOS.MN.Summary.Oct.sf <- st_as_sf(LAGOS.MN.Summary.Oct, coords = c("long", "lat"), crs = 4326)
+
+
+# generate a map of U.S. states
+states <- st_as_sf(map(database = "state", plot = FALSE, fill = TRUE, col = "white"))
+
+# filter MN
+states.MN <- filter(states, ID %in%
+c("minnesota"))
+
+secchiplot.MN <- ggplot() +
+geom_sf(data = states.MN, fill = "white")+
+geom_sf(data = LAGOS.MN.Summary.Sept.sf, aes(size = Urban.pct, color = secchi.mean),
+alpha = 0.1, show.legend = "point")+
+scale_color_viridis_c(option = "inferno") +
+labs(color = "Average \n Secchi \n Depth (m)", size = "Urban \n Area \n %") +
+theme(legend.position = "right", legend.text = element_text(size = 7),
+legend.title = element_text(size = 8),
+legend.margin = margin(0,0,0,0)) 
+#+guides(color = F) # This line removes the color gradient
+print(secchiplot.MN)
+
+chlaplot.MN <- ggplot() +
+geom_sf(data = states.MN, fill = "white")+
+geom_sf(data = LAGOS.MN.Summary.Oct.sf, aes(size = Urban.pct, color = chla.mean),
+alpha = 0.4, show.legend = "point")+
+scale_color_viridis_c(option = "inferno") +
+labs(color = "Average \n Chla \n ", size = "Urban \n Area \n %") +
+theme(legend.position = "right", legend.text = element_text(size = 7),
+legend.title = element_text(size = 8),
+legend.margin = margin(0,0,0,0)) 
+#+guides(color = F) # This line removes the color gradient
+print(chlaplot.MN)
+
+
+
+
 ```
 
 
@@ -580,54 +805,7 @@ LAGOS.MN.processed.Ecoreg.sf <- st_join(LAGOS.MN.processed.UTM.sf, MN.Ecoregions
 ```
 
 
-```{r}
-# generate a map of U.S. states
-states <- st_as_sf(map(database = "state", plot = FALSE, fill = TRUE, col = "white"))
 
-# filter MN
-states.MN <- filter(states, ID %in%
-c("minnesota"))
-
-
-#Maybe use means and not so many data for each lake.
-
-secchiplot.MN <- ggplot() +
-geom_sf(data = states.MN, fill = "white")+
-geom_sf(data = LAGOS.MN.processed.sf, aes(size = Urban.pct, color = secchi),
-alpha = 0.7, show.legend = "point")+
-scale_color_viridis_c(option = "inferno") +
-labs(color = "Average \n Secchi \n Depth (m)", size = "Urban \n Area \n %") +
-theme(legend.position = "right", legend.text = element_text(size = 7),
-legend.title = element_text(size = 8),
-legend.margin = margin(0,0,0,0)) 
-#+guides(color = F) # This line removes the color gradient
-print(secchiplot.MN)
-
-secchiplot.MN <- ggplot() +
-geom_sf(data = states.MN, fill = "white")+
-geom_sf(data = LAGOS.MN.processed.sf, aes(size = Urban.pct, color = secchi),
-alpha = 0.7, show.legend = "point")+
-scale_color_viridis_c(option = "inferno") +
-labs(color = "Average \n Secchi \n Depth (m)", size = "Urban \n Area \n %") +
-theme(legend.position = "right", legend.text = element_text(size = 7),
-legend.title = element_text(size = 8),
-legend.margin = margin(0,0,0,0)) 
-#+guides(color = F) # This line removes the color gradient
-print(secchiplot.MN)
-
-chlaplot.MN <- ggplot() +
-geom_sf(data = states.MN, fill = "white")+
-geom_sf(data = LAGOS.MN.processed.sf, aes(size = Urban.pct, color = chla),
-alpha = 0.7, show.legend = "point")+
-scale_color_viridis_c(option = "inferno") +
-labs(color = "chla", size = "Urban \n Area \n %") +
-theme(legend.position = "right", legend.text = element_text(size = 7),
-legend.title = element_text(size = 8),
-legend.margin = margin(0,0,0,0)) 
-#+guides(color = F) # This line removes the color gradient
-print(chlaplot.MN)
-
-```
 
 
 

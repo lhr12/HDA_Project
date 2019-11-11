@@ -247,3 +247,4 @@ LAGOSiws.median.final2 <- LAGOS.MN.av %>%
 ```
 
 With the constraints in the above chunk, the number of available lakes is 10 and 32, respectively.
+Without constraints (so just using the middle 50% of each) there are 106 available lakes.
