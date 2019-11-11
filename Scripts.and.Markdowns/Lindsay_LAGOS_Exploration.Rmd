@@ -200,13 +200,14 @@ geom_line()
 ```{r Create_Full_df}
 
 LAGOS.MN.processed <- LAGOSiws.nutrient.2011.MN %>%
-  mutate(Urban.pct = iws_nlcd2011_pct_11,
-         Ag.pct = iws_nlcd2011_pct_21 + iws_nlcd2011_pct_22 +
+  mutate(Water.pct = iws_nlcd2011_pct_11,
+         Urban.pct = iws_nlcd2011_pct_21 + iws_nlcd2011_pct_22 +
            iws_nlcd2011_pct_23 + iws_nlcd2011_pct_24, 
-         Natural.pct = iws_nlcd2011_pct_31 + iws_nlcd2011_pct_41 + 
+         Undeveloped.pct = iws_nlcd2011_pct_31 + iws_nlcd2011_pct_41 + 
            iws_nlcd2011_pct_42 + iws_nlcd2011_pct_43 + 
-           iws_nlcd2011_pct_71 + iws_nlcd2011_pct_81 + 
-           iws_nlcd2011_pct_82) %>%
+           iws_nlcd2011_pct_52 + 
+           iws_nlcd2011_pct_90 + iws_nlcd2011_pct_95,
+         Ag.pct =  iws_nlcd2011_pct_81 + iws_nlcd2011_pct_82 + iws_nlcd2011_pct_71) %>%
   select(-c(iws_nlcd2011_pct_11, iws_nlcd2011_pct_21, iws_nlcd2011_pct_22, 
             iws_nlcd2011_pct_23, iws_nlcd2011_pct_24, iws_nlcd2011_pct_31, 
             iws_nlcd2011_pct_41, iws_nlcd2011_pct_42, iws_nlcd2011_pct_43, 
@@ -216,8 +217,8 @@ LAGOS.MN.processed <- LAGOSiws.nutrient.2011.MN %>%
 
 sapply(LAGOS.MN.processed, summary)
 
-write.csv(x =  LAGOS.MN.processed, row.names = FALSE,
-          file =  "./data/raw/LAGOS_MN_Full.csv")
+#write.csv(x =  LAGOS.MN.processed, row.names = FALSE,
+          #file =  "./data/raw/LAGOS_MN_Full.csv")
 
 ```
 
@@ -256,6 +257,656 @@ ggplot(LAGOS.MN.processed, aes(x = chla, y = Natural.pct, color = as.numeric(sam
   geom_point()
 
 
+
+```
+
+```{r Add_DOY_Month}
+
+
+LAGOS.MN.processed <- LAGOS.MN.processed %>%
+  mutate(DOY = yday(sampledate)) %>%
+  mutate(Month = month(sampledate))
+
+#write.csv(x =  LAGOS.MN.processed, row.names = FALSE,
+          #file =  "./data/processed/LAGOS_MN_Full2.csv")
+
+
+```
+
+
+```{r Plot_by_DOY}
+#By DOY
+
+ggplot(LAGOS.MN.processed, aes(x = secchi, y = Urban.pct, color = DOY)) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+ggplot(LAGOS.MN.processed, aes(x = secchi, y = Ag.pct, color = DOY)) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+ggplot(LAGOS.MN.processed, aes(x = secchi, y = Undeveloped.pct, color = DOY)) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+ggplot(LAGOS.MN.processed, aes(x = chla, y = Urban.pct, color = DOY)) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+ggplot(LAGOS.MN.processed, aes(x = chla, y = Ag.pct, color = DOY)) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+ggplot(LAGOS.MN.processed, aes(x = chla, y = Undeveloped.pct, color = DOY)) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+```
+
+```{r Plot_by_Month}
+#By Month (could be season)
+
+ggplot(LAGOS.MN.processed, aes(x = secchi, y = Urban.pct, color = Month)) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+ggplot(LAGOS.MN.processed, aes(x = secchi, y = Ag.pct, color = Month)) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+ggplot(LAGOS.MN.processed, aes(x = secchi, y = Undeveloped.pct, color = Month)) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+ggplot(LAGOS.MN.processed, aes(x = chla, y = Urban.pct, color = Month)) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+ggplot(LAGOS.MN.processed, aes(x = chla, y = Ag.pct, color = Month)) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+ggplot(LAGOS.MN.processed, aes(x = chla, y = Undeveloped.pct, color = Month)) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_point()
+
+```
+
+```{r Create_Month_Subsets}
+LAGOS.MN.processed.January <- filter(LAGOS.MN.processed, Month == 1)
+LAGOS.MN.processed.February <- filter(LAGOS.MN.processed, Month == 2)
+LAGOS.MN.processed.March <- filter(LAGOS.MN.processed, Month == 3)
+LAGOS.MN.processed.April <- filter(LAGOS.MN.processed, Month == 4)
+LAGOS.MN.processed.May <- filter(LAGOS.MN.processed, Month == 5)
+LAGOS.MN.processed.June <- filter(LAGOS.MN.processed, Month == 6)
+LAGOS.MN.processed.July <- filter(LAGOS.MN.processed, Month == 7)
+LAGOS.MN.processed.August <- filter(LAGOS.MN.processed, Month == 8)
+LAGOS.MN.processed.Sept <- filter(LAGOS.MN.processed, Month == 9)
+LAGOS.MN.processed.Oct <- filter(LAGOS.MN.processed, Month == 10)
+LAGOS.MN.processed.Nov <- filter(LAGOS.MN.processed, Month == 11)
+LAGOS.MN.processed.Dec <- filter(LAGOS.MN.processed, Month == 12)
+```
+
+```{r Summarize_by_Month/Season_Not_Working}
+
+LAGOS.MN.Summary.January <- LAGOS.MN.processed.January %>%
+group_by(lagoslakeid) %>%
+summarise(secchi.mean = mean(secchi),
+          chla.mean = mean(chla),
+          lake.area = mean(lake_area_ha),
+          iws.area = mean(iws_ha),
+          LakeIWS.Ratio = mean(LakeIWS.Ratio),
+          Water.pct = mean(Water.pct),
+          Urban.pct = mean(Urban.pct),
+          Undeveloped.pct = mean(Undeveloped.pct),
+          Ag.pct = mean(Ag.pct),
+          lat = mean(nhd_lat),
+          long = mean(nhd_long)) %>%
+  drop_na()
+  
+LAGOS.MN.Summary.February <- LAGOS.MN.processed.February %>%
+group_by(lagoslakeid) %>%
+summarise(secchi.mean = mean(secchi),
+          chla.mean = mean(chla),
+          lake.area = mean(lake_area_ha),
+          iws.area = mean(iws_ha),
+          LakeIWS.Ratio = mean(LakeIWS.Ratio),
+          Water.pct = mean(Water.pct),
+          Urban.pct = mean(Urban.pct),
+          Undeveloped.pct = mean(Undeveloped.pct),
+          Ag.pct = mean(Ag.pct),
+          lat = mean(nhd_lat),
+          long = mean(nhd_long)) %>%
+  drop_na()
+
+LAGOS.MN.Summary.March <- LAGOS.MN.processed.March %>%
+group_by(lagoslakeid) %>%
+summarise(secchi.mean = mean(secchi),
+          chla.mean = mean(chla),
+          lake.area = mean(lake_area_ha),
+          iws.area = mean(iws_ha),
+          LakeIWS.Ratio = mean(LakeIWS.Ratio),
+          Water.pct = mean(Water.pct),
+          Urban.pct = mean(Urban.pct),
+          Undeveloped.pct = mean(Undeveloped.pct),
+          Ag.pct = mean(Ag.pct),
+          lat = mean(nhd_lat),
+          long = mean(nhd_long)) %>%
+  drop_na()
+
+LAGOS.MN.Summary.April <- LAGOS.MN.processed.April %>%
+group_by(lagoslakeid) %>%
+summarise(secchi.mean = mean(secchi),
+          chla.mean = mean(chla),
+          lake.area = mean(lake_area_ha),
+          iws.area = mean(iws_ha),
+          LakeIWS.Ratio = mean(LakeIWS.Ratio),
+          Water.pct = mean(Water.pct),
+          Urban.pct = mean(Urban.pct),
+          Undeveloped.pct = mean(Undeveloped.pct),
+          Ag.pct = mean(Ag.pct),
+          lat = mean(nhd_lat),
+          long = mean(nhd_long)) %>%
+  drop_na()
+
+LAGOS.MN.Summary.May <- LAGOS.MN.processed.May %>%
+group_by(lagoslakeid) %>%
+summarise(secchi.mean = mean(secchi),
+          chla.mean = mean(chla),
+          lake.area = mean(lake_area_ha),
+          iws.area = mean(iws_ha),
+          LakeIWS.Ratio = mean(LakeIWS.Ratio),
+          Water.pct = mean(Water.pct),
+          Urban.pct = mean(Urban.pct),
+          Undeveloped.pct = mean(Undeveloped.pct),
+          Ag.pct = mean(Ag.pct),
+          lat = mean(nhd_lat),
+          long = mean(nhd_long)) %>%
+  drop_na()
+
+LAGOS.MN.Summary.June <- LAGOS.MN.processed.June %>%
+group_by(lagoslakeid) %>%
+summarise(secchi.mean = mean(secchi),
+          chla.mean = mean(chla),
+          lake.area = mean(lake_area_ha),
+          iws.area = mean(iws_ha),
+          LakeIWS.Ratio = mean(LakeIWS.Ratio),
+          Water.pct = mean(Water.pct),
+          Urban.pct = mean(Urban.pct),
+          Undeveloped.pct = mean(Undeveloped.pct),
+          Ag.pct = mean(Ag.pct),
+          lat = mean(nhd_lat),
+          long = mean(nhd_long)) %>%
+  drop_na()
+
+LAGOS.MN.Summary.July <- LAGOS.MN.processed.July %>%
+group_by(lagoslakeid) %>%
+summarise(secchi.mean = mean(secchi),
+          chla.mean = mean(chla),
+          lake.area = mean(lake_area_ha),
+          iws.area = mean(iws_ha),
+          LakeIWS.Ratio = mean(LakeIWS.Ratio),
+          Water.pct = mean(Water.pct),
+          Urban.pct = mean(Urban.pct),
+          Undeveloped.pct = mean(Undeveloped.pct),
+          Ag.pct = mean(Ag.pct),
+          lat = mean(nhd_lat),
+          long = mean(nhd_long)) %>%
+  drop_na()
+
+LAGOS.MN.Summary.August <- LAGOS.MN.processed.August %>%
+group_by(lagoslakeid) %>%
+summarise(secchi.mean = mean(secchi),
+          chla.mean = mean(chla),
+          lake.area = mean(lake_area_ha),
+          iws.area = mean(iws_ha),
+          LakeIWS.Ratio = mean(LakeIWS.Ratio),
+          Water.pct = mean(Water.pct),
+          Urban.pct = mean(Urban.pct),
+          Undeveloped.pct = mean(Undeveloped.pct),
+          Ag.pct = mean(Ag.pct),
+          lat = mean(nhd_lat),
+          long = mean(nhd_long)) %>%
+  drop_na()
+
+LAGOS.MN.Summary.Sept <-LAGOS.MN.processed.Sept %>%
+group_by(lagoslakeid) %>%
+summarise(secchi.mean = mean(secchi),
+          chla.mean = mean(chla),
+          lake.area = mean(lake_area_ha),
+          iws.area = mean(iws_ha),
+          LakeIWS.Ratio = mean(LakeIWS.Ratio),
+          Water.pct = mean(Water.pct),
+          Urban.pct = mean(Urban.pct),
+          Undeveloped.pct = mean(Undeveloped.pct),
+          Ag.pct = mean(Ag.pct),
+          lat = mean(nhd_lat),
+          long = mean(nhd_long)) %>%
+  drop_na()
+
+LAGOS.MN.Summary.Oct <- LAGOS.MN.processed.Oct %>%
+group_by(lagoslakeid) %>%
+summarise(secchi.mean = mean(secchi),
+          chla.mean = mean(chla),
+          lake.area = mean(lake_area_ha),
+          iws.area = mean(iws_ha),
+          LakeIWS.Ratio = mean(LakeIWS.Ratio),
+          Water.pct = mean(Water.pct),
+          Urban.pct = mean(Urban.pct),
+          Undeveloped.pct = mean(Undeveloped.pct),
+          Ag.pct = mean(Ag.pct),
+          lat = mean(nhd_lat),
+          long = mean(nhd_long)) %>%
+  drop_na()
+
+LAGOS.MN.Summary.Nov <- LAGOS.MN.processed.Nov %>%
+group_by(lagoslakeid) %>%
+summarise(secchi.mean = mean(secchi),
+          chla.mean = mean(chla),
+          lake.area = mean(lake_area_ha),
+          iws.area = mean(iws_ha),
+          LakeIWS.Ratio = mean(LakeIWS.Ratio),
+          Water.pct = mean(Water.pct),
+          Urban.pct = mean(Urban.pct),
+          Undeveloped.pct = mean(Undeveloped.pct),
+          Ag.pct = mean(Ag.pct),
+          lat = mean(nhd_lat),
+          long = mean(nhd_long)) %>%
+  drop_na()
+
+LAGOS.MN.Summary.Dec <- LAGOS.MN.processed.Dec %>%
+group_by(lagoslakeid) %>%
+summarise(secchi.mean = mean(secchi),
+          chla.mean = mean(chla),
+          lake.area = mean(lake_area_ha),
+          iws.area = mean(iws_ha),
+          LakeIWS.Ratio = mean(LakeIWS.Ratio),
+          Water.pct = mean(Water.pct),
+          Urban.pct = mean(Urban.pct),
+          Undeveloped.pct = mean(Undeveloped.pct),
+          Ag.pct = mean(Ag.pct),
+          lat = mean(nhd_lat),
+          long = mean(nhd_long)) %>%
+  drop_na()
+```
+
+```{r Map_Data}
+#Only Sept because smallest Secchi depth (not 100% sure)
+LAGOS.MN.Summary.Sept.sf <- st_as_sf(LAGOS.MN.Summary.Sept, coords = c("long", "lat"), crs = 4326)
+
+#Only Oct because highest Chla (not 100% sure)
+LAGOS.MN.Summary.Oct.sf <- st_as_sf(LAGOS.MN.Summary.Oct, coords = c("long", "lat"), crs = 4326)
+
+
+# generate a map of U.S. states
+states <- st_as_sf(map(database = "state", plot = FALSE, fill = TRUE, col = "white"))
+
+# filter MN
+states.MN <- filter(states, ID %in%
+c("minnesota"))
+
+secchiplot.MN <- ggplot() +
+geom_sf(data = states.MN, fill = "white")+
+geom_sf(data = LAGOS.MN.Summary.Sept.sf, aes(size = Urban.pct, color = secchi.mean),
+alpha = 0.1, show.legend = "point")+
+scale_color_viridis_c(option = "inferno") +
+labs(color = "Average \n Secchi \n Depth (m)", size = "Urban \n Area \n %") +
+theme(legend.position = "right", legend.text = element_text(size = 7),
+legend.title = element_text(size = 8),
+legend.margin = margin(0,0,0,0)) 
+#+guides(color = F) # This line removes the color gradient
+print(secchiplot.MN)
+
+chlaplot.MN <- ggplot() +
+geom_sf(data = states.MN, fill = "white")+
+geom_sf(data = LAGOS.MN.Summary.Oct.sf, aes(size = Urban.pct, color = chla.mean),
+alpha = 0.4, show.legend = "point")+
+scale_color_viridis_c(option = "inferno") +
+labs(color = "Average \n Chla \n ", size = "Urban \n Area \n %") +
+theme(legend.position = "right", legend.text = element_text(size = 7),
+legend.title = element_text(size = 8),
+legend.margin = margin(0,0,0,0)) 
+#+guides(color = F) # This line removes the color gradient
+print(chlaplot.MN)
+
+
+
+
+```
+
+
+```{r Undeveloped_Chla_Scatterplots}
+#Chla scatterplots
+
+ggplot(LAGOS.MN.processed.January, aes(x = Undeveloped.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("Chla")) +
+ggtitle("Natural % vs Chla Scatterplot, January") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.February, aes(x = Undeveloped.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("Chla")) +
+ggtitle("Natural % vs Chla Scatterplot, February") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.March, aes(x = Undeveloped.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("Chla")) +
+ggtitle("Natural % vs Chla Scatterplot, March") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.April, aes(x = Undeveloped.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("Chla")) +
+ggtitle("Natural % vs Chla Scatterplot, April") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.May, aes(x = Undeveloped.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("Chla")) +
+ggtitle("Natural % vs Chla Scatterplot, May") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.June, aes(x = Undeveloped.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("Chla")) +
+ggtitle("Natural % vs Chla Scatterplot, June") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.July, aes(x = Undeveloped.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("Chla")) +
+ggtitle("Natural % vs Chla Scatterplot, July") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.August, aes(x = Undeveloped.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("Chla")) +
+ggtitle("Natural % vs Chla Scatterplot, August") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Sept, aes(x = Undeveloped.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("Chla")) +
+ggtitle("Natural % vs Chla Scatterplot, Sept") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Oct, aes(x = Undeveloped.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("Chla")) +
+ggtitle("Natural % vs Chla Scatterplot, Oct") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Nov, aes(x = Undeveloped.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("Chla")) +
+ggtitle("Natural % vs Chla Scatterplot, Nov") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Dec, aes(x = Undeveloped.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("Chla")) +
+ggtitle("Natural % vs Chla Scatterplot, Dec") +
+theme(plot.title = element_text(hjust = 0.5))
+
+
+
+
+```
+
+```{r Undeveloped_Secchi_Scatterplots}
+#secchi scatterplots
+
+ggplot(LAGOS.MN.processed.January, aes(x = Undeveloped.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, January") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.February, aes(x = Undeveloped.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, February") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.March, aes(x = Undeveloped.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, March") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.April, aes(x = Undeveloped.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, April") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.May, aes(x = Undeveloped.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, May") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.June, aes(x = Undeveloped.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, June") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.July, aes(x = Undeveloped.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, July") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.August, aes(x = Undeveloped.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, August") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Sept, aes(x = Undeveloped.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, Sept") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Oct, aes(x = Undeveloped.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, Oct") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Nov, aes(x = Undeveloped.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, Nov") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Dec, aes(x = Undeveloped.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Natural %")) +
+ylab(expression("secchi")) +
+ggtitle("Natural % vs secchi Scatterplot, Dec") +
+theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+```{r Map_Ecoregions}
+LAGOS.MN.processed.sf <- st_as_sf(LAGOS.MN.processed, coords = c("nhd_long", "nhd_lat"), crs = 4326)
+
+LAGOS.MN.processed.UTM.sf <- st_transform(LAGOS.MN.processed.sf, crs=26917)
+
+MN.Ecoregions.sf <- st_read('./Data/Raw/mn_eco_l3.shp')
+
+MN.Ecoregions.UTM.sf <- st_transform(MN.Ecoregions.sf, crs=26917)
+
+#mapview(LAGOS.MN.processed.UTM.sf) + mapview(MN.Ecoregions.UTM.sf)
+
+
+LAGOS.MN.processed.Ecoreg.sf <- st_join(LAGOS.MN.processed.UTM.sf, MN.Ecoregions.UTM.sf)
+
+
+```
+
+
+
+
+
+
+
+
+############## Not done
+
+######## Make a map showing the variables with circles. Including the ecoregions.
+
+
+```{r}
+#secchi scatterplots Urban
+
+ggplot(LAGOS.MN.processed.January, aes(x = Urban.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Urban %")) +
+ylab(expression("secchi")) +
+ggtitle("Urban % vs secchi Scatterplot, January") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.February, aes(x = Urban.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Urban %")) +
+ylab(expression("secchi")) +
+ggtitle("Urban % vs secchi Scatterplot, February") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.March, aes(x = Urban.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Urban %")) +
+ylab(expression("secchi")) +
+ggtitle("Urban % vs secchi Scatterplot, March") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.April, aes(x = Urban.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Urban %")) +
+ylab(expression("secchi")) +
+ggtitle("Urban % vs secchi Scatterplot, April") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.May, aes(x = Urban.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Urban %")) +
+ylab(expression("secchi")) +
+ggtitle("Urban % vs secchi Scatterplot, May") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.June, aes(x = Urban.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Urban %")) +
+ylab(expression("secchi")) +
+ggtitle("Urban % vs secchi Scatterplot, June") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.July, aes(x = Urban.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Urban %")) +
+ylab(expression("secchi")) +
+ggtitle("Urban % vs secchi Scatterplot, July") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.August, aes(x = Urban.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Urban %")) +
+ylab(expression("secchi")) +
+ggtitle("Urban % vs secchi Scatterplot, August") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Sept, aes(x = Urban.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Urban %")) +
+ylab(expression("secchi")) +
+ggtitle("Urban % vs secchi Scatterplot, Sept") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Oct, aes(x = Urban.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Urban %")) +
+ylab(expression("secchi")) +
+ggtitle("Urban % vs secchi Scatterplot, Oct") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Nov, aes(x = Urban.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Urban %")) +
+ylab(expression("secchi")) +
+ggtitle("Urban % vs secchi Scatterplot, Nov") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Dec, aes(x = Urban.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Urban %")) +
+ylab(expression("secchi")) +
+ggtitle("Urban % vs secchi Scatterplot, Dec") +
+theme(plot.title = element_text(hjust = 0.5))
 
 ```
 
