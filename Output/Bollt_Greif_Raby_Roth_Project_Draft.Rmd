@@ -28,11 +28,17 @@ mainfont: Times New Roman
 <Note: set up autoreferencing for figures and tables in your document>
 
 ```{r setup, include=FALSE}
-# Set your working directory
+getwd()
 
-# Load your packages
+#load packages
+library(tidyverse)
+library(lubridate)
+library(LAGOSNE)
+library(sf)
+library(maps)
+library(mapview)
 
-# Set your ggplot theme
+theme_set(theme_classic)
 
 ```
 
