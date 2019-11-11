@@ -7,7 +7,6 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Keith, edit this to reflect the new landuse grouping, and that the dependent variables are secchi depth (m) and chlorophyll a (mg/L)
 ## Information About the LAGOSNE Dataset
 
 The Lake Multi-Scaled Geospatial and Temporal Database (LAGOSNE) is a collection of several data modules that contain information on lakes in the northern United States. The modules contain data from thousands of lakes in 17 states in the northeastern and midwestern United States, from Missouri to Maine. The dataset includes a complete list of all lakes bigger than 4 hectacres in the 17 state area, and water quality data on a large number of lakes, spanning every state. The purpose of collecting this data in one place is to facilitate the continued understanding of water quality in these lakes through open-source access. More information about the general composition of the LAGOSNE dataset can be found at
@@ -15,29 +14,29 @@ The Lake Multi-Scaled Geospatial and Temporal Database (LAGOSNE) is a collection
 https://cont-limno.github.io/LAGOSNE/articles/lagosne_structure.html
 
 
-## Information About the Ohio Ecoregions Shapefile
+## Information About the Minnesota Ecoregions Shapefile
 
-Ecoregions are used by planning managers to understand the type of land use that occurs in different regions of the United States. There are different levels of ecoregions. Level 1 divides North America into 15 ecological regions, while Level IV offers fine ecological resolution for each state. For the purposes of our project, we selected Level III ecoregions because they appear to offer a descriptive narrative of the land use patterns of Ohio without making a 'distinction without a difference'.
+Ecoregions are used by planning managers to understand the type of land use that occurs in different regions of the United States. There are different levels of ecoregions. Level 1 divides North America into 15 ecological regions, while Level IV offers fine ecological resolution for each state. For the purposes of our project, we selected Level III ecoregions because they appear to offer a descriptive narrative of the land use patterns of Minnesota without making a 'distinction without a difference'.
 
-The following information is copied directly from the EPA's metadata page about the Ohio Level III ecoregions: 
+The following information is copied directly from the EPA's metadata page about the Minnesota Level III ecoregions: 
 
-"Title: Level III Ecoregions of Ohio
+"Title: Level III Ecoregions of Minnesota
 Originators: US Environmental Protection Agency
 Publisher: U.S. EPA Office of Research and Development (ORD) - National Health and Environmental Effects Research Laboratory (NHEERL)
 Publication place: Corvallis, OR
 Publication date: 2012
 Data type: vector digital data
-Data location: ftp://ftp.epa.gov/wed/ecoregions/oh/oh_eco_l3.zip, http://edg.epa.gov"
+Data location: ftp://ftp.epa.gov/wed/ecoregions/mn/mn_eco_l3.zip, http://edg.epa.gov"
 
-For more information about the Ohio Ecoregions Shapefile and to access the metadata page where this information came from, download the Ohio Level III informational file at: 
+For more information about the Minnesota Ecoregions Shapefile and to access the metadata page where this information came from, download the Minnesota Level III informational file at: 
 https://www.epa.gov/eco-research/ecoregion-download-files-state-region-5
 
 
 ## Information About the Creation of Our Master Raw Dataframe
 
-The LAGOSNE dataset contains hundreds of variables on water quality, many of which are not relevant or pertinent to our specific research questions. In addition, our questions are limited to the state of Ohio. Therefore, we wrangled the entire LAGOSNE dataset to create a master raw dataframe from which we would answer our research questions. For more information about which variables we chose, see the next section in our metadata file.
+The LAGOSNE dataset contains hundreds of variables on water quality, many of which are not relevant or pertinent to our specific research questions. In addition, our questions are limited to the state of Minnesota. Therefore, we wrangled the entire LAGOSNE dataset to create a master raw dataframe from which we would answer our research questions. For more information about which variables we chose, see the next section in our metadata file.
 
-We joined our LAGOSNE sub-dataset with our Level III Ecoregions of Ohio shapefile so our master dataset reflects which ecoregion each lake in our study is located. 
+We joined our LAGOSNE sub-dataset with our Level III Ecoregions of Minnesota shapefile so our master dataset reflects which ecoregion each lake in our study is located. 
 
 
 ## Information About The Variables In Our Master Raw Dataframe
@@ -45,12 +44,14 @@ We joined our LAGOSNE sub-dataset with our Level III Ecoregions of Ohio shapefil
 We selected only the variables that we need to answer our research questions. They are as follows:
 
 ###Dependent Variables: 
-Total Phosphorus (tp): This variable measures the total phosphorus located in a water quality sample. Its units are μg/L. Along with total nitrogen, total phosphorus is one of two dependent variables in our study; we are considering it a proxy of land use. We will be using it to test research questions 1+2.
-Total Nitrogen: This variable measures the total nitrogen located in a water quality sample. Its units are μg/L. Along with total phosphorus, total nitrogen is one of two dependent variables in our study; we are considering it a proxy of land use. We will be using it to test research questions 1+2.
+*Secchi Depth (m): This variable measures the visibility of the water column, by using a secchi disk. Its units are meters. Along with Chlorophyll a concentration, secchi depth is one of two dependent variables in our study; we are considering it a proxy of land use. We will be using it to test research questions 1+2.
+
+*Chlorophyll a (mg/L): This variable measures the Chlorophyll a concentration in a water quality sample. Its units are mg/L. Along with secchi depth, Chlorophyll a concentration is one of two dependent variables in our study; we are considering it a proxy of land use. We will be using it to test research questions 1+2.
 
 ###Independent Variables:
-We are testing our hypotheses surrounding varying land use by comparing nitrogen and phosphorus concentrations by land use/land cover. We are using USGS land use/land cover information as it is listed in LAGOSNE. For more information about the USGS's classification scheme, visit
-http://www.webgis.com/lulcdata.html
+We are testing our hypotheses surrounding varying land use by comparing nitrogen and phosphorus concentrations by land use/land cover. We are using 2011 USGS land use/land cover information as it is listed in LAGOSNE. For more information about the USGS's 2011 classification scheme, visit
+
+https://www.mrlc.gov/data/legends/national-land-cover-database-2011-nlcd2011-legend
 
 
 The raw list of land cover from the LAGOSNE dataset is as follows: 
@@ -65,22 +66,22 @@ The raw list of land cover from the LAGOSNE dataset is as follows:
 *"Developed, medium intensity."
 *"Developed, high Intensity. "
 *Bare rock/sand/clay
-*Quarries/strip mines/gravel pits measured in 1992
-*Transitional (barren) measured in 1992
+*Quarries/strip mines/gravel pits 
+*Transitional (barren) 
 *Deciduous forest
 *Evergreen forest
 *Mixed forest
-*Shrubland measured in 1992
+*Shrubland 
 *Scrub/shrub
 *Orchards/vineyards
 *Grasslands/herbaceous
 *Pasture/hay
 *Row crops
-*Small grains measured in 1992
-*Urban/recreational grasses measured in 1992
+*Small grains 
+*Urban/recreational grasses 
 *"Woody wetlands. Note, this variable not calculated in 1992"
-*Woody wetlands measured in 1992
-*Emergent herbaceous wetlands measured in 1992
+*Woody wetlands 
+*Emergent herbaceous wetlands 
 *Emergent herbaceous wetlands
 
 
@@ -88,17 +89,22 @@ We did some simplification of land use. For example, we combined several types o
 
 *Open Water
 *Urban: Contains "Residential, low intensity", "Developed, open space.", "Residential, high intensity", "Developed, low intensity. ", Commercial/industrial/transportation, "Developed, medium intensity.","Developed, high Intensity. "
-*Bare rock/sand/clay: Contains Bare rock/sand/clay, Quarries/strip mines/gravel pits measured in 1992, Transitional (barren) measured in 1992
+*Bare rock/sand/clay: Contains Bare rock/sand/clay, Quarries/strip mines/gravel pits , Transitional (barren) 
 *Forest: Contains Deciduous forest, Evergreen forest, Mixed forest
-*Scrub/shrub: Contains Shrubland measured in 1992, Scrub/shrub
+*Scrub/shrub: Contains Shrubland , Scrub/shrub
 *Orchards/vineyards
 *Grasslands/herbaceous
 *Pasture/hay
-*Row crops: Contains Row crops, Small grains measured in 1992, Urban/recreational grasses measured in 1992
-*Wetlands: Contains "Woody wetlands. Note, this variable not calculated in 1992", Woody wetlands measured in 1992, Emergent herbaceous wetlands measured in 1992, Emergent herbaceous wetlands
+*Row crops: Contains Row crops, Small grains , Urban/recreational grasses 
+*Wetlands: Contains "Woody wetlands. Note, this variable not calculated in 1992", Woody wetlands , Emergent herbaceous wetlands , Emergent herbaceous wetlands
 
+Because we are interested in how land use and modification has affected water quality, we further simplified our land use classification into three categories: urban, undeveloped, and agricultural.
+
+*Urban: Urban
+*Undeveloped: Bare Rock/sand/Clay, forest, scrub/shrub, wetlands, orchards/vineyards
+*Agricultural: Grasslands/herbaceous, pasture/hay, row crops
 
 In addition, our master raw dataset contains the following two independent variables:
 
-*EPA Level III Ecoregion: From the Ohio Level III Ecoregion shapefile. This will be used to test questions one and two.
-*Season of data collection: Winter (December-February), Spring (March-May), Summer (June-August), Fall (September-November). This variable will be used to test research question two.
+*EPA Level III Ecoregion: From the Minnesota Level III Ecoregion shapefile. This will be used to test questions one and two.
+*Season of data collection: Early (May 15 and Before), Prime (May 16 - September 30), and Late (October 1 and later). These season designations are somewhat arbitrary, but are based off of our prior knowledge of when the prime biological growing season is in Minnesota.

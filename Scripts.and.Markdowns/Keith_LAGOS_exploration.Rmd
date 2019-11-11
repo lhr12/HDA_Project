@@ -16,14 +16,9 @@ Questions for the group:
 
 #Install packages if necessary
 
-#install.packages("LAGOSNE")
-#install.packages("lubridate")
-#install.packages("tidyverse")
-
-#lagosne_get(dest_folder = LAGOSNE:::lagos_path(), overwrite = TRUE)
-
-invisible(lapply(packages, library, character.only = TRUE)) 
-
+install.packages("LAGOSNE")
+install.packages("lubridate")
+install.packages("tidyverse")
 
 #load packages
 library(tidyverse)
@@ -35,40 +30,52 @@ invisible(lapply(packages, library, character.only = TRUE))
 
 theme_set(theme_classic())
 
+
 #load LAGOS data
+#lagosne_get(dest_folder = LAGOSNE:::lagos_path(), overwrite = TRUE)
+
+invisible(lapply(packages, library, character.only = TRUE)) 
+
 LAGOSdata <- lagosne_load()
 
 # creating specific lagos files
+LAGOSstate <- LAGOSdata$state
 LAGOSlocus <- LAGOSdata$locus
 LAGOSnutrient <- LAGOSdata$epi_nutr
 LAGOSiwslulc <- LAGOSdata$iws.lulc
-LAGOSgeo <- LAGOSdata$lakes.geo
+LAGOSiws <- LAGOSdata$iws
 ```
 
 ```{r adding a season column}
-#we are creating growing seasons; early, prime, late. They will be based off of water temperature and day of year
-# Visualization
 
+```
+
+
+```{r adding a season column}
+#we are creating growing seasons; early, prime, late. They will be based off of water temperature and day of year. We choose May 15 and October 1 because these are arbitrary but approximate bookends to the prime growing season.
+# Visualization
 
 seasonvisualizationplot <- ggplot(LAGOS.MN.processed, aes(x = DOY, y = chla))+
   geom_point()
 print(seasonvisualizationplot)
 
-LAGOS.MN.processed$EarlyTrue <- LAGOS.MN.processed$DOY < 136
-LAGOS.MN.processed$PrimeTrue <- LAGOS.MN.processed$DOY >=136 & LAGOS.MN.processed$DOY < 273
-LAGOS.MN.processed$LateTrue <- LAGOS.MN.processed$DOY > 273
+#Code
 
-LAGOS.MN.processed$Spring %>% 
-  mutate("Early" = "TRUE")
+LAGOS.MN.processed$EarlyTrue <- LAGOS.MN.processed$DOY < 136 #Before May 15
+LAGOS.MN.processed$PrimeTrue <- LAGOS.MN.processed$DOY >=136 & LAGOS.MN.processed$DOY <= 273 #May 15 to September 30
+LAGOS.MN.processed$LateTrue <- LAGOS.MN.processed$DOY > 273  #October 1 and later
 
-LAGOS.MN.processed$Season <- LAGOS.MN.processed$DOY
-LAGOS.MN.processed$Season <- LAGOS.MN.processed$Season(Early = runif(DOY <= 200),
-                   Prime = runif(200 < DOY < 250),
-                   Late = runif(DOY >= 250),
-                   )
+LAGOS.MN.processed$EarlyTrue <- ifelse(LAGOS.MN.processed$EarlyTrue == TRUE, "Early", "No")
+LAGOS.MN.processed$PrimeTrue <- ifelse(LAGOS.MN.processed$PrimeTrue == TRUE, "Prime", "No")
+LAGOS.MN.processed$LateTrue <- ifelse(LAGOS.MN.processed$LateTrue == TRUE, "Late", "No")
 
-LAGOS.MN.processed$Season %>%
-  select(EarlyTrue) %>%
-  (Spring = c(TRUE))
+LAGOS.MN.processed$Season <- LAGOS.MN.processed$EarlyTrue == "Early"
+  
+LAGOS.MN.processed$Season[LAGOS.MN.processed$EarlyTrue == "Early"] <- "Early"
+LAGOS.MN.processed$Season[LAGOS.MN.processed$PrimeTrue == "Prime"] <- "Prime"
+LAGOS.MN.processed$Season[LAGOS.MN.processed$LateTrue == "Late"] <- "Late"
+
+LAGOS.MN.processed  <- LAGOS.MN.processed %>%
+  select(-c(EarlyTrue, PrimeTrue, LateTrue))
 ```
 
