@@ -1,4 +1,4 @@
-"lagoslakeid","lake_area_ha","lake_perim_meters","iws_zoneid","iws_ha","state_zoneid.x","elevation_m","sampledate","chla","secchi","Water.pct","Urban.pct","Undeveloped.pct","Ag.pct","LakeIWS.Ratio","DOY","Season","US_L3NAME"
+"lagoslakeid","lake_area_ha","lake_perim_meters","iws_zoneid","iws_ha","state_zoneid.x","elevation_m","sampledate","chla","secchi","Water.pct","Urban.pct","Undeveloped.pct","Ag.pct","LakeIWS.Ratio","DOY","Season","LevelIII_Ecoregion"
 72,31.20761134,2190.1644,"IWS_26239",1261.015619,"State_14",291.1679993,2010-10-12,40,0.8,0.81,6.54,7.39,85.27,0.0247479974631464,285,"Late","North Central Hardwood Forests"
 72,31.20761134,2190.1644,"IWS_26239",1261.015619,"State_14",291.1679993,2011-10-05,150,0.3,0.81,6.54,7.39,85.27,0.0247479974631464,278,"Late","North Central Hardwood Forests"
 72,31.20761134,2190.1644,"IWS_26239",1261.015619,"State_14",291.1679993,2011-10-24,33,0.3,0.81,6.54,7.39,85.27,0.0247479974631464,297,"Late","North Central Hardwood Forests"
