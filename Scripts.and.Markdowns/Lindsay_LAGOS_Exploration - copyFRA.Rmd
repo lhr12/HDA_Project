@@ -20,7 +20,6 @@ library(lubridate)
 library(LAGOSNE)
 library(sf)
 library(maps)
-library(mapview)
 
 #load LAGOS data
 LAGOSdata <- lagosne_load()
@@ -224,8 +223,8 @@ LAGOS.MN.processed <- LAGOSiws.nutrient.2011.MN %>%
 
 sapply(LAGOS.MN.processed, summary)
 
-write.csv(x =  LAGOS.MN.processed, row.names = FALSE,
-          file =  "./data/raw/LAGOS_MN_Full.csv")
+#write.csv(x =  LAGOS.MN.processed, row.names = FALSE,
+        #  file =  "./data/raw/LAGOS_MN_Full.csv")
 
 ```
 
@@ -276,8 +275,8 @@ LAGOS.MN.processed <- LAGOS.MN.processed %>%
   mutate(DOY = yday(sampledate)) %>%
   mutate(Month = month(sampledate))
 
-write.csv(x =  LAGOS.MN.processed, row.names = FALSE,
-          file =  "./data/processed/LAGOS_MN_Full2.csv")
+#write.csv(x =  LAGOS.MN.processed, row.names = FALSE,
+#          file =  "./data/processed/LAGOS_MN_Full2.csv")
 
 
 ```
@@ -673,18 +672,26 @@ ylab(expression("Chla")) +
 ggtitle("Natural % vs Chla Scatterplot, Nov") +
 theme(plot.title = element_text(hjust = 0.5))
 
+
+
+
+```
+
+
+```{r }
+
+knitr::opts_chunk$set(cache=TRUE, error=FALSE, fig.cap = "December Chlorophyll-a vs Undeveloped Percentage. We are exploring whether there is a relationship between these two variables", message=FALSE, warning=FALSE)
+
 ggplot(LAGOS.MN.processed.Dec, aes(x = Undeveloped.pct, y = chla)) +
 geom_point() +
 geom_smooth(method=lm) +
 xlab(expression("Natural %")) +
 ylab(expression("Chla")) +
 ggtitle("Natural % vs Chla Scatterplot, Dec") +
-theme(plot.title = element_text(hjust = 0.5))
-
-
-
+theme(plot.title = element_text(hjust = 0.5)) 
 
 ```
+
 
 ```{r}
 #secchi scatterplots
@@ -792,14 +799,14 @@ LAGOS.MN.processed.sf <- st_as_sf(LAGOS.MN.processed, coords = c("nhd_long", "nh
 
 LAGOS.MN.processed.UTM.sf <- st_transform(LAGOS.MN.processed.sf, crs=26917)
 
-MN.Ecoregions.sf <- st_read('./Data/Raw/mn_eco_l3.shp')
+#MN.Ecoregions.sf <- st_read('./Data/Raw/mn_eco_l3.shp')
 
-MN.Ecoregions.UTM.sf <- st_transform(MN.Ecoregions.sf, crs=26917)
+#MN.Ecoregions.UTM.sf <- st_transform(MN.Ecoregions.sf, crs=26917)
 
 #mapview(LAGOS.MN.processed.UTM.sf) + mapview(MN.Ecoregions.UTM.sf)
 
 
-LAGOS.MN.processed.Ecoreg.sf <- st_join(LAGOS.MN.processed.UTM.sf, MN.Ecoregions.UTM.sf)
+#LAGOS.MN.processed.Ecoreg.sf <- st_join(LAGOS.MN.processed.UTM.sf, MN.Ecoregions.UTM.sf)
 
 
 ```
