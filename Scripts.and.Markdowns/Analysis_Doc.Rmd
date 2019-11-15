@@ -3,28 +3,138 @@ title: "Analysis_Doc"
 author: "Lindsay Roth"
 date: "11/15/2019"
 output: pdf_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+```{r Setup and load data}
+getwd()
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+#load packages
+suppressMessages(library(tidyverse))
+library(ggplot2)
+library(dplyr)
+library(RColorBrewer)
+library(viridis)
+library(knitr)
+library(lubridate)
+library(lme4)
+library(nlme)
+library(trend)
+library(gridExtra)
+library(corrplot)
+library(car)
+library(bestNormalize)
+library(stats)
+library(LAGOSNE)
+library(sf)
+library(maps)
+library(mapview)
 
-```{r cars}
-summary(cars)
+source("./Scripts.and.Markdowns/pair.fun.R")
+
+
+#load data
+#Early
+LAGOS.MN.processed.Early <- read.csv("./data/processed/LAGOS.MN.processed.Early.csv")
+#Late
+LAGOS.MN.processed.Late <-read.csv("./data/processed/LAGOS.MN.processed.Late.csv")
+#Prime
+LAGOS.MN.processed.Prime <-read.csv("./data/processed/LAGOS.MN.processed.Prime.csv")
+#Full
+LAGOS.MN.processed.Full <-read.csv("./data/processed/LAGOS_MN_Full2.csv")
+
+
+#set theme
+theme_set(theme_classic())
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r correlation}
+early.model.variables <- LAGOS.MN.processed.Early %>%
+  select(chla, secchi, Water.pct, Urban.pct, Undeveloped.pct,Ag.pct,  LakeIWS.Ratio, US_L3NAME)
+prime.model.variables <- LAGOS.MN.processed.Prime %>%
+  select(chla, secchi, Water.pct, Urban.pct, Undeveloped.pct,Ag.pct,  LakeIWS.Ratio, US_L3NAME)
+late.model.variables <- LAGOS.MN.processed.Late %>%
+  select(chla, secchi, Water.pct, Urban.pct, Undeveloped.pct,Ag.pct,  LakeIWS.Ratio, US_L3NAME)
+
+colnames(LAGOS.MN.processed.Early)
+
+pairs(early.model.variables, lower.panel = panel.smooth, 
+      upper.panel = panel.cor, diag.panel = panel.hist)
+pairs(prime.model.variables, lower.panel = panel.smooth, 
+      upper.panel = panel.cor, diag.panel = panel.hist)
+pairs(late.model.variables, lower.panel = panel.smooth, 
+      upper.panel = panel.cor, diag.panel = panel.hist)
+
+sapply(LAGOS.MN.processed.Prime, summary)
+
+
+
+corrplot.mixed(cor(LAGOS.MN.processed.Early[,c(9:15)]))
+corrplot.mixed(cor(LAGOS.MN.processed.Prime[,c(9:15)]))
+corrplot.mixed(cor(LAGOS.MN.processed.Late[,c(9:15)]))
+
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+#test for departures multivariate normality
+
+qqnorm(LAGOS.MN.processed.Early$chla)
+qqline(LAGOS.MN.processed.Early$chla)
+shapiro.test(LAGOS.MN.processed.Early$chla)
+qqnorm(log(LAGOS.MN.processed.Early$chla))
+qqline(log(LAGOS.MN.processed.Early$chla))
+shapiro.test(log(LAGOS.MN.processed.Early$chla)) #still not normal but looks a lot better
+
+qqnorm(LAGOS.MN.processed.Early$secchi)
+qqline(LAGOS.MN.processed.Early$secchi)
+shapiro.test(LAGOS.MN.processed.Early$secchi)
+qqnorm(log(LAGOS.MN.processed.Early$secchi))
+qqline(log(LAGOS.MN.processed.Early$secchi))
+shapiro.test(log(LAGOS.MN.processed.Early$secchi)) #still not normal but looks a lot better
+
+qqnorm(LAGOS.MN.processed.Early$Water.pct)
+qqline(LAGOS.MN.processed.Early$Water.pct)
+shapiro.test(LAGOS.MN.processed.Early$Water.pct)
+bestNormalize(LAGOS.MN.processed.Early$Water.pct)
+qqnorm(log(LAGOS.MN.processed.Early$Water.pct))
+qqline(log(LAGOS.MN.processed.Early$Water.pct))
+shapiro.test(log(LAGOS.MN.processed.Early$Water.pct)) #still not normal but looks a lot better
+
+qqnorm(LAGOS.MN.processed.Early$Urban.pct)
+qqline(LAGOS.MN.processed.Early$Urban.pct)
+shapiro.test(LAGOS.MN.processed.Early$Urban.pct)
+bestNormalize(LAGOS.MN.processed.Early$Urban.pct)
+qqnorm(sqrt(LAGOS.MN.processed.Early$Urban.pct))
+qqline(sqrt(LAGOS.MN.processed.Early$Urban.pct))
+shapiro.test(sqrt(LAGOS.MN.processed.Early$Urban.pct))
+
+
+
+```
+
+
+```{r}
+
+early.chla.model1 <- lm(log(chla) ~ Water.pct + Urban.pct + Undeveloped.pct + Ag.pct + LakeIWS.Ratio,
+                        data = LAGOS.MN.processed.Early)
+summary(early.chla.model1)
+
+early.secchi.model1 <- lm(log(secchi) ~ Water.pct + Urban.pct + Undeveloped.pct + Ag.pct + LakeIWS.Ratio,
+                        data = LAGOS.MN.processed.Early)
+summary(early.secchi.model1)
+
+
+late.chla.model1 <- lm(log(chla) ~ Water.pct + Urban.pct + Undeveloped.pct + Ag.pct + LakeIWS.Ratio,
+                        data = LAGOS.MN.processed.Late)
+summary(late.chla.model1)
+
+```
+
