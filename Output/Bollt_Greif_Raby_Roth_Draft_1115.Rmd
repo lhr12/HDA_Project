@@ -1,0 +1,475 @@
+---
+output: 
+  pdf_document:
+    keep_tex: yes
+    fig_caption: yes
+    number_sections: yes
+geometry: margin=2.54cm
+title: Impacts of Land Use on Water Quality in Minnesota
+subtitle: https://github.com/lhr12/HDA_Project
+author: Keith Bollt, Jake Greif, Felipe Raby-Amadori, & Lindsay Roth
+fontsize: 12pt
+mainfont: Times New Roman
+editor_options: 
+  chunk_output_type: console
+---
+
+\newpage
+
+<Arrow brackets are used for annotating the RMarkdown files. Text within these brackets should not appear in the final version of the PDF document>
+
+<**General Guidelines**>
+<1. Write in scientific style> 
+<2. [Global options for R chunks](https://rmarkdown.rstudio.com/lesson-3.html) should be set so that only relevant output is displayed>
+<3. Make sure your final knitted PDF looks professional. Format tables appropriately, size figures appropriately, make sure bulleted and numbered lists appear as such, avoid awkwardly placed page breaks, etc.>
+
+```{r setup, include=FALSE}
+# Set working directory
+getwd()
+
+# Load packages
+library(tidyverse)
+library(lubridate)
+library(LAGOSNE)
+library(sf)
+library(maps)
+library(mapview)
+library(viridis)
+library(ggplot2)
+library(knitr)
+
+# Set ggplot theme
+theme_set(theme_classic())
+
+# Load datasets
+LAGOSdata <- lagosne_load()
+```
+
+
+# Rationale and Research Questions
+
+<Write 1-2 paragraph(s) detailing the rationale for your study. This should include both the context of the topic as well as a rationale for your choice of dataset (reason for location, variables, etc.) A few citations should be included to give context for your topic. You may choose to configure autoreferencing for your citations or add these manually.>
+
+
+* Land use has a large impact on nutrient runoff into streams, lakes, and other water bodies
+* Minnesota has wide variety of land uses.  Inlcudes large urban centers, natural lands, and agricultural area. 
+* Nutrient management has been a challenge for states in the effort to control harmful algal blooms and coastal dead zones.
+* Understanding the causes of nutrient problems will better inform management strategies.
+
+Research questions:
+
+1. What are the predictors of nutrients based on land use in watersheds in the state of Minnesota?
+
+2. How do you characterize seasonal variation between the predictors of nutrients?
+
+Goals:
+
+* Determine how land use, watershed size, and ecoregion explain variation in nutrient loading indicators.
+* Discern whether there a seasonal trends in nutrient loading indicators based on land use types, watershed size, and ecoregion.
+* Provide insight to inform decisions about nutrient managment practices based on land use types, watershed size, and ecoregion.
+
+<At the end of your rationale, introduce a numbered list of your questions (or an overarching question and sub-questions). Each question should be accompanied by one or more working hypotheses, inserted beneath each question.>
+
+Research questions:
+
+1. What are the predictors of nutrients based on land use in watersheds in the state of Minnesota?
+    
+    Hypothesis:
+
+2. How do you characterize seasonal variation between the predictors of nutrients?
+
+    Hypothesis:
+
+\newpage
+
+# Dataset Information
+
+<Provide information on how the dataset for this analysis were collected, the data contained in the dataset, and any important pieces of information that are relevant to your analyses. This section should contain much of same information as the metadata file for the dataset but formatted in a way that is more narrative.>
+
+The data used in this analysis include data from the Lake Multi-Scaled Geospatial and Temporal Database (LAGOSNE) and the EPA ecoregion spatial datasets.
+
+LAGOSNE is a collection of several data modules that contain information on lakes in the northern United States. The modules contain data from thousands of lakes in 17 states in the northeastern and midwestern United States, from Missouri to Maine. The dataset includes a complete list of all lakes bigger than 4 hectacres in the 17 state area, and water quality data on a large number of lakes, spanning every state. 
+
+Ecoregions are used by planning managers to understand the type of land use that occurs in different regions of the United States. There are different levels of ecoregions. Level 1 divides North America into 15 ecological regions, while Level IV offers fine ecological resolution for each state. This data was published by the U.S. EPA Office of Research and Development (ORD) - National Health and Environmental Effects Research Laboratory (NHEERL). For the purposes of our project, we selected Level III ecoregions because they appear to offer a descriptive narrative of the land use patterns of Minnesota without making a 'distinction without a difference'.
+
+<Describe how your team wrangled your dataset in a format similar to a methods section of a journal article.>
+
+******Not included in original draft*********
+
+<Add a table that summarizes your data structure (variables, units, ranges and/or central tendencies, data source if multiple are used, etc.). This table can be made in markdown text or inserted as a `kable` function in an R chunk. If the latter, do not include the code used to generate your table.>
+```{r ,echo=TRUE}
+Variables.table <- read.csv("./Output/Variable_Descriptions_Table.csv")
+library(knitr)
+kable(Variables.table)
+```
+
+\newpage
+
+# Exploratory Analysis 
+
+<Insert exploratory visualizations of your dataset. This may include, but is not limited to, graphs illustrating the distributions of variables of interest and/or maps of the spatial context of your dataset. Format your R chunks so that graphs are displayed but code is not displayed. Accompany these graphs with text sections that describe the visualizations and provide context for further analyses.>
+
+<Each figure should be accompanied by a caption, and each figure should be referenced within the text>
+
+*******code below is copied directly from originial draft, it needs to be edited to fulfill the above requirements**************
+
+```{r Setup_Load_Data}
+#load LAGOS data
+LAGOSdata <- lagosne_load()
+
+# creating specific lagos files
+LAGOSstate <- LAGOSdata$state
+LAGOSlocus <- LAGOSdata$locus
+LAGOSnutrient <- LAGOSdata$epi_nutr
+LAGOSiwslulc <- LAGOSdata$iws.lulc
+LAGOSiws <- LAGOSdata$iws
+```
+
+```{r MN_Nutrient_Data}
+#State 14: Minnesota
+LAGOSlocus.MN <- LAGOSlocus %>% filter (state_zoneid == "State_14")
+LAGOSnutrient.MN <- LAGOSlocus.MN %>%
+  left_join(LAGOSnutrient, by = "lagoslakeid") 
+```
+
+```{r Joining_MN_Nutrient_lulc}
+#getting the area of the iws
+LAGOSiws.area <- select(LAGOSiws, "lagoslakeid", "iws_ha")
+
+#joining MN locus with iwslulc and adding the area of IWS
+LAGOSiws.MN <- LAGOSlocus.MN %>% 
+  left_join(LAGOSiwslulc, by = "lagoslakeid") %>%
+  left_join(LAGOSiws.area, by = "lagoslakeid")
+
+##selecting 2011 lulc
+LAGOSiws2011.MN <- LAGOSiws.MN %>% 
+  select(lagoslakeid,state_zoneid, lake_area_ha, iws_ha,
+         iws_nlcd2011_pct_11, iws_nlcd2011_pct_21, iws_nlcd2011_pct_22,
+         iws_nlcd2011_pct_23, iws_nlcd2011_pct_24, iws_nlcd2011_pct_31,
+         iws_nlcd2011_pct_41, iws_nlcd2011_pct_42, iws_nlcd2011_pct_43,
+         iws_nlcd2011_pct_52, iws_nlcd2011_pct_71, iws_nlcd2011_pct_81,
+         iws_nlcd2011_pct_82, iws_nlcd2011_pct_90, iws_nlcd2011_pct_95)
+```
+
+```{r, Filter_Nutrient_Dates}
+#filtering state nutrient data #FRA. We can expand this range
+LAGOSnutrient.MN.skinny <- LAGOSnutrient.MN %>%
+  filter(sampledate > "2008-12-31" & sampledate < "2015-01-01")
+
+```
+
+```{r, Joined_MN_df}
+##Joining iws.lulc and nutrient
+LAGOSiws.nutrient.2011.MN <-  left_join(LAGOSnutrient.MN.skinny,
+                                        LAGOSiws2011.MN, by =
+                                          c("lagoslakeid", "lake_area_ha")) 
+
+LAGOSiws.nutrient.2011.MN <- LAGOSiws.nutrient.2011.MN %>%
+  select(lagoslakeid, nhd_lat, nhd_long, lake_area_ha, lake_perim_meters,
+         iws_zoneid, iws_ha, state_zoneid.x, elevation_m, sampledate, chla,secchi, 
+         iws_nlcd2011_pct_11, iws_nlcd2011_pct_21, iws_nlcd2011_pct_22, 
+         iws_nlcd2011_pct_23, iws_nlcd2011_pct_24, iws_nlcd2011_pct_31, 
+         iws_nlcd2011_pct_41, iws_nlcd2011_pct_42, iws_nlcd2011_pct_43, 
+         iws_nlcd2011_pct_52, iws_nlcd2011_pct_71, iws_nlcd2011_pct_81, 
+         iws_nlcd2011_pct_82, iws_nlcd2011_pct_90, iws_nlcd2011_pct_95)
+```
+
+```{r, Visualize_data}
+ggplot(LAGOSiws.nutrient.2011.MN, 
+       aes(x = sampledate, y = secchi, color = lagoslakeid)) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_line() 
+
+ggplot(LAGOSiws.nutrient.2011.MN, 
+       aes(x = sampledate, y = chla, color = lagoslakeid)) +
+  scale_color_viridis_c(option = "plasma") +
+  geom_line() 
+```
+
+```{r Create_Full_df}
+LAGOS.MN.processed <- LAGOSiws.nutrient.2011.MN %>%
+  mutate(Water.pct = iws_nlcd2011_pct_11,
+         Urban.pct = iws_nlcd2011_pct_21 + iws_nlcd2011_pct_22 +
+           iws_nlcd2011_pct_23 + iws_nlcd2011_pct_24,
+         Undeveloped.pct = iws_nlcd2011_pct_31 + iws_nlcd2011_pct_41 +
+           iws_nlcd2011_pct_42 + iws_nlcd2011_pct_43 + 
+           iws_nlcd2011_pct_52 + iws_nlcd2011_pct_90 + iws_nlcd2011_pct_95,
+         Ag.pct =  iws_nlcd2011_pct_81 + iws_nlcd2011_pct_82 + 
+           iws_nlcd2011_pct_71) %>%
+  select(-c(iws_nlcd2011_pct_11, iws_nlcd2011_pct_21, iws_nlcd2011_pct_22, 
+            iws_nlcd2011_pct_23, iws_nlcd2011_pct_24, iws_nlcd2011_pct_31, 
+            iws_nlcd2011_pct_41, iws_nlcd2011_pct_42, iws_nlcd2011_pct_43, 
+            iws_nlcd2011_pct_52, iws_nlcd2011_pct_71, iws_nlcd2011_pct_81, 
+            iws_nlcd2011_pct_82, iws_nlcd2011_pct_90, iws_nlcd2011_pct_95)) %>%
+  na.omit() %>%
+  mutate(LakeIWS.Ratio = lake_area_ha/iws_ha) %>%
+  mutate(DOY = yday(sampledate))
+```
+
+```{r adding a season column, echo=FALSE}
+#We are creating growing seasons; early, prime, late. 
+#They will be based off of water temperature and day of year. 
+#We choose May 15 and October 1 because these are arbitrary but 
+#approximate bookends to the prime growing season.
+
+LAGOS.MN.processed$EarlyTrue <- 
+  LAGOS.MN.processed$DOY < 136 #Before May 15
+LAGOS.MN.processed$PrimeTrue <- 
+  LAGOS.MN.processed$DOY >=136 & LAGOS.MN.processed$DOY <= 273 #May 15 to September 30
+LAGOS.MN.processed$LateTrue <- 
+  LAGOS.MN.processed$DOY > 273  #October 1 and later
+
+LAGOS.MN.processed$EarlyTrue <- 
+  ifelse(LAGOS.MN.processed$EarlyTrue == TRUE, "Early", "No")
+LAGOS.MN.processed$PrimeTrue <- 
+  ifelse(LAGOS.MN.processed$PrimeTrue == TRUE, "Prime", "No")
+LAGOS.MN.processed$LateTrue <- 
+  ifelse(LAGOS.MN.processed$LateTrue == TRUE, "Late", "No")
+
+LAGOS.MN.processed$Season <- LAGOS.MN.processed$EarlyTrue == "Early"
+  
+LAGOS.MN.processed$Season[LAGOS.MN.processed$EarlyTrue == "Early"] <- "Early"
+LAGOS.MN.processed$Season[LAGOS.MN.processed$PrimeTrue == "Prime"] <- "Prime"
+LAGOS.MN.processed$Season[LAGOS.MN.processed$LateTrue == "Late"] <- "Late"
+
+LAGOS.MN.processed  <- LAGOS.MN.processed %>%
+  select(-c(EarlyTrue, PrimeTrue, LateTrue))
+```
+
+```{r Adding_Ecoregions}
+LAGOS.MN.processed.sf <- st_as_sf(LAGOS.MN.processed, 
+                                  coords = c("nhd_long", "nhd_lat"), crs = 4326)
+
+LAGOS.MN.processed.UTM.sf <- st_transform(LAGOS.MN.processed.sf, crs=26917)
+
+MN.Ecoregions.sf <- st_read('./Data/Raw/mn_eco_l3.shp')
+
+#Selecting level 3 ecoregions names
+MN.Ecoregions.sf <- select(MN.Ecoregions.sf, US_L3NAME)
+
+MN.Ecoregions.UTM.sf <- st_transform(MN.Ecoregions.sf, crs=26917)
+
+LAGOS.MN.processed.sf <- st_join(LAGOS.MN.processed.UTM.sf, MN.Ecoregions.UTM.sf)
+```
+
+```{r Creating_Seasons_dfs}
+#Creating sf seasons files
+LAGOS.MN.processed.Early.sf <- filter(LAGOS.MN.processed.sf, Season == "Early")
+LAGOS.MN.processed.Prime.sf <- filter(LAGOS.MN.processed.sf, Season == "Prime")
+LAGOS.MN.processed.Late.sf <- filter(LAGOS.MN.processed.sf, Season == "Late")
+
+#Creating regular season files (doesn't have ecoregions column)
+LAGOS.MN.processed.Early <- filter(LAGOS.MN.processed, Season == "Early")
+LAGOS.MN.processed.Prime <- filter(LAGOS.MN.processed, Season == "Prime")
+LAGOS.MN.processed.Late <- filter(LAGOS.MN.processed, Season == "Late")
+```
+
+```{r scatterplots}
+ggplot(LAGOS.MN.processed.Late.sf, aes(x = Undeveloped.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Undeveloped %")) +
+ylab(expression("Secchi Depth (m)")) +
+ggtitle("Undeveloped % vs Secchi Depth Scatterplot, Late Season") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Late.sf, aes(x = Urban.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Urban %")) +
+ylab(expression("Secchi Depth (m)")) +
+ggtitle("Urban % vs Secchi Depth Scatterplot, Late Season") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Late.sf, aes(x = Ag.pct, y = secchi)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Agriculture %")) +
+ylab(expression("Secchi Depth (m)")) +
+ggtitle("Agriculture % vs Secchi Depth Scatterplot, Late Season") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Late.sf, aes(x = Undeveloped.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Undeveloped %")) +
+ylab(expression("Chla (mg/L)")) +
+ggtitle("Undeveloped % vs Chla Scatterplot, Late Season") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Late.sf, aes(x = Urban.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Urban %")) +
+ylab(expression("Chla (mg/L)")) +
+ggtitle("Urban % vs Chla Scatterplot, Late Season") +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(LAGOS.MN.processed.Late.sf, aes(x = Ag.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm) +
+xlab(expression("Agriculture %")) +
+ylab(expression("Chla (mg/L)")) +
+ggtitle("Agriculture % vs Chla Scatterplot, Late Season") +
+theme(plot.title = element_text(hjust = 0.5))
+```
+
+```{r summary.for.late.season}
+LAGOS.MN.Summary.Late <- LAGOS.MN.processed.Late %>%
+group_by(lagoslakeid) %>%
+summarise(secchi.mean = mean(secchi),
+          chla.mean = mean(chla),
+          lake.area = mean(lake_area_ha),
+          iws.area = mean(iws_ha),
+          LakeIWS.Ratio = mean(LakeIWS.Ratio),
+          Water.pct = mean(Water.pct),
+          Urban.pct = mean(Urban.pct),
+          Undeveloped.pct = mean(Undeveloped.pct),
+          Ag.pct = mean(Ag.pct),
+          Lat = mean(nhd_lat),
+          Long = mean(nhd_long)
+          ) %>%
+  drop_na()
+
+#SF file with the summary
+LAGOS.MN.Summary.Late.sf <- st_as_sf(LAGOS.MN.Summary.Late, 
+                                     coords = c("Long", "Lat"), crs = 4326)
+
+#Loading the MN state boundary  
+# generate a map of U.S. states
+states <- st_as_sf(map(database = "state", plot = FALSE, 
+                       fill = TRUE, col = "white"))
+
+# filter MN
+states.MN <- filter(states, ID %in%
+c("minnesota"))
+
+secchiplot1.Late.MN <- ggplot() +
+  geom_sf(data = states.MN, fill = "white") +
+  geom_sf(data = LAGOS.MN.Summary.Late.sf, 
+          aes(size = Undeveloped.pct, color = secchi.mean),
+          alpha = 0.4, show.legend = "point") +
+  scale_color_viridis_c(option = "inferno") +
+  labs(color = "Average \n Secchi \n Depth (m)", 
+       size = "Undeveloped \n Area \n %") +
+  theme(legend.position = "right", legend.text = element_text(size = 7),
+        legend.title = element_text(size = 8),
+        legend.margin = margin(0,0,0,0)) 
+print(secchiplot1.Late.MN)
+
+secchiplot2.Late.MN <- ggplot() +
+  geom_sf(data = states.MN, fill = "white") +
+  geom_sf(data = LAGOS.MN.Summary.Late.sf, 
+          aes(size = Urban.pct, color = secchi.mean),
+          alpha = 0.4, show.legend = "point") +
+  scale_color_viridis_c(option = "inferno") +
+  labs(color = "Average \n Secchi \n Depth (m)", 
+       size = "Urban \n Area \n %") +
+  theme(legend.position = "right", legend.text = element_text(size = 7),
+        legend.title = element_text(size = 8),
+        legend.margin = margin(0,0,0,0)) 
+print(secchiplot2.Late.MN)
+
+secchiplot3.Late.MN <- ggplot() +
+  geom_sf(data = states.MN, fill = "white") +
+  geom_sf(data = LAGOS.MN.Summary.Late.sf, 
+          aes(size = Ag.pct, color = secchi.mean),
+          alpha = 0.4, show.legend = "point") +
+  scale_color_viridis_c(option = "inferno") +
+  labs(color = "Average \n Secchi \n Depth (m)", 
+       size = "Agricultural \n Area \n %") +
+  theme(legend.position = "right", legend.text = element_text(size = 7),
+        legend.title = element_text(size = 8),
+        legend.margin = margin(0,0,0,0)) 
+print(secchiplot3.Late.MN)
+
+chlaplot1.Late.MN <- ggplot() +
+  geom_sf(data = states.MN, fill = "white") +
+  geom_sf(data = LAGOS.MN.Summary.Late.sf, 
+          aes(size = Undeveloped.pct, color = chla.mean),
+          alpha = 0.4, show.legend = "point") +
+  scale_color_viridis_c(option = "inferno") +
+  labs(color = "Average \n Chla \n Depth (m)", 
+       size = "Undeveloped \n Area \n %") +
+  theme(legend.position = "right", legend.text = element_text(size = 7),
+        legend.title = element_text(size = 8),
+        legend.margin = margin(0,0,0,0)) 
+print(chlaplot1.Late.MN)
+
+chlaplot2.Late.MN <- ggplot() +
+  geom_sf(data = states.MN, fill = "white") +
+  geom_sf(data = LAGOS.MN.Summary.Late.sf, 
+          aes(size = Urban.pct, color = chla.mean),
+          alpha = 0.4, show.legend = "point") +
+  scale_color_viridis_c(option = "inferno") +
+  labs(color = "Average \n Chla \n Depth (m)", 
+       size = "Urban \n Area \n %") +
+  theme(legend.position = "right", legend.text = element_text(size = 7),
+        legend.title = element_text(size = 8),
+        legend.margin = margin(0,0,0,0)) 
+print(chlaplot2.Late.MN)
+
+chlaplot3.Late.MN <- ggplot() +
+  geom_sf(data = states.MN, fill = "white") +
+  geom_sf(data = LAGOS.MN.Summary.Late.sf, 
+          aes(size = Ag.pct, color = chla.mean),
+          alpha = 0.4, show.legend = "point") +
+  scale_color_viridis_c(option = "inferno") +
+  labs(color = "Average \n Chla \n Depth (m)", 
+       size = "Agricultural \n Area \n %") +
+  theme(legend.position = "right", legend.text = element_text(size = 7),
+        legend.title = element_text(size = 8),
+        legend.margin = margin(0,0,0,0)) 
+print(secchiplot3.Late.MN)
+```
+
+```{r writing_csv}
+st_geometry(LAGOS.MN.processed.Early.sf) <- NULL
+write.csv(x =  LAGOS.MN.processed.Early.sf, row.names = FALSE,
+          file =  "./data/processed/LAGOS.MN.processed.Early.csv")
+
+st_geometry(LAGOS.MN.processed.Prime.sf) <- NULL
+write.csv(x =  LAGOS.MN.processed.Prime.sf, row.names = FALSE,
+          file =  "./data/processed/LAGOS.MN.processed.Prime.csv")
+
+st_geometry(LAGOS.MN.processed.Late.sf) <- NULL
+write.csv(x =  LAGOS.MN.processed.Late.sf, row.names = FALSE,
+          file =  "./data/processed/LAGOS.MN.processed.Late.csv")
+```
+
+\newpage
+
+# Analysis
+
+<Insert visualizations and text describing your main analyses. Format your R chunks so that graphs are displayed but code and other output is not displayed. Instead, describe the results of any statistical tests in the main text (e.g., "Variable x was significantly different among y groups (ANOVA; df = 300, F = 5.55, p < 0.0001)"). Each paragraph, accompanied by one or more visualizations, should describe the major findings and how they relate to the question and hypotheses. Divide this section into subsections, one for each research question.>
+
+<Each figure should be accompanied by a caption, and each figure should be referenced within the text>
+
+* First we will create correlation plots in order to eliminate variables with a correlation greater than 0.8.
+* Then we will run Shapiro-Wilkes tests to determine normality and the need for possible data transformations.
+* After determining the distributions of the data, then we will generate mixed effect linear models with chlorophyll a and secchi depth as response variables, land use and watershed size as fixed effects, and ecoregion as a random effect.
+
+Final figures will include:
+
+* 6 maps of the state, each showing the relationship between land use and both response variables. Ecoregion will be included as a base layer for each map.
+* Scatter plots showing the strongest relationships between land use and the response variables.
+* Table showing results of linear model.
+
+## Question 1: <insert specific question here and add additional subsections for additional questions below>
+
+
+
+## Question 2: 
+
+
+
+
+\newpage
+
+# Summary and Conclusions
+<Summarize your major findings from your analyses in a few paragraphs. What conclusions do you draw from your findings? Relate your findings back to the original research questions and rationale.>
+
+\newpage
+
+# References
+<add references here> 
