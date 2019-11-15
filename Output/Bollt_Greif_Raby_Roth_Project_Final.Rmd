@@ -5,9 +5,9 @@ output:
     fig_caption: yes
     number_sections: yes
 geometry: margin=2.54cm
-title: "Insert title of project here"
-subtitle: "Web address for GitHub repository"
-author: "Insert names of team members here"
+title: "Impacts of Land Use on Water Quality in Minnesota"
+subtitle: "https://github.com/lhr12/HDA_Project"
+author: "Keith Bollt, Jake Greif, Felipe Raby-Amadori, & Lindsay Roth"
 fontsize: 12pt
 mainfont: Times New Roman
 
