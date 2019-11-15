@@ -114,9 +114,6 @@ kable(Variables.table)
 *******code below is copied directly from originial draft, it needs to be edited to fulfill the above requirements**************
 
 ```{r Setup_Load_Data}
-#load LAGOS data
-LAGOSdata <- lagosne_load()
-
 # creating specific lagos files
 LAGOSstate <- LAGOSdata$state
 LAGOSlocus <- LAGOSdata$locus
@@ -176,9 +173,10 @@ LAGOSiws.nutrient.2011.MN <- LAGOSiws.nutrient.2011.MN %>%
 
 ```{r, Visualize_data}
 ggplot(LAGOSiws.nutrient.2011.MN, 
-       aes(x = sampledate, y = secchi, color = lagoslakeid)) +
-  scale_color_viridis_c(option = "plasma") +
-  geom_line() 
+       aes(x = sampledate, y = secchi)) +
+  geom_point(alpha = 0.2) 
+
+summary(LAGOSiws.nutrient.2011.MN$secchi)
 
 ggplot(LAGOSiws.nutrient.2011.MN, 
        aes(x = sampledate, y = chla, color = lagoslakeid)) +

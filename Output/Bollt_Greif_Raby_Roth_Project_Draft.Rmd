@@ -56,6 +56,7 @@ Research questions:
 2. How do you characterize seasonal variation between the predictors of nutrients?
 
 Goals:
+
 * Determine how land use, watershed size, and ecoregion explain variation in nutrient loading indicators.
 * Discern whether there a seasonal trends in nutrient loading indicators based on land use types, watershed size, and ecoregion.
 * Provide insight to inform decisions about nutrient managment practices based on land use types, watershed size, and ecoregion.
