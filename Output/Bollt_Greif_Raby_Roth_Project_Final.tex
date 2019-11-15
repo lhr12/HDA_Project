@@ -1,0 +1,199 @@
+\documentclass[12pt,]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+    \setmainfont[]{Times New Roman}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=2.54cm]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={Impacts of Land Use on Water Quality in Minnesota},
+            pdfauthor={Keith Bollt, Jake Greif, Felipe Raby-Amadori, \& Lindsay Roth},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\providecommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{Impacts of Land Use on Water Quality in Minnesota}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+  \subtitle{\url{https://github.com/lhr12/HDA_Project}}
+  \author{Keith Bollt, Jake Greif, Felipe Raby-Amadori, \& Lindsay Roth}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+    \date{}
+    \predate{}\postdate{}
+  
+
+\begin{document}
+\maketitle
+
+\newpage
+
+\textless{}Arrow brackets are used for annotating the RMarkdown files.
+Text within these brackets should not appear in the final version of the
+PDF document\textgreater{}
+
+\textless{}\textbf{General Guidelines}\textgreater{} \textless{}1. Write
+in scientific style\textgreater{} \textless{}2.
+\href{https://rmarkdown.rstudio.com/lesson-3.html}{Global options for R
+chunks} should be set so that only relevant output is
+displayed\textgreater{} \textless{}3. Make sure your final knitted PDF
+looks professional. Format tables appropriately, size figures
+appropriately, make sure bulleted and numbered lists appear as such,
+avoid awkwardly placed page breaks, etc.\textgreater{}
+
+\hypertarget{rationale-and-research-questions}{%
+\section{Rationale and Research
+Questions}\label{rationale-and-research-questions}}
+
+\textless{}Write 1-2 paragraph(s) detailing the rationale for your
+study. This should include both the context of the topic as well as a
+rationale for your choice of dataset (reason for location, variables,
+etc.) A few citations should be included to give context for your topic.
+You may choose to configure autoreferencing for your citations or add
+these manually.\textgreater{}
+
+\textless{}At the end of your rationale, introduce a numbered list of
+your questions (or an overarching question and sub-questions). Each
+question should be accompanied by one or more working hypotheses,
+inserted beneath each question.\textgreater{}
+
+\newpage
+
+\hypertarget{dataset-information}{%
+\section{Dataset Information}\label{dataset-information}}
+
+\textless{}Provide information on how the dataset for this analysis were
+collected, the data contained in the dataset, and any important pieces
+of information that are relevant to your analyses. This section should
+contain much of same information as the metadata file for the dataset
+but formatted in a way that is more narrative.\textgreater{}
+
+\textless{}Describe how your team wrangled your dataset in a format
+similar to a methods section of a journal article.\textgreater{}
+
+\textless{}Add a table that summarizes your data structure (variables,
+units, ranges and/or central tendencies, data source if multiple are
+used, etc.). This table can be made in markdown text or inserted as a
+\texttt{kable} function in an R chunk. If the latter, do not include the
+code used to generate your table.\textgreater{}
+
+\newpage
+
+\hypertarget{exploratory-analysis}{%
+\section{Exploratory Analysis}\label{exploratory-analysis}}
+
+\textless{}Insert exploratory visualizations of your dataset. This may
+include, but is not limited to, graphs illustrating the distributions of
+variables of interest and/or maps of the spatial context of your
+dataset. Format your R chunks so that graphs are displayed but code is
+not displayed. Accompany these graphs with text sections that describe
+the visualizations and provide context for further
+analyses.\textgreater{}
+
+\textless{}Each figure should be accompanied by a caption, and each
+figure should be referenced within the text\textgreater{}
+
+\newpage
+
+\hypertarget{analysis}{%
+\section{Analysis}\label{analysis}}
+
+\textless{}Insert visualizations and text describing your main analyses.
+Format your R chunks so that graphs are displayed but code and other
+output is not displayed. Instead, describe the results of any
+statistical tests in the main text (e.g., ``Variable x was significantly
+different among y groups (ANOVA; df = 300, F = 5.55, p \textless{}
+0.0001)''). Each paragraph, accompanied by one or more visualizations,
+should describe the major findings and how they relate to the question
+and hypotheses. Divide this section into subsections, one for each
+research question.\textgreater{}
+
+\textless{}Each figure should be accompanied by a caption, and each
+figure should be referenced within the text\textgreater{}
+
+\hypertarget{question-1}{%
+\subsection{Question 1: }\label{question-1}}
+
+\hypertarget{question-2}{%
+\subsection{Question 2:}\label{question-2}}
+
+\newpage
+
+\hypertarget{summary-and-conclusions}{%
+\section{Summary and Conclusions}\label{summary-and-conclusions}}
+
+\textless{}Summarize your major findings from your analyses in a few
+paragraphs. What conclusions do you draw from your findings? Relate your
+findings back to the original research questions and
+rationale.\textgreater{}
+
+\newpage
+
+\hypertarget{references}{%
+\section{References}\label{references}}
+
+
+\end{document}
