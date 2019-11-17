@@ -58,11 +58,14 @@ theme_set(theme_classic())
 
 ```{r correlation}
 early.model.variables <- LAGOS.MN.processed.Early %>%
-  select(chla, secchi, Water.pct, Urban.pct, Undeveloped.pct,Ag.pct,  LakeIWS.Ratio, US_L3NAME)
+  select(chla, secchi, Water.pct, Urban.pct, Forest.pct, GrassShrub.pct, 
+         Wetland.pct, Pasture.pct, RowCrop.pct, LakeIWS.Ratio, US_L3NAME)
 prime.model.variables <- LAGOS.MN.processed.Prime %>%
-  select(chla, secchi, Water.pct, Urban.pct, Undeveloped.pct,Ag.pct,  LakeIWS.Ratio, US_L3NAME)
+  select(chla, secchi, Water.pct, Urban.pct, Forest.pct, GrassShrub.pct, 
+         Wetland.pct, Pasture.pct, RowCrop.pct, LakeIWS.Ratio, US_L3NAME)
 late.model.variables <- LAGOS.MN.processed.Late %>%
-  select(chla, secchi, Water.pct, Urban.pct, Undeveloped.pct,Ag.pct,  LakeIWS.Ratio, US_L3NAME)
+  select(chla, secchi, Water.pct, Urban.pct, Forest.pct, GrassShrub.pct, 
+         Wetland.pct, Pasture.pct, RowCrop.pct, LakeIWS.Ratio, US_L3NAME)
 
 colnames(LAGOS.MN.processed.Early)
 
@@ -77,9 +80,9 @@ sapply(LAGOS.MN.processed.Prime, summary)
 
 
 
-corrplot.mixed(cor(LAGOS.MN.processed.Early[,c(9:15)]))
-corrplot.mixed(cor(LAGOS.MN.processed.Prime[,c(9:15)]))
-corrplot.mixed(cor(LAGOS.MN.processed.Late[,c(9:15)]))
+corrplot.mixed(cor(LAGOS.MN.processed.Early[,c(9:18)]))
+corrplot.mixed(cor(LAGOS.MN.processed.Prime[,c(9:18)]))
+corrplot.mixed(cor(LAGOS.MN.processed.Late[,c(9:18)]))
 
 ```
 
@@ -89,6 +92,7 @@ corrplot.mixed(cor(LAGOS.MN.processed.Late[,c(9:15)]))
 qqnorm(LAGOS.MN.processed.Early$chla)
 qqline(LAGOS.MN.processed.Early$chla)
 shapiro.test(LAGOS.MN.processed.Early$chla)
+bestNormalize(LAGOS.MN.processed.Early$chla) #log gets it closest
 qqnorm(log(LAGOS.MN.processed.Early$chla))
 qqline(log(LAGOS.MN.processed.Early$chla))
 shapiro.test(log(LAGOS.MN.processed.Early$chla)) #still not normal but looks a lot better
@@ -96,6 +100,7 @@ shapiro.test(log(LAGOS.MN.processed.Early$chla)) #still not normal but looks a l
 qqnorm(LAGOS.MN.processed.Early$secchi)
 qqline(LAGOS.MN.processed.Early$secchi)
 shapiro.test(LAGOS.MN.processed.Early$secchi)
+bestNormalize(LAGOS.MN.processed.Early$secchi) #log slightly better than sqrt
 qqnorm(log(LAGOS.MN.processed.Early$secchi))
 qqline(log(LAGOS.MN.processed.Early$secchi))
 shapiro.test(log(LAGOS.MN.processed.Early$secchi)) #still not normal but looks a lot better
@@ -103,7 +108,7 @@ shapiro.test(log(LAGOS.MN.processed.Early$secchi)) #still not normal but looks a
 qqnorm(LAGOS.MN.processed.Early$Water.pct)
 qqline(LAGOS.MN.processed.Early$Water.pct)
 shapiro.test(LAGOS.MN.processed.Early$Water.pct)
-bestNormalize(LAGOS.MN.processed.Early$Water.pct)
+bestNormalize(LAGOS.MN.processed.Early$Water.pct) #log good not great
 qqnorm(log(LAGOS.MN.processed.Early$Water.pct))
 qqline(log(LAGOS.MN.processed.Early$Water.pct))
 shapiro.test(log(LAGOS.MN.processed.Early$Water.pct)) #still not normal but looks a lot better
@@ -111,12 +116,15 @@ shapiro.test(log(LAGOS.MN.processed.Early$Water.pct)) #still not normal but look
 qqnorm(LAGOS.MN.processed.Early$Urban.pct)
 qqline(LAGOS.MN.processed.Early$Urban.pct)
 shapiro.test(LAGOS.MN.processed.Early$Urban.pct)
-bestNormalize(LAGOS.MN.processed.Early$Urban.pct)
+bestNormalize(LAGOS.MN.processed.Early$Urban.pct) #sqrt is best but none are good
 qqnorm(sqrt(LAGOS.MN.processed.Early$Urban.pct))
 qqline(sqrt(LAGOS.MN.processed.Early$Urban.pct))
 shapiro.test(sqrt(LAGOS.MN.processed.Early$Urban.pct))
 
-
+qqnorm(LAGOS.MN.processed.Early$Forest.pct)
+qqline(LAGOS.MN.processed.Early$Forest.pct)
+shapiro.test(LAGOS.MN.processed.Early$Forest.pct)
+bestNormalize(LAGOS.MN.processed.Early$Forest.pct)
 
 ```
 
