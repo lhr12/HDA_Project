@@ -164,6 +164,13 @@ colnames(MN.Ecoregions.sf)[1] <- "Ecoregion"
 MN.Ecoregions.UTM.sf <- st_transform(MN.Ecoregions.sf, crs=26917)
 
 LAGOS.MN.processed.sf <- st_join(LAGOS.MN.processed.UTM.sf, MN.Ecoregions.UTM.sf)
+LAGOS.MN.processed.sf <- na.omit(LAGOS.MN.processed.sf)
+
+colnames(data)[colnames(data)=="old_name"] <- "new_name"
+LAGOS.MN.processed.sf <- LAGOS.MN.processed.sf %>%
+  mutate(LevelIII_Ecoregion = US_L3NAME)
+LAGOS.MN.processed.sf$US_L3NAME <- NULL
+summary(LAGOS.MN.processed.sf)
 ```
 
 ```{r Creating_Seasons_dfs}
@@ -359,6 +366,16 @@ print(secchiplot3.Late.MN)
 
 
 
+```{r}
+LAGOS.MN.processed.Early.sf <- LAGOS.MN.processed.Early.sf %>%
+  na.omit()
+LAGOS.MN.processed.Prime.sf <- LAGOS.MN.processed.Prime.sf %>%
+  na.omit() %>%
+  filter(chla > 0)
+LAGOS.MN.processed.Late.sf <- LAGOS.MN.processed.Late.sf %>%
+  na.omit()
+
+```
 
 
 
