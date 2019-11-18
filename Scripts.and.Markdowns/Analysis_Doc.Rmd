@@ -155,12 +155,39 @@ early.chla.model1 <- lm(log(chla) ~ IntenseUrban.pct + OpenUrban.pct +
                           Pasture.pct + RowCrop.pct + LakeIWS.Ratio + factor(Ecoregion), 
                         data = LAGOS.MN.processed.Early)
 summary(early.chla.model1)
+aov(early.chla.model1)
 
 early.chla.model1.2 <- lm(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
                           Forest.pct + GrassShrub.pct + Wetland.pct + 
                           Pasture.pct + RowCrop.pct + LakeIWS.Ratio + factor(Ecoregion), 
                         data = LAGOS.MN.processed.Early)
 summary(early.chla.model1.2)
+
+early.chla.model1.3 <- lm(log(chla) ~ OpenUrban.pct + 
+                          Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          Pasture.pct + RowCrop.pct + LakeIWS.Ratio + factor(Ecoregion), 
+                        data = LAGOS.MN.processed.Early)
+summary(early.chla.model1.3)
+
+early.chla.model1.4 <- lm(log(chla) ~ OpenUrban.pct + 
+                          Forest.pct + GrassShrub.pct + 
+                          Pasture.pct + RowCrop.pct + LakeIWS.Ratio + factor(Ecoregion), 
+                        data = LAGOS.MN.processed.Early)
+summary(early.chla.model1.4)
+
+early.chla.model1.5 <- lm(log(chla) ~ OpenUrban.pct + 
+                          Forest.pct +
+                          Pasture.pct + RowCrop.pct + LakeIWS.Ratio + factor(Ecoregion), 
+                        data = LAGOS.MN.processed.Early)
+summary(early.chla.model1.5)
+#remaining lulc significant, not sure what to do with ecoregion
+#adjusted r-squared 0.1043
+
+AIC(early.chla.model1, early.chla.model1.2, early.chla.model1.3, early.chla.model1.4, early.chla.model1.5)
+#lowest AIC model 5
+
+
+ 
 
 
 par(mfrow = c(2,2))
