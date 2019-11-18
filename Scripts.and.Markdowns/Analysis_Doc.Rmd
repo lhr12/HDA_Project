@@ -157,7 +157,7 @@ early.chla.model1 <- lm(log(chla) ~ IntenseUrban.pct + OpenUrban.pct +
                           Pasture.pct + RowCrop.pct + LakeIWS.Ratio + factor(Ecoregion), 
                         data = LAGOS.MN.processed.Early)
 summary(early.chla.model1)
-step(early.chla.model1)
+step(early.chla.model1) #openurban, forest, grassshrub, wetland, pasture, rowcrop, lakeratio, ecoregion
 aov(early.chla.model1)
 
 early.chla.model1.2 <- lm(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
@@ -199,7 +199,7 @@ early.secchi.model1 <- lm(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct +
                           Pasture.pct + RowCrop.pct + LakeIWS.Ratio + factor(Ecoregion), 
                         data = LAGOS.MN.processed.Early)
 summary(early.secchi.model1)
-step(early.secchi.model1)
+step(early.secchi.model1) #intenseurban, openurban, barren, forest, grassshrub, wetland, pasture, lakeratio, ecoregion
 
 early.secchi.model1.2 <- lm(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
                           Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
@@ -266,7 +266,7 @@ prime.chla.model1 <- lm(log(chla) ~ IntenseUrban.pct + OpenUrban.pct +
                           Pasture.pct + RowCrop.pct + LakeIWS.Ratio + factor(Ecoregion), 
                         data = LAGOS.MN.processed.Prime)
 summary(prime.chla.model1)
-step(prime.chla.model1)
+step(prime.chla.model1) #inenseurban, openurban, forest, grassshrub, wetland, rowcrop, lakeratio, ecoregion
 
 prime.chla.model1.2 <- lm(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
                           Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
@@ -289,7 +289,7 @@ prime.secchi.model1 <- lm(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct +
                           Pasture.pct + RowCrop.pct + LakeIWS.Ratio + factor(Ecoregion), 
                         data = LAGOS.MN.processed.Prime)
 summary(prime.secchi.model1)
-step(prime.secchi.model1)
+step(prime.secchi.model1) #intenseurban, openurban, barren, forest, grassshrub, wetland, pasture, row crop, lakeratio, ecoregion
 
 prime.secchi.model1.2 <- lm(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
                           Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
@@ -355,12 +355,67 @@ late.chla.model1 <- lm(log(chla) ~ IntenseUrban.pct + OpenUrban.pct +
                           Pasture.pct + RowCrop.pct + LakeIWS.Ratio + factor(Ecoregion), 
                         data = LAGOS.MN.processed.Late)
 summary(late.chla.model1)
+step(late.chla.model1) #intenseurban, openurban, forest, grassshrub, wetland, lakeratio, ecoregion
+
+late.chla.model1.2 <- lm(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          Pasture.pct + RowCrop.pct + LakeIWS.Ratio + factor(Ecoregion), 
+                        data = LAGOS.MN.processed.Late)
+summary(late.chla.model1.2)
+
+late.chla.model1.3 <- lm(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          Pasture.pct + LakeIWS.Ratio + factor(Ecoregion), 
+                        data = LAGOS.MN.processed.Late)
+summary(late.chla.model1.3)
+
+late.chla.model1.4 <- lm(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          LakeIWS.Ratio + factor(Ecoregion), 
+                        data = LAGOS.MN.processed.Late)
+summary(late.chla.model1.4)
+#remaining variables significant
+#adjusted r-squared 0.1633
+AIC(late.chla.model1, late.chla.model1.2, late.chla.model1.3, late.chla.model1.4)
+#lowest AIC model 4
+
 
 late.secchi.model1 <- lm(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
                           Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
                           Pasture.pct + RowCrop.pct + LakeIWS.Ratio + factor(Ecoregion), 
                         data = LAGOS.MN.processed.Late)
 summary(late.secchi.model1)
+step(late.secchi.model1) #intenseurban, openurban, forest, grassshrub, lakeratio, ecoregion
+
+late.secchi.model1.2 <- lm(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          Pasture.pct + LakeIWS.Ratio + factor(Ecoregion), 
+                        data = LAGOS.MN.processed.Late)
+summary(late.secchi.model1.2)
+
+late.secchi.model1.3 <- lm(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          LakeIWS.Ratio + factor(Ecoregion), 
+                        data = LAGOS.MN.processed.Late)
+summary(late.secchi.model1.3)
+
+late.secchi.model1.4 <- lm(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          LakeIWS.Ratio + factor(Ecoregion), 
+                        data = LAGOS.MN.processed.Late)
+summary(late.secchi.model1.4)
+
+late.secchi.model1.5 <- lm(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Forest.pct + GrassShrub.pct + 
+                          LakeIWS.Ratio + factor(Ecoregion), 
+                        data = LAGOS.MN.processed.Late)
+summary(late.secchi.model1.5)
+#all remaining variables significant
+#adjusted r-squared 0.171
+AIC(late.secchi.model1, late.secchi.model1.2, late.secchi.model1.3, late.secchi.model1.4, late.secchi.model1.5)
+#lowest AIC model 5
+
+
 ```
 
 
