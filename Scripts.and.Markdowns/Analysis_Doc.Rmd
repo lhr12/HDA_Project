@@ -472,45 +472,140 @@ summary(late.secchi.model2)
 
 
 ```{r No interaction mixed effects models}
-#Early Season
+####Early Season
+###Chla
 early.chla.model3 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
                           Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
                           Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
                         data = LAGOS.MN.processed.Early)
 summary(early.chla.model3)
 
+#Saving the fitted values to the dataframe
+LAGOS.MN.processed.Early$LMER_Early_Chla <- fitted(early.chla.model3)
+
+# Plotting the model
+ggplot(LAGOS.MN.processed.Early, aes(x=LakeIWS.Ratio, y=log(chla))) +
+  geom_point(alpha = 0.3, size = 3) +
+  geom_line(aes(y = LMER_Early_Chla), color ="red") +
+  facet_wrap(~Ecoregion)
+
 plot(early.chla.model3)
 
+###Secchi
 early.secchi.model3 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
                           Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
                           Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
                         data = LAGOS.MN.processed.Early)
 summary(early.secchi.model3)
 
-#Prime Season ######NOT WORKING. DONT KNOW WHY
+#Saving the fitted values to the dataframe
+LAGOS.MN.processed.Early$LMER_Early_Secchi <- fitted(early.secchi.model3)
+
+# Plotting the model
+ggplot(LAGOS.MN.processed.Early, aes(x=LakeIWS.Ratio, y=log(secchi))) +
+  geom_point(alpha = 0.3, size = 3) +
+  geom_line(aes(y = LMER_Early_Secchi), color ="blue") +
+  facet_wrap(~Ecoregion)
+
+plot(early.secchi.model3)
+
+
+
+####Prime Season
+###Chla
 prime.chla.model3 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
                           Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
                           Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
                         data = LAGOS.MN.processed.Prime)
 summary(prime.chla.model3)
 
+#Saving the fitted values to the dataframe
+LAGOS.MN.processed.Prime$LMER_Prime_Chla <- fitted(prime.chla.model3)
+
+# Plotting the model
+ggplot(LAGOS.MN.processed.Prime, aes(x=LakeIWS.Ratio, y=log(chla))) +
+  geom_point(alpha = 0.3, size = 3) +
+  geom_line(aes(y = LMER_Prime_Chla), color ="red") +
+  facet_wrap(~Ecoregion)
+
+plot(prime.chla.model3)
+
+### Secchi
 prime.secchi.model3 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
                           Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
                           Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
                         data = LAGOS.MN.processed.Prime)
 summary(prime.secchi.model3)
 
-#Late Season
+#Saving the fitted values to the dataframe
+LAGOS.MN.processed.Prime$LMER_Prime_Secchi <- fitted(prime.secchi.model3)
+
+# Plotting the model
+ggplot(LAGOS.MN.processed.Prime, aes(x=LakeIWS.Ratio, y=log(secchi))) +
+  geom_point(alpha = 0.3, size = 3) +
+  geom_line(aes(y = LMER_Prime_Secchi), color ="blue") +
+  facet_wrap(~Ecoregion)
+
+plot(prime.secchi.model3)
+
+
+
+
+
+
+
+
+
+
+
+
+
+#### Late Season
+###Chla
 late.chla.model3 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
                           Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
                           Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
                         data = LAGOS.MN.processed.Late)
 summary(late.chla.model3)
 
+#Saving the fitted values to the dataframe
+LAGOS.MN.processed.Late$LMER_Late_Chla <- fitted(late.chla.model3)
+
+# Plotting the model
+ggplot(LAGOS.MN.processed.Late, aes(x=LakeIWS.Ratio, y=log(chla))) +
+  geom_point(alpha = 0.3, size = 3) +
+  geom_line(aes(y = LMER_Late_Chla), color ="red") +
+  facet_wrap(~Ecoregion)
+
+plot(late.chla.model3)
+
+
+
+
+
+
+###Secchi
+
 late.secchi.model3 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
                           Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
                           Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
                         data = LAGOS.MN.processed.Late)
 summary(late.secchi.model3)
+
+#Saving the fitted values to the dataframe
+LAGOS.MN.processed.Late$LMER_Late_Secchi <- fitted(late.secchi.model3)
+
+# Plotting the model
+ggplot(LAGOS.MN.processed.Late, aes(x=LakeIWS.Ratio, y=log(secchi))) +
+  geom_point(alpha = 0.3, size = 3) +
+  geom_line(aes(y = LMER_Late_Secchi), color ="blue") +
+  facet_wrap(~Ecoregion)
+
+plot(late.secchi.model3)
+
+
+
+
+
 ```
 
