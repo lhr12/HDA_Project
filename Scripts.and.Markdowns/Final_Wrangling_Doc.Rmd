@@ -366,6 +366,15 @@ print(secchiplot3.Late.MN)
 
 
 
+```{r}
+LAGOS.MN.processed.Early.sf <- LAGOS.MN.processed.Early.sf %>%
+  na.omit()
+LAGOS.MN.processed.Prime.sf <- LAGOS.MN.processed.Prime.sf %>%
+  na.omit()
+LAGOS.MN.processed.Late.sf <- LAGOS.MN.processed.Late.sf %>%
+  na.omit()
+
+```
 
 
 
