@@ -156,6 +156,12 @@ early.chla.model1 <- lm(log(chla) ~ IntenseUrban.pct + OpenUrban.pct +
                         data = LAGOS.MN.processed.Early)
 summary(early.chla.model1)
 
+early.chla.model1.2 <- lm(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          Pasture.pct + RowCrop.pct + LakeIWS.Ratio + factor(Ecoregion), 
+                        data = LAGOS.MN.processed.Early)
+summary(early.chla.model1.2)
+
 
 par(mfrow = c(2,2))
 plot(early.chla.model1) #this looks great!!!
