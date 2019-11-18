@@ -67,6 +67,23 @@ LAGOS.MN.processed.Prime <-read.csv("./data/processed/LAGOS.MN.processed.Prime.c
 
 <At the end of your rationale, introduce a numbered list of your questions (or an overarching question and sub-questions). Each question should be accompanied by one or more working hypotheses, inserted beneath each question.>
 
+Land use has a large impact on nutrient runoff into streams, lakes, and other water bodies. Understanding the causes of nutrient problems will better inform management strategies. A study looking at land use and water quality in the Chaohu Basin in China found that forest and grassland has a statistically significant negative correlation with water quality, while urbanization has a statistically significant positive correlation with water quality and farmland has a more complex relationship (Huang et al., 2013). We applied some of the basic research questions of the Huang et al. study to the United States. Nutrient management has been a challenge for states in the effort to control harmful algal blooms and coastal dead zones (Wurtsbaugh et al., 2019). We selected the state of Minnesota for our study because Minnesota has wide variety of land uses.  It includes a large urban center (the Twin Cities metropolitan area), natural lands in the northern part of the state, and large agricultural areas. It also has a large number of lakes with water quality sampling. In addition, studies performed in Minnesota have shown that water quality has been adversely affected by land use changes (Christensen et al., 2012); (Maalim et al., 2013). There may also be seasonal relationships between water quality and land use; for example, we know that farmers apply nutrients at certain times of year and lakes naturally have higher levels of algae in summer months.
+* * 
+Research Questions:
+	In order to evaluate the relationship between land use wand lacustrine water quality in the state of Minnesota, we asked the following two questions to help guide our research:
+1.	What are the predictors of nutrients based on land use in watersheds in the state of Minnesota?
+Hypothesis 1a: The percentage of urbanized land in a lake’s watershed in the state of Minnesota will have a statistically significant negative effect on water quality, as measured by higher Chlorophyll a concentrations and lower secchi depth measurements.
+Hypothesis 1b: The percentage of agricultural land in a lake’s watershed in the state of Minnesota will have a statistically significant negative effect on water quality, as measured by higher Chlorophyll a concentrations and lower secchi depth measurements.
+2.	How do you characterize seasonal variation between the predictors of nutrients?
+Hypothesis 2: The water quality in Minnesota lakes will demonstrate a statistically significant seasonal pattern.
+
+Goals:
+	By testing our hypotheses, we aim to accomplish the following goals:
+1.	Determine how land use, watershed size, and ecoregion explain variation in nutrient loading indicators.
+2.	Discern whether there a seasonal trends in nutrient loading indicators based on land use types, watershed size, and ecoregion.
+3.	Provide insight to inform decisions about nutrient management practices based on land use types, watershed size, and ecoregion.
+
+
 \newpage
 
 # Dataset Information
@@ -109,3 +126,13 @@ LAGOS.MN.processed.Prime <-read.csv("./data/processed/LAGOS.MN.processed.Prime.c
 
 # References
 <add references here> 
+Christensen, Victoria G., et al. "Relations between Retired Agricultural Land, Water Quality, and	Aquatic-Community Health, Minnesota River Basin." Journal of Environmental Quality,	vol. 41, no. 5, 2012, pp. 1459-72. ProQuest,	https://login.proxy.lib.duke.edu/login?url=https://search.proquest.com/docview/1	95114913?accountid=10598.
+
+Maalim, Fukhrudin K., Melesse, Assefa M., Belmont, Patrick., Gran, Karen B. "Modeling the	impact of land use changes on runoff and sediment yield in the Le Sueur watershed,	Minnesota using GeoWEPP." CATENA Volume 107, 2013, Pages 35	45, https://doi.org/10.1016/j.catena.2013.03.004.
+
+Huang, J., Zhan, J., Yan, H., Wu, F., Xiangzheng Deng, X. “Evaluation of the Impacts of Land	Use on Water Quality: A Case Study in The Chaohu Lake Basin,” The Scientific World	Journal, vol. 2013, Article ID 329187, 7 pages,	2013. https://doi.org/10.1155/2013/329187.
+
+Ramstack, Joy M., Sherilyn C. Fritz, and Daniel R. Engstrom. "Twentieth Century Water Quality	Trends	in Minnesota Lakes Compared with Presettlement Variability." Canadian Journal	of Fisheries and Aquatic Sciences, vol. 61, no. 4, 2004, pp. 561-576.	ProQuest, https://login.proxy.lib.duke.edu/login?url=https://search.proquest.com/docvi	ew/29317301?accountid=10598.
+
+Wurtsbaugh, WA, Paerl, HW, Dodds, WK. “Nutrients, eutrophication and harmful algal blooms	along the freshwater to marine continuum.” WIREs	Water. 2019; 6:e1373. https://doi.org/10.1002/wat2.1373
+
