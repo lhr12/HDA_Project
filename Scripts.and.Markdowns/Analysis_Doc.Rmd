@@ -477,8 +477,42 @@ summary(late.secchi.model2)
 early.chla.model3 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
                           Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
                           Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
-                        data = LAGOS.MN.processed.Early)
+                        data = LAGOS.MN.processed.Early, REML = TRUE)
 summary(early.chla.model3)
+Anova(early.chla.model3)
+
+early.chla.model3.2 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Early, REML = TRUE)
+summary(early.chla.model3.2)
+Anova(early.chla.model3.2)
+
+early.chla.model3.3 <- lmer(log(chla) ~ OpenUrban.pct + 
+                          Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Early, REML = TRUE)
+summary(early.chla.model3.3)
+Anova(early.chla.model3.3)
+
+early.chla.model3.4 <- lmer(log(chla) ~ OpenUrban.pct + 
+                          Forest.pct + GrassShrub.pct +  
+                          Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Early, REML = TRUE)
+summary(early.chla.model3.4)
+Anova(early.chla.model3.4)
+
+early.chla.model3.5 <- lmer(log(chla) ~ OpenUrban.pct + 
+                          Forest.pct +  
+                          Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Early, REML = TRUE)
+summary(early.chla.model3.5)
+Anova(early.chla.model3.5)
+#all remaining variables significant
+plot(early.chla.model3.5)
+anova(early.chla.model3, early.chla.model3.2, early.chla.model3.3, 
+      early.chla.model3.4, early.chla.model3.5)
+
 
 #Saving the fitted values to the dataframe
 LAGOS.MN.processed.Early$LMER_Early_Chla <- fitted(early.chla.model3)
@@ -491,12 +525,46 @@ ggplot(LAGOS.MN.processed.Early, aes(x=LakeIWS.Ratio, y=log(chla))) +
 
 plot(early.chla.model3)
 
+
 ###Secchi
 early.secchi.model3 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
                           Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
                           Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
                         data = LAGOS.MN.processed.Early)
 summary(early.secchi.model3)
+Anova(early.secchi.model3)
+
+early.secchi.model3.2 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          Pasture.pct + LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Early)
+summary(early.secchi.model3.2)
+Anova(early.secchi.model3.2)
+
+early.secchi.model3.3 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Early)
+summary(early.secchi.model3.3)
+Anova(early.secchi.model3.3)
+
+early.secchi.model3.4 <- lmer(log(secchi) ~ OpenUrban.pct + 
+                          Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Early)
+summary(early.secchi.model3.4)
+Anova(early.secchi.model3.4)
+
+early.secchi.model3.5 <- lmer(log(secchi) ~ OpenUrban.pct + 
+                          Barren.pct + Forest.pct + GrassShrub.pct +
+                          LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Early)
+summary(early.secchi.model3.5)
+Anova(early.secchi.model3.5)
+#remaining variables significant
+plot(early.secchi.model3.5)
+anova(early.secchi.model3, early.secchi.model3.2, early.secchi.model3.3,
+      early.secchi.model3.4, early.secchi.model3.5)
 
 #Saving the fitted values to the dataframe
 LAGOS.MN.processed.Early$LMER_Early_Secchi <- fitted(early.secchi.model3)
@@ -518,6 +586,23 @@ prime.chla.model3 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct +
                           Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
                         data = LAGOS.MN.processed.Prime)
 summary(prime.chla.model3)
+Anova(prime.chla.model3)
+
+prime.chla.model3.2 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Prime)
+summary(prime.chla.model3.2)
+Anova(prime.chla.model3.2)
+
+prime.chla.model3.3 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Prime)
+summary(prime.chla.model3.3)
+Anova(prime.chla.model3.3)
+#remaining variables significant
+plot(prime.chla.model3.3)
 
 #Saving the fitted values to the dataframe
 LAGOS.MN.processed.Prime$LMER_Prime_Chla <- fitted(prime.chla.model3)
@@ -536,6 +621,17 @@ prime.secchi.model3 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct +
                           Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
                         data = LAGOS.MN.processed.Prime)
 summary(prime.secchi.model3)
+Anova(prime.secchi.model3)
+
+prime.secchi.model3.2 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Barren.pct + Forest.pct + GrassShrub.pct + 
+                          Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Prime)
+summary(prime.secchi.model3.2)
+Anova(prime.secchi.model3.2)
+#remaining variables significant
+plot(prime.secchi.model3.2)
+anova(prime.secchi.model3, prime.secchi.model3.2)
 
 #Saving the fitted values to the dataframe
 LAGOS.MN.processed.Prime$LMER_Prime_Secchi <- fitted(prime.secchi.model3)
