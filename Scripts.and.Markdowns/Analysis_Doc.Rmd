@@ -663,6 +663,31 @@ late.chla.model3 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct +
                           Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
                         data = LAGOS.MN.processed.Late)
 summary(late.chla.model3)
+Anova(late.chla.model3)
+
+late.chla.model3.2 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Late)
+summary(late.chla.model3.2)
+Anova(late.chla.model3.2)
+
+late.chla.model3.3 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          Pasture.pct + LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Late)
+summary(late.chla.model3.3)
+Anova(late.chla.model3.3)
+
+late.chla.model3.4 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Late)
+summary(late.chla.model3.4)
+Anova(late.chla.model3.4)
+#all remaining variables significant
+plot(late.chla.model3.4)
+
 
 #Saving the fitted values to the dataframe
 LAGOS.MN.processed.Late$LMER_Late_Chla <- fitted(late.chla.model3)
@@ -687,6 +712,53 @@ late.secchi.model3 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct +
                           Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
                         data = LAGOS.MN.processed.Late)
 summary(late.secchi.model3)
+Anova(late.secchi.model3)
+
+late.secchi.model3.2 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          Pasture.pct + LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Late)
+summary(late.secchi.model3.2)
+Anova(late.secchi.model3.2)
+
+late.secchi.model3.2 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          Pasture.pct + LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Late)
+summary(late.secchi.model3.2)
+Anova(late.secchi.model3.2)
+
+late.secchi.model3.2 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          Pasture.pct + LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Late)
+summary(late.secchi.model3.2)
+Anova(late.secchi.model3.2)
+
+late.secchi.model3.3 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Late)
+summary(late.secchi.model3.3)
+Anova(late.secchi.model3.3)
+
+late.secchi.model3.4 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Late)
+summary(late.secchi.model3.4)
+Anova(late.secchi.model3.4)
+
+late.secchi.model3.5 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Forest.pct + GrassShrub.pct + 
+                          LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Late)
+summary(late.secchi.model3.5)
+Anova(late.secchi.model3.5)
+#remaining variables significant
+plot(late.secchi.model3.5)
+anova(late.secchi.model3, late.secchi.model3.2, late.secchi.model3.3, 
+      late.secchi.model3.4, late.secchi.model3.5)
 
 #Saving the fitted values to the dataframe
 LAGOS.MN.processed.Late$LMER_Late_Secchi <- fitted(late.secchi.model3)
