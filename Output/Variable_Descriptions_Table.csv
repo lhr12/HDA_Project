@@ -1,9 +1,14 @@
 ﻿Column Name,Description,Units,Variable Type
 chla,Chlorophyll a,mg/L,Depedent
 secchi,Secchi depth,m,Depedent
-Urban.pct,Percent urban land cover,%,Independent- fixed
-Undeveloped.pct,Percent natural land cover,%,Independent- fixed
-Ag.pct,Percent agricultural land cover,%,Independent- fixed
+IntenseUrban.pct,Percent med. and high intensity urban land cover,%,Independent- fixed
+OpenUrban.pct,"Percent developed, open space (mostly vegetation in the form of lawn grasses)",%,Independent- fixed
+Barren.pct,Percent areas of bedrock and desert pavement land cover,%,Independent- fixed
+Forest.pct,"Percent deciduous, evergreen, and mixed forest land cover",%,Independent- fixed
+GrassShrub.pct,"Percent areas dominated by shrubs, gramanoid, or herbaceous vegetation land cover",%,Independent- fixed
+Wetland.pct,Percent wetlands land cover,%,Independent- fixed
+Pasture.pct,"Percent areas of grasses, legumes, or grass-legume mixtures land cover",%,Independent- fixed
+RowCrop.pct ,Percent cultivated crops land cover,%,Independent- fixed
 LakeIWS.Ratio,Lake surface area to watershed area ratio,N/A,Independent- fixed
 Season,"Early, prime, and late growing ""seasons""",N/A,Independent- fixed
-US_L3NAME,Level 3 ecoregions,N/A,Independent- random
+Ecoregion,Level 3 ecoregions,N/A,Independent- random

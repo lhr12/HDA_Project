@@ -35,6 +35,7 @@ library(LAGOSNE)
 library(sf)
 library(maps)
 library(mapview)
+library(lme4)
 
 source("./Scripts.and.Markdowns/pair.fun.R")
 
@@ -46,8 +47,8 @@ LAGOS.MN.processed.Early <- read.csv("./data/processed/LAGOS.MN.processed.Early.
 LAGOS.MN.processed.Late <-read.csv("./data/processed/LAGOS.MN.processed.Late.csv")
 #Prime
 LAGOS.MN.processed.Prime <-read.csv("./data/processed/LAGOS.MN.processed.Prime.csv")
-#Full
-LAGOS.MN.processed.Full <-read.csv("./data/processed/LAGOS_MN_Full2.csv")
+# #Full
+# LAGOS.MN.processed.Full <-read.csv("./data/processed/LAGOS_MN_Full2.csv")
 
 
 #set theme
@@ -56,13 +57,16 @@ theme_set(theme_classic())
 
 
 
-```{r correlation}
+```{r correlation and distributions}
 early.model.variables <- LAGOS.MN.processed.Early %>%
-  select(chla, secchi, Water.pct, Urban.pct, Undeveloped.pct,Ag.pct,  LakeIWS.Ratio, US_L3NAME)
+  select(chla, secchi, IntenseUrban.pct, OpenUrban.pct, Barren.pct, Forest.pct,
+         GrassShrub.pct, Wetland.pct, Pasture.pct, RowCrop.pct, LakeIWS.Ratio, Ecoregion)
 prime.model.variables <- LAGOS.MN.processed.Prime %>%
-  select(chla, secchi, Water.pct, Urban.pct, Undeveloped.pct,Ag.pct,  LakeIWS.Ratio, US_L3NAME)
+  select(chla, secchi, IntenseUrban.pct, OpenUrban.pct, Barren.pct, Forest.pct,
+         GrassShrub.pct, Wetland.pct, Pasture.pct, RowCrop.pct, LakeIWS.Ratio, Ecoregion)
 late.model.variables <- LAGOS.MN.processed.Late %>%
-  select(chla, secchi, Water.pct, Urban.pct, Undeveloped.pct,Ag.pct,  LakeIWS.Ratio, US_L3NAME)
+  select(chla, secchi, IntenseUrban.pct, OpenUrban.pct, Barren.pct, Forest.pct,
+         GrassShrub.pct, Wetland.pct, Pasture.pct, RowCrop.pct, LakeIWS.Ratio, Ecoregion)
 
 colnames(LAGOS.MN.processed.Early)
 
@@ -75,20 +79,15 @@ pairs(late.model.variables, lower.panel = panel.smooth,
 
 sapply(LAGOS.MN.processed.Prime, summary)
 
-
-
-corrplot.mixed(cor(LAGOS.MN.processed.Early[,c(9:15)]))
-corrplot.mixed(cor(LAGOS.MN.processed.Prime[,c(9:15)]))
-corrplot.mixed(cor(LAGOS.MN.processed.Late[,c(9:15)]))
-
 ```
 
-```{r}
+```{r Normality tests}
 #test for departures multivariate normality
 
 qqnorm(LAGOS.MN.processed.Early$chla)
 qqline(LAGOS.MN.processed.Early$chla)
 shapiro.test(LAGOS.MN.processed.Early$chla)
+bestNormalize(LAGOS.MN.processed.Early$chla) #log gets it closest
 qqnorm(log(LAGOS.MN.processed.Early$chla))
 qqline(log(LAGOS.MN.processed.Early$chla))
 shapiro.test(log(LAGOS.MN.processed.Early$chla)) #still not normal but looks a lot better
@@ -96,45 +95,197 @@ shapiro.test(log(LAGOS.MN.processed.Early$chla)) #still not normal but looks a l
 qqnorm(LAGOS.MN.processed.Early$secchi)
 qqline(LAGOS.MN.processed.Early$secchi)
 shapiro.test(LAGOS.MN.processed.Early$secchi)
+bestNormalize(LAGOS.MN.processed.Early$secchi) #log slightly better than sqrt
 qqnorm(log(LAGOS.MN.processed.Early$secchi))
 qqline(log(LAGOS.MN.processed.Early$secchi))
 shapiro.test(log(LAGOS.MN.processed.Early$secchi)) #still not normal but looks a lot better
 
-qqnorm(LAGOS.MN.processed.Early$Water.pct)
-qqline(LAGOS.MN.processed.Early$Water.pct)
-shapiro.test(LAGOS.MN.processed.Early$Water.pct)
-bestNormalize(LAGOS.MN.processed.Early$Water.pct)
-qqnorm(log(LAGOS.MN.processed.Early$Water.pct))
-qqline(log(LAGOS.MN.processed.Early$Water.pct))
-shapiro.test(log(LAGOS.MN.processed.Early$Water.pct)) #still not normal but looks a lot better
 
-qqnorm(LAGOS.MN.processed.Early$Urban.pct)
-qqline(LAGOS.MN.processed.Early$Urban.pct)
-shapiro.test(LAGOS.MN.processed.Early$Urban.pct)
-bestNormalize(LAGOS.MN.processed.Early$Urban.pct)
-qqnorm(sqrt(LAGOS.MN.processed.Early$Urban.pct))
-qqline(sqrt(LAGOS.MN.processed.Early$Urban.pct))
-shapiro.test(sqrt(LAGOS.MN.processed.Early$Urban.pct))
+qqnorm(LAGOS.MN.processed.Early$IntenseUrban.pct)
+qqline(LAGOS.MN.processed.Early$IntenseUrban.pct)
+shapiro.test(LAGOS.MN.processed.Early$IntenseUrban.pct)
+bestNormalize(LAGOS.MN.processed.Early$IntenseUrban.pct) #nothing makes it close to normal
+
+qqnorm(LAGOS.MN.processed.Early$OpenUrban.pct)
+qqline(LAGOS.MN.processed.Early$OpenUrban.pct)
+shapiro.test(LAGOS.MN.processed.Early$OpenUrban.pct)
+bestNormalize(LAGOS.MN.processed.Early$OpenUrban.pct) #nothing makes it close to normal
+
+qqnorm(LAGOS.MN.processed.Early$Barren.pct)
+qqline(LAGOS.MN.processed.Early$Barren.pct)
+shapiro.test(LAGOS.MN.processed.Early$Barren.pct)
+bestNormalize(LAGOS.MN.processed.Early$Barren.pct) #nothing makes it close to normal
+
+qqnorm(LAGOS.MN.processed.Early$Forest.pct)
+qqline(LAGOS.MN.processed.Early$Forest.pct)
+shapiro.test(LAGOS.MN.processed.Early$Forest.pct)
+bestNormalize(LAGOS.MN.processed.Early$Forest.pct) #sqrt best
+qqnorm(sqrt(LAGOS.MN.processed.Early$Forest.pct))
+qqline(sqrt(LAGOS.MN.processed.Early$Forest.pct))
+shapiro.test(sqrt(LAGOS.MN.processed.Early$Forest.pct)) #not much better
+
+qqnorm(LAGOS.MN.processed.Early$GrassShrub.pct)
+qqline(LAGOS.MN.processed.Early$GrassShrub.pct)
+shapiro.test(LAGOS.MN.processed.Early$GrassShrub.pct)
+bestNormalize(LAGOS.MN.processed.Early$GrassShrub.pct) #nothing makes it close to normal
+
+qqnorm(LAGOS.MN.processed.Early$Wetland.pct)
+qqline(LAGOS.MN.processed.Early$Wetland.pct)
+shapiro.test(LAGOS.MN.processed.Early$Wetland.pct)
+bestNormalize(LAGOS.MN.processed.Early$Wetland.pct) #nothing makes it close to normal
+
+qqnorm(LAGOS.MN.processed.Early$Pasture.pct)
+qqline(LAGOS.MN.processed.Early$Pasture.pct)
+shapiro.test(LAGOS.MN.processed.Early$Pasture.pct)
+bestNormalize(LAGOS.MN.processed.Early$Pasture.pct) #nothing makes it close to normal
+
+qqnorm(LAGOS.MN.processed.Early$RowCrop.pct)
+qqline(LAGOS.MN.processed.Early$RowCrop.pct)
+shapiro.test(LAGOS.MN.processed.Early$RowCrop.pct)
+bestNormalize(LAGOS.MN.processed.Early$RowCrop.pct) #nothing makes it close to normal
+
+
+```
+
+
+```{r No interaction models}
+#Early Season
+early.chla.model1 <- lm(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          Pasture.pct + RowCrop.pct + LakeIWS.Ratio + factor(Ecoregion), 
+                        data = LAGOS.MN.processed.Early)
+summary(early.chla.model1)
+
+early.chla.model1.2 <- lm(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          Pasture.pct + RowCrop.pct + LakeIWS.Ratio + factor(Ecoregion), 
+                        data = LAGOS.MN.processed.Early)
+summary(early.chla.model1.2)
+
+
+par(mfrow = c(2,2))
+plot(early.chla.model1) #this looks great!!!
+
+early.secchi.model1 <- lm(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          Pasture.pct + RowCrop.pct + LakeIWS.Ratio + factor(Ecoregion), 
+                        data = LAGOS.MN.processed.Early)
+summary(early.secchi.model1)
+
+#Prime Season ######NOT WORKING. DONT KNOW WHY
+prime.chla.model1 <- lm(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          Pasture.pct + RowCrop.pct + LakeIWS.Ratio + factor(Ecoregion), 
+                        data = LAGOS.MN.processed.Prime)
+summary(prime.chla.model1)
+
+prime.secchi.model1 <- lm(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          Pasture.pct + RowCrop.pct + LakeIWS.Ratio + factor(Ecoregion), 
+                        data = LAGOS.MN.processed.Prime)
+summary(prime.secchi.model1)
+
+#Late Season
+late.chla.model1 <- lm(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          Pasture.pct + RowCrop.pct + LakeIWS.Ratio + factor(Ecoregion), 
+                        data = LAGOS.MN.processed.Late)
+summary(late.chla.model1)
+
+late.secchi.model1 <- lm(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          Pasture.pct + RowCrop.pct + LakeIWS.Ratio + factor(Ecoregion), 
+                        data = LAGOS.MN.processed.Late)
+summary(late.secchi.model1)
+```
+
+
+```{r Interaction models}
+## Model 2
+
+#Early Season
+early.chla.model2 <- lm(log(chla) ~ IntenseUrban.pct*OpenUrban.pct* 
+                          Barren.pct*Forest.pct*GrassShrub.pct*Wetland.pct* 
+                          Pasture.pct*RowCrop.pct*LakeIWS.Ratio, 
+                        data = LAGOS.MN.processed.Early)
+summary(early.chla.model2)
+
+early.secchi.model2 <- lm(log(secchi) ~ IntenseUrban.pct*OpenUrban.pct* 
+                          Barren.pct*Forest.pct*GrassShrub.pct*Wetland.pct* 
+                          Pasture.pct*RowCrop.pct*LakeIWS.Ratio, 
+                        data = LAGOS.MN.processed.Early)
+summary(early.secchi.model2)
+
+#Prime Season ######NOT WORKING. DONT KNOW WHY
+prime.chla.model2 <- lm(log(chla) ~ IntenseUrban.pct*OpenUrban.pct* 
+                          Barren.pct*Forest.pct*GrassShrub.pct*Wetland.pct* 
+                          Pasture.pct*RowCrop.pct*LakeIWS.Ratio, 
+                        data = LAGOS.MN.processed.Prime)
+summary(prime.chla.model2)
+
+prime.secchi.model2 <- lm(log(secchi) ~ IntenseUrban.pct*OpenUrban.pct* 
+                          Barren.pct*Forest.pct*GrassShrub.pct*Wetland.pct* 
+                          Pasture.pct*RowCrop.pct*LakeIWS.Ratio, 
+                        data = LAGOS.MN.processed.Prime)
+summary(prime.secchi.model2)
+
+#Late Season
+late.chla.model2 <- lm(log(chla) ~ IntenseUrban.pct*OpenUrban.pct* 
+                          Barren.pct*Forest.pct*GrassShrub.pct*Wetland.pct* 
+                          Pasture.pct*RowCrop.pct*LakeIWS.Ratio, 
+                        data = LAGOS.MN.processed.Late)
+summary(late.chla.model2)
+
+late.secchi.model2 <- lm(log(secchi) ~ IntenseUrban.pct*OpenUrban.pct* 
+                          Barren.pct*Forest.pct*GrassShrub.pct*Wetland.pct* 
+                          Pasture.pct*RowCrop.pct*LakeIWS.Ratio, 
+                        data = LAGOS.MN.processed.Late)
+summary(late.secchi.model2)
+
 
 
 
 ```
 
 
-```{r}
-
-early.chla.model1 <- lm(log(chla) ~ Water.pct + Urban.pct + Undeveloped.pct + Ag.pct + LakeIWS.Ratio,
+```{r No interaction mixed effects models}
+#Early Season
+early.chla.model3 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
                         data = LAGOS.MN.processed.Early)
-summary(early.chla.model1)
+summary(early.chla.model3)
 
-early.secchi.model1 <- lm(log(secchi) ~ Water.pct + Urban.pct + Undeveloped.pct + Ag.pct + LakeIWS.Ratio,
+early.secchi.model3 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
                         data = LAGOS.MN.processed.Early)
-summary(early.secchi.model1)
+summary(early.secchi.model3)
 
+#Prime Season ######NOT WORKING. DONT KNOW WHY
+prime.chla.model3 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Prime)
+summary(prime.chla.model3)
 
-late.chla.model1 <- lm(log(chla) ~ Water.pct + Urban.pct + Undeveloped.pct + Ag.pct + LakeIWS.Ratio,
+prime.secchi.model3 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Prime)
+summary(prime.secchi.model3)
+
+#Late Season
+late.chla.model3 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
                         data = LAGOS.MN.processed.Late)
-summary(late.chla.model1)
+summary(late.chla.model3)
 
+late.secchi.model3 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Late)
+summary(late.secchi.model3)
 ```
 

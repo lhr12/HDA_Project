@@ -107,13 +107,14 @@ ggplot(LAGOSiws.nutrient.2011.MN, aes(x = sampledate, y = chla, color = lagoslak
 
 ```{r Create_Full_df}
 LAGOS.MN.processed <- LAGOSiws.nutrient.2011.MN %>%
-  mutate(Water.pct = iws_nlcd2011_pct_11,
-         Urban.pct = iws_nlcd2011_pct_21 + iws_nlcd2011_pct_22 +
-           iws_nlcd2011_pct_23 + iws_nlcd2011_pct_24,
-         Undeveloped.pct = iws_nlcd2011_pct_31 + iws_nlcd2011_pct_41 +
-           iws_nlcd2011_pct_42 + iws_nlcd2011_pct_43 + 
-           iws_nlcd2011_pct_52 + iws_nlcd2011_pct_90 + iws_nlcd2011_pct_95,
-         Ag.pct =  iws_nlcd2011_pct_81 + iws_nlcd2011_pct_82 + iws_nlcd2011_pct_71) %>%
+  mutate(IntenseUrban.pct = iws_nlcd2011_pct_23 + iws_nlcd2011_pct_24,
+         OpenUrban.pct = iws_nlcd2011_pct_21,
+         Barren.pct = iws_nlcd2011_pct_31,
+         Forest.pct = iws_nlcd2011_pct_41 + iws_nlcd2011_pct_42 + iws_nlcd2011_pct_43,
+         GrassShrub.pct = iws_nlcd2011_pct_52 + iws_nlcd2011_pct_71,
+         Wetland.pct = iws_nlcd2011_pct_90 + iws_nlcd2011_pct_95,
+         Pasture.pct =  iws_nlcd2011_pct_81,
+         RowCrop.pct = iws_nlcd2011_pct_82) %>%
   select(-c(iws_nlcd2011_pct_11, iws_nlcd2011_pct_21, iws_nlcd2011_pct_22, 
             iws_nlcd2011_pct_23, iws_nlcd2011_pct_24, iws_nlcd2011_pct_31, 
             iws_nlcd2011_pct_41, iws_nlcd2011_pct_42, iws_nlcd2011_pct_43, 
@@ -156,6 +157,7 @@ MN.Ecoregions.sf <- st_read('./Data/Raw/mn_eco_l3.shp')
 
 #Selecting level 3 ecoregions names
 MN.Ecoregions.sf <- select(MN.Ecoregions.sf, US_L3NAME)
+colnames(MN.Ecoregions.sf)[1] <- "Ecoregion"
 
 #mapview(MN.Ecoregions.sf)
 
@@ -182,65 +184,68 @@ LAGOS.MN.processed.Early <- filter(LAGOS.MN.processed, Season == "Early")
 LAGOS.MN.processed.Prime <- filter(LAGOS.MN.processed, Season == "Prime")
 LAGOS.MN.processed.Late <- filter(LAGOS.MN.processed, Season == "Late")
 
-# summary(LAGOS.MN.processed.Early.sf$chla)
-# summary(LAGOS.MN.processed.Prime.sf$chla)
-# summary(LAGOS.MN.processed.Late.sf$chla)
-# 
-# summary(LAGOS.MN.processed.Early.sf$secchi)
-# summary(LAGOS.MN.processed.Prime.sf$secchi)
-# summary(LAGOS.MN.processed.Late.sf$secchi)
+
+#To look at the statistics
+summary(LAGOS.MN.processed.Early.sf$chla)
+summary(LAGOS.MN.processed.Prime.sf$chla)
+summary(LAGOS.MN.processed.Late.sf$chla)
+
+summary(LAGOS.MN.processed.Early.sf$secchi)
+summary(LAGOS.MN.processed.Prime.sf$secchi)
+summary(LAGOS.MN.processed.Late.sf$secchi)
 
 
 ```
 
 ```{r scatterplots}
+#Exploring some preliminary trends for Late Season (Highest Mean Chla and Lowest Mean Secchi Depth)
 
-ggplot(LAGOS.MN.processed.Late.sf, aes(x = Undeveloped.pct, y = secchi)) +
+ggplot(LAGOS.MN.processed.Late.sf, aes(x = IntenseUrban.pct, y = secchi)) +
 geom_point() +
-geom_smooth(method=lm) +
-xlab(expression("Undeveloped %")) +
+geom_smooth(method=lm, se=FALSE) +
+xlab(expression("% Intense Urban")) +
 ylab(expression("Secchi Depth (m)")) +
-ggtitle("Undeveloped % vs Secchi Depth Scatterplot, Late Season") +
+ggtitle("% Intense Urban vs Secchi Depth Scatterplot, Late Season") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.Late.sf, aes(x = Urban.pct, y = secchi)) +
+ggplot(LAGOS.MN.processed.Late.sf, aes(x = Forest.pct, y = secchi)) +
 geom_point() +
-geom_smooth(method=lm) +
-xlab(expression("Urban %")) +
+geom_smooth(method=lm, se=FALSE) +
+xlab(expression("% Forest")) +
 ylab(expression("Secchi Depth (m)")) +
-ggtitle("Urban % vs Secchi Depth Scatterplot, Late Season") +
+ggtitle("% Forest vs Secchi Depth Scatterplot, Late Season") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.Late.sf, aes(x = Ag.pct, y = secchi)) +
+ggplot(LAGOS.MN.processed.Late.sf, aes(x = RowCrop.pct, y = secchi)) +
 geom_point() +
-geom_smooth(method=lm) +
-xlab(expression("Agriculture %")) +
+geom_smooth(method=lm, se=FALSE) +
+xlab(expression("% Row Crops")) +
 ylab(expression("Secchi Depth (m)")) +
-ggtitle("Agriculture % vs Secchi Depth Scatterplot, Late Season") +
+ggtitle("% Row Crops vs Secchi Depth Scatterplot, Late Season") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.Late.sf, aes(x = Undeveloped.pct, y = chla)) +
+ggplot(LAGOS.MN.processed.Late.sf, aes(x = IntenseUrban.pct, y = chla)) +
 geom_point() +
-geom_smooth(method=lm) +
-xlab(expression("Undeveloped %")) +
-ylab(expression("Chla (mg/L)")) +
-ggtitle("Undeveloped % vs Chla Scatterplot, Late Season") +
+geom_smooth(method=lm, se=FALSE) +
+xlab(expression("% Intense Urban")) +
+ylab(expression("chla (mg/L)")) +
+ggtitle("% Intense Urban vs Chla Scatterplot, Late Season") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.Late.sf, aes(x = Urban.pct, y = chla)) +
+ggplot(LAGOS.MN.processed.Late.sf, aes(x = Forest.pct, y = chla)) +
 geom_point() +
-geom_smooth(method=lm) +
-xlab(expression("Urban %")) +
-ylab(expression("Chla (mg/L)")) +
-ggtitle("Urban % vs Chla Scatterplot, Late Season") +
+geom_smooth(method=lm, se=FALSE) +
+xlab(expression("% Forest")) +
+ylab(expression("chla (mg/L)")) +
+ggtitle("% Forest vs Chla Scatterplot, Late Season") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.Late.sf, aes(x = Ag.pct, y = chla)) +
+ggplot(LAGOS.MN.processed.Late.sf, aes(x = RowCrop.pct, y = chla)) +
 geom_point() +
-geom_smooth(method=lm) +
-xlab(expression("Agriculture %")) +
-ylab(expression("Chla (mg/L)")) +
-ggtitle("Agriculture % vs Chla Scatterplot, Late Season") +
+geom_smooth(method=lm, se=FALSE) +
+xlab(expression("% Row Crops")) +
+ylab(expression("chla (mg/L)")) +
+ggtitle("% Row Crops vs Chla Scatterplot, Late Season") +
 theme(plot.title = element_text(hjust = 0.5))
 ```
 
