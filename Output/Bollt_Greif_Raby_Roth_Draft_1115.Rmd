@@ -37,6 +37,8 @@ library(mapview)
 library(viridis)
 library(ggplot2)
 library(knitr)
+library(gridExtra)
+library(grid)
 
 # Set ggplot theme
 theme_set(theme_classic())
@@ -175,7 +177,7 @@ LAGOSiws.nutrient.2011.MN <- LAGOSiws.nutrient.2011.MN %>%
 ggplot(LAGOSiws.nutrient.2011.MN, 
        aes(x = sampledate, y = secchi)) +
   geom_point(alpha = 0.2) +
-  labs(y = "Secchi Depth (m)", x = "Year") +
+  labs(y = "Secchi Depth (m)", x = "Year")
 
 summary(LAGOSiws.nutrient.2011.MN$secchi)
 
@@ -275,31 +277,83 @@ summary(LAGOS.MN.processed.Late.sf$secchi)
 ```{r scatterplots}
 #Exploring some preliminary trends for Late Season (Highest Mean Chla and Lowest Mean Secchi Depth)
 
-ggplot(LAGOS.MN.processed.Late.sf, aes(x = IntenseUrban.pct, y = secchi)) +
-geom_point() +
+knitr::opts_chunk$set(cache=TRUE, error=FALSE, fig.cap = "These plots shows that there are trends in secchi depth relative to the given land uses during the 'Late Season'. The presence of trends supports the inclusion of the above land uses in the analysis. Note that the x-axes are on different scales.", message=FALSE, warning=FALSE)
+
+secchi.int.urb.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = IntenseUrban.pct, y = secchi)) +
+geom_point(alpha = 0.5) +
 geom_smooth(method=lm, se=FALSE) +
 xlab(expression("% Intense Urban")) +
 ylab(expression("Secchi Depth (m)")) +
-ggtitle("% Intense Urban vs Secchi Depth Scatterplot, Late Season") +
+#ggtitle("% Intense Urban vs Secchi Depth, Late Season") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.Late.sf, aes(x = Forest.pct, y = secchi)) +
-geom_point() +
+secchi.open.urb.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = OpenUrban.pct, y = secchi)) +
+geom_point(alpha = 0.5) +
+geom_smooth(method=lm, se=FALSE) +
+xlab(expression("% Open Urban")) +
+ylab(expression("")) +
+#ggtitle("% Open Urban vs Secchi Depth, Late Season") +
+theme(plot.title = element_text(hjust = 0.5))
+
+secchi.barren.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = Barren.pct, y = secchi)) +
+geom_point(alpha = 0.5) +
+geom_smooth(method=lm, se=FALSE) +
+xlab(expression("% Barren")) +
+ylab(expression("")) +
+#ggtitle("% Barren Land vs Secchi Depth, Late Season") +
+theme(plot.title = element_text(hjust = 0.5))
+
+secchi.forest.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = Forest.pct, y = secchi)) +
+geom_point(alpha = 0.5) +
 geom_smooth(method=lm, se=FALSE) +
 xlab(expression("% Forest")) +
 ylab(expression("Secchi Depth (m)")) +
-ggtitle("% Forest vs Secchi Depth Scatterplot, Late Season") +
+#ggtitle("% Forest vs Secchi Depth Scatterplot, Late Season") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.Late.sf, aes(x = RowCrop.pct, y = secchi)) +
-geom_point() +
+secchi.grass.shrub.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = GrassShrub.pct, y = secchi)) +
+geom_point(alpha = 0.5) +
+geom_smooth(method=lm, se=FALSE) +
+xlab(expression("% Grass-Shrub")) +
+ylab(expression("")) +
+#ggtitle("% Grass-Shrub vs Secchi Depth, Late Season") +
+theme(plot.title = element_text(hjust = 0.5))
+
+secchi.wet.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = Wetland.pct, y = secchi)) +
+geom_point(alpha = 0.5) +
+geom_smooth(method=lm, se=FALSE) +
+xlab(expression("% Wetland")) +
+ylab(expression("")) +
+#ggtitle("% Wetland vs Secchi Depth, Late Season") +
+theme(plot.title = element_text(hjust = 0.5))
+
+secchi.past.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = Pasture.pct, y = secchi)) +
+geom_point(alpha = 0.5) +
+geom_smooth(method=lm, se=FALSE) +
+xlab(expression("% Pasture")) +
+ylab(expression("Secchi Depth (m)")) +
+#ggtitle("% Pasture vs Secchi Depth, Late Season") +
+theme(plot.title = element_text(hjust = 0.5))
+
+secchi.row.crop.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = RowCrop.pct, y = secchi)) +
+geom_point(alpha = 0.5) +
 geom_smooth(method=lm, se=FALSE) +
 xlab(expression("% Row Crops")) +
-ylab(expression("Secchi Depth (m)")) +
-ggtitle("% Row Crops vs Secchi Depth Scatterplot, Late Season") +
+ylab(expression("")) +
+#ggtitle("% Row Crops vs Secchi Depth, Late Season") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.Late.sf, aes(x = IntenseUrban.pct, y = chla)) +
+title1 = grid.text("Secchi Depth vs. % Land Use")
+grid.arrange(secchi.int.urb.late, secchi.open.urb.late, secchi.barren.late,
+             secchi.forest.late, secchi.grass.shrub.late, secchi.wet.late,
+             secchi.past.late, secchi.row.crop.late, top = title1)
+```
+
+```{r}
+
+knitr::opts_chunk$set(cache=TRUE, error=FALSE, fig.cap = "These plots shows that there are trends in chlorophyll a relative to the given land uses during the 'Late Season'. The presence of trends supports the inclusion of the above land uses in the analysis.", message=FALSE, warning=FALSE)
+
+chla.int.urb.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = IntenseUrban.pct, y = chla)) +
 geom_point() +
 geom_smooth(method=lm, se=FALSE) +
 xlab(expression("% Intense Urban")) +
@@ -307,7 +361,7 @@ ylab(expression("chla (mg/L)")) +
 ggtitle("% Intense Urban vs Chla Scatterplot, Late Season") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.Late.sf, aes(x = Forest.pct, y = chla)) +
+chla.forest.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = Forest.pct, y = chla)) +
 geom_point() +
 geom_smooth(method=lm, se=FALSE) +
 xlab(expression("% Forest")) +
@@ -315,7 +369,7 @@ ylab(expression("chla (mg/L)")) +
 ggtitle("% Forest vs Chla Scatterplot, Late Season") +
 theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(LAGOS.MN.processed.Late.sf, aes(x = RowCrop.pct, y = chla)) +
+chla.row.crop.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = RowCrop.pct, y = chla)) +
 geom_point() +
 geom_smooth(method=lm, se=FALSE) +
 xlab(expression("% Row Crops")) +
