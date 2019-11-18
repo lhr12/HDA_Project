@@ -24,13 +24,40 @@ mainfont: Times New Roman
 
 ```{r setup, include=FALSE}
 # Set your working directory
+getwd()
 
 # Load your packages
+suppressMessages(library(tidyverse))
+library(ggplot2)
+library(dplyr)
+library(RColorBrewer)
+library(viridis)
+library(knitr)
+library(lubridate)
+library(lme4)
+library(nlme)
+library(trend)
+library(gridExtra)
+library(corrplot)
+library(car)
+library(bestNormalize)
+library(stats)
+library(LAGOSNE)
+library(sf)
+library(maps)
+library(mapview)
+library(lme4)
 
 # Set your ggplot theme
+theme_set(theme_classic())
 
 # Load your datasets
-
+#Early
+LAGOS.MN.processed.Early <- read.csv("./data/processed/LAGOS.MN.processed.Early.csv")
+#Late
+LAGOS.MN.processed.Late <-read.csv("./data/processed/LAGOS.MN.processed.Late.csv")
+#Prime
+LAGOS.MN.processed.Prime <-read.csv("./data/processed/LAGOS.MN.processed.Prime.csv")
 ```
 
 
