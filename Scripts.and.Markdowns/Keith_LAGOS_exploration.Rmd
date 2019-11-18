@@ -31,7 +31,7 @@ theme_set(theme_classic())
 
 
 #load LAGOS data
-#lagosne_get(dest_folder = LAGOSNE:::lagos_path(), overwrite = TRUE)
+lagosne_get(dest_folder = LAGOSNE:::lagos_path(), overwrite = TRUE)
 
 invisible(lapply(packages, library, character.only = TRUE)) 
 
