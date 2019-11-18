@@ -187,13 +187,9 @@ ggplot(LAGOSiws.nutrient.2011.MN,
 ```{r Create_Full_df}
 LAGOS.MN.processed <- LAGOSiws.nutrient.2011.MN %>%
   mutate(Water.pct = iws_nlcd2011_pct_11,
-         Urban.pct = iws_nlcd2011_pct_21 + iws_nlcd2011_pct_22 +
-           iws_nlcd2011_pct_23 + iws_nlcd2011_pct_24,
-         Undeveloped.pct = iws_nlcd2011_pct_31 + iws_nlcd2011_pct_41 +
-           iws_nlcd2011_pct_42 + iws_nlcd2011_pct_43 + 
-           iws_nlcd2011_pct_52 + iws_nlcd2011_pct_90 + iws_nlcd2011_pct_95,
-         Ag.pct =  iws_nlcd2011_pct_81 + iws_nlcd2011_pct_82 + 
-           iws_nlcd2011_pct_71) %>%
+         Urban.pct = iws_nlcd2011_pct_21 + iws_nlcd2011_pct_22 + iws_nlcd2011_pct_23 + iws_nlcd2011_pct_24,
+         Undeveloped.pct = iws_nlcd2011_pct_31 + iws_nlcd2011_pct_41 + iws_nlcd2011_pct_42 + iws_nlcd2011_pct_43 + iws_nlcd2011_pct_52 + iws_nlcd2011_pct_90 + iws_nlcd2011_pct_95,
+         Ag.pct =  iws_nlcd2011_pct_81 + iws_nlcd2011_pct_82 + iws_nlcd2011_pct_71) %>%
   select(-c(iws_nlcd2011_pct_11, iws_nlcd2011_pct_21, iws_nlcd2011_pct_22, 
             iws_nlcd2011_pct_23, iws_nlcd2011_pct_24, iws_nlcd2011_pct_31, 
             iws_nlcd2011_pct_41, iws_nlcd2011_pct_42, iws_nlcd2011_pct_43, 
