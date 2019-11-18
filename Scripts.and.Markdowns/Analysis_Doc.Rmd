@@ -57,7 +57,7 @@ theme_set(theme_classic())
 
 
 
-```{r correlation}
+```{r correlation and distributions}
 early.model.variables <- LAGOS.MN.processed.Early %>%
   select(chla, secchi, IntenseUrban.pct, OpenUrban.pct, Barren.pct, Forest.pct,
          GrassShrub.pct, Wetland.pct, Pasture.pct, RowCrop.pct, LakeIWS.Ratio, Ecoregion)
@@ -79,15 +79,9 @@ pairs(late.model.variables, lower.panel = panel.smooth,
 
 sapply(LAGOS.MN.processed.Prime, summary)
 
-
-
-corrplot.mixed(cor(LAGOS.MN.processed.Early[,c(9:18)]))
-corrplot.mixed(cor(LAGOS.MN.processed.Prime[,c(9:18)]))
-corrplot.mixed(cor(LAGOS.MN.processed.Late[,c(9:18)]))
-
 ```
 
-```{r}
+```{r Normality tests}
 #test for departures multivariate normality
 
 qqnorm(LAGOS.MN.processed.Early$chla)
@@ -106,31 +100,55 @@ qqnorm(log(LAGOS.MN.processed.Early$secchi))
 qqline(log(LAGOS.MN.processed.Early$secchi))
 shapiro.test(log(LAGOS.MN.processed.Early$secchi)) #still not normal but looks a lot better
 
-qqnorm(LAGOS.MN.processed.Early$Water.pct)
-qqline(LAGOS.MN.processed.Early$Water.pct)
-shapiro.test(LAGOS.MN.processed.Early$Water.pct)
-bestNormalize(LAGOS.MN.processed.Early$Water.pct) #log good not great
-qqnorm(log(LAGOS.MN.processed.Early$Water.pct))
-qqline(log(LAGOS.MN.processed.Early$Water.pct))
-shapiro.test(log(LAGOS.MN.processed.Early$Water.pct)) #still not normal but looks a lot better
 
-qqnorm(LAGOS.MN.processed.Early$Urban.pct)
-qqline(LAGOS.MN.processed.Early$Urban.pct)
-shapiro.test(LAGOS.MN.processed.Early$Urban.pct)
-bestNormalize(LAGOS.MN.processed.Early$Urban.pct) #sqrt is best but none are good
-qqnorm(sqrt(LAGOS.MN.processed.Early$Urban.pct))
-qqline(sqrt(LAGOS.MN.processed.Early$Urban.pct))
-shapiro.test(sqrt(LAGOS.MN.processed.Early$Urban.pct))
+qqnorm(LAGOS.MN.processed.Early$IntenseUrban.pct)
+qqline(LAGOS.MN.processed.Early$IntenseUrban.pct)
+shapiro.test(LAGOS.MN.processed.Early$IntenseUrban.pct)
+bestNormalize(LAGOS.MN.processed.Early$IntenseUrban.pct) #nothing makes it close to normal
+
+qqnorm(LAGOS.MN.processed.Early$OpenUrban.pct)
+qqline(LAGOS.MN.processed.Early$OpenUrban.pct)
+shapiro.test(LAGOS.MN.processed.Early$OpenUrban.pct)
+bestNormalize(LAGOS.MN.processed.Early$OpenUrban.pct) #nothing makes it close to normal
+
+qqnorm(LAGOS.MN.processed.Early$Barren.pct)
+qqline(LAGOS.MN.processed.Early$Barren.pct)
+shapiro.test(LAGOS.MN.processed.Early$Barren.pct)
+bestNormalize(LAGOS.MN.processed.Early$Barren.pct) #nothing makes it close to normal
 
 qqnorm(LAGOS.MN.processed.Early$Forest.pct)
 qqline(LAGOS.MN.processed.Early$Forest.pct)
 shapiro.test(LAGOS.MN.processed.Early$Forest.pct)
-bestNormalize(LAGOS.MN.processed.Early$Forest.pct)
+bestNormalize(LAGOS.MN.processed.Early$Forest.pct) #sqrt best
+qqnorm(sqrt(LAGOS.MN.processed.Early$Forest.pct))
+qqline(sqrt(LAGOS.MN.processed.Early$Forest.pct))
+shapiro.test(sqrt(LAGOS.MN.processed.Early$Forest.pct)) #not much better
+
+qqnorm(LAGOS.MN.processed.Early$GrassShrub.pct)
+qqline(LAGOS.MN.processed.Early$GrassShrub.pct)
+shapiro.test(LAGOS.MN.processed.Early$GrassShrub.pct)
+bestNormalize(LAGOS.MN.processed.Early$GrassShrub.pct) #nothing makes it close to normal
+
+qqnorm(LAGOS.MN.processed.Early$Wetland.pct)
+qqline(LAGOS.MN.processed.Early$Wetland.pct)
+shapiro.test(LAGOS.MN.processed.Early$Wetland.pct)
+bestNormalize(LAGOS.MN.processed.Early$Wetland.pct) #nothing makes it close to normal
+
+qqnorm(LAGOS.MN.processed.Early$Pasture.pct)
+qqline(LAGOS.MN.processed.Early$Pasture.pct)
+shapiro.test(LAGOS.MN.processed.Early$Pasture.pct)
+bestNormalize(LAGOS.MN.processed.Early$Pasture.pct) #nothing makes it close to normal
+
+qqnorm(LAGOS.MN.processed.Early$RowCrop.pct)
+qqline(LAGOS.MN.processed.Early$RowCrop.pct)
+shapiro.test(LAGOS.MN.processed.Early$RowCrop.pct)
+bestNormalize(LAGOS.MN.processed.Early$RowCrop.pct) #nothing makes it close to normal
+
 
 ```
 
 
-```{r}
+```{r No interaction models}
 #Early Season
 early.chla.model1 <- lm(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
                           Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
@@ -176,7 +194,7 @@ summary(late.secchi.model1)
 ```
 
 
-```{r}
+```{r Interaction models}
 ## Model 2
 
 #Early Season
@@ -224,7 +242,7 @@ summary(late.secchi.model2)
 ```
 
 
-```{r}
+```{r No interaction mixed effects models}
 #Early Season
 early.chla.model3 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
                           Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
