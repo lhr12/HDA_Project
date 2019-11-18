@@ -188,6 +188,7 @@ summary(early.chla.model1.5)
 
 AIC(early.chla.model1, early.chla.model1.2, early.chla.model1.3, early.chla.model1.4, early.chla.model1.5)
 #lowest AIC model 5
+plot(early.chla.model1.5)
 
 par(mfrow = c(2,2))
 plot(early.chla.model1) #this looks great!!!
@@ -282,6 +283,7 @@ summary(prime.chla.model1.3)
 #remaining variables significant, adjusted r-squared 0.2555
 AIC(prime.chla.model1, prime.chla.model1.2, prime.chla.model1.3)
 #lowest AIC model 3
+plot(prime.chla.model1.3)
 
 
 prime.secchi.model1 <- lm(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
@@ -378,6 +380,7 @@ summary(late.chla.model1.4)
 #adjusted r-squared 0.1633
 AIC(late.chla.model1, late.chla.model1.2, late.chla.model1.3, late.chla.model1.4)
 #lowest AIC model 4
+plot(late.chla.model1.4)
 
 
 late.secchi.model1 <- lm(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
@@ -414,6 +417,7 @@ summary(late.secchi.model1.5)
 #adjusted r-squared 0.171
 AIC(late.secchi.model1, late.secchi.model1.2, late.secchi.model1.3, late.secchi.model1.4, late.secchi.model1.5)
 #lowest AIC model 5
+plot(late.secchi.model1.5)
 
 
 ```
