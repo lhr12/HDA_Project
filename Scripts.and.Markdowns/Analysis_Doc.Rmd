@@ -422,6 +422,20 @@ plot(late.secchi.model1.5)
 
 ```
 
+FRAComment: the next chunk is a plot that we can use to show model results. If we dont need to show results with plots we can only just talk about coeficients and trends.
+
+```{r}
+#Saving the fitted values to the dataframe
+LAGOS.MN.processed.Late$LM_Late_Secchi <- fitted(late.secchi.model1.5)
+
+# Plotting the model
+ggplot(LAGOS.MN.processed.Late, aes(x=LakeIWS.Ratio, y=log(secchi))) +
+  geom_point(alpha = 0.3, size = 3) +
+  geom_line(aes(y = LM_Late_Secchi), color ="red") +
+  facet_wrap(~Ecoregion)
+```
+
+
 
 ```{r Interaction models}
 ## Model 2
@@ -477,11 +491,46 @@ summary(late.secchi.model2)
 early.chla.model3 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
                           Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
                           Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
-                        data = LAGOS.MN.processed.Early)
+                        data = LAGOS.MN.processed.Early, REML = TRUE)
 summary(early.chla.model3)
+Anova(early.chla.model3)
+
+early.chla.model3.2 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Early, REML = TRUE)
+summary(early.chla.model3.2)
+Anova(early.chla.model3.2)
+
+early.chla.model3.3 <- lmer(log(chla) ~ OpenUrban.pct + 
+                          Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Early, REML = TRUE)
+summary(early.chla.model3.3)
+Anova(early.chla.model3.3)
+
+early.chla.model3.4 <- lmer(log(chla) ~ OpenUrban.pct + 
+                          Forest.pct + Wetland.pct + 
+                          Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Early, REML = TRUE)
+summary(early.chla.model3.4)
+Anova(early.chla.model3.4)
+
+early.chla.model3.5 <- lmer(log(chla) ~ OpenUrban.pct + 
+                          Forest.pct +  
+                          Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Early, REML = TRUE)
+summary(early.chla.model3.5)
+Anova(early.chla.model3.5)
+#all remaining variables significant
+plot(early.chla.model3.5)
+anova(early.chla.model3, early.chla.model3.2, early.chla.model3.3, 
+      early.chla.model3.4, early.chla.model3.5)
+
 
 #Saving the fitted values to the dataframe
 LAGOS.MN.processed.Early$LMER_Early_Chla <- fitted(early.chla.model3)
+#should this be the simplest model or the full model?
 
 # Plotting the model
 ggplot(LAGOS.MN.processed.Early, aes(x=LakeIWS.Ratio, y=log(chla))) +
@@ -491,12 +540,46 @@ ggplot(LAGOS.MN.processed.Early, aes(x=LakeIWS.Ratio, y=log(chla))) +
 
 plot(early.chla.model3)
 
+
 ###Secchi
 early.secchi.model3 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
                           Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
                           Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
                         data = LAGOS.MN.processed.Early)
 summary(early.secchi.model3)
+Anova(early.secchi.model3)
+
+early.secchi.model3.2 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          Pasture.pct + LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Early)
+summary(early.secchi.model3.2)
+Anova(early.secchi.model3.2)
+
+early.secchi.model3.3 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Barren.pct + Forest.pct + GrassShrub.pct +  
+                          Pasture.pct + LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Early)
+summary(early.secchi.model3.3)
+Anova(early.secchi.model3.3)
+
+early.secchi.model3.4 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Barren.pct + Forest.pct + GrassShrub.pct +  
+                          LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Early)
+summary(early.secchi.model3.4)
+Anova(early.secchi.model3.4)
+
+early.secchi.model3.5 <- lmer(log(secchi) ~ OpenUrban.pct + 
+                          Barren.pct + Forest.pct + GrassShrub.pct +
+                          LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Early)
+summary(early.secchi.model3.5)
+Anova(early.secchi.model3.5)
+#remaining variables significant
+plot(early.secchi.model3.5)
+anova(early.secchi.model3, early.secchi.model3.2, early.secchi.model3.3,
+      early.secchi.model3.4, early.secchi.model3.5)
 
 #Saving the fitted values to the dataframe
 LAGOS.MN.processed.Early$LMER_Early_Secchi <- fitted(early.secchi.model3)
@@ -518,6 +601,23 @@ prime.chla.model3 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct +
                           Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
                         data = LAGOS.MN.processed.Prime)
 summary(prime.chla.model3)
+Anova(prime.chla.model3)
+
+prime.chla.model3.2 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Prime)
+summary(prime.chla.model3.2)
+Anova(prime.chla.model3.2)
+
+prime.chla.model3.3 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Prime)
+summary(prime.chla.model3.3)
+Anova(prime.chla.model3.3)
+#remaining variables significant
+plot(prime.chla.model3.3)
 
 #Saving the fitted values to the dataframe
 LAGOS.MN.processed.Prime$LMER_Prime_Chla <- fitted(prime.chla.model3)
@@ -536,6 +636,17 @@ prime.secchi.model3 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct +
                           Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
                         data = LAGOS.MN.processed.Prime)
 summary(prime.secchi.model3)
+Anova(prime.secchi.model3)
+
+prime.secchi.model3.2 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Barren.pct + Forest.pct + GrassShrub.pct + 
+                          Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Prime)
+summary(prime.secchi.model3.2)
+Anova(prime.secchi.model3.2)
+#remaining variables significant
+plot(prime.secchi.model3.2)
+anova(prime.secchi.model3, prime.secchi.model3.2)
 
 #Saving the fitted values to the dataframe
 LAGOS.MN.processed.Prime$LMER_Prime_Secchi <- fitted(prime.secchi.model3)
@@ -567,6 +678,31 @@ late.chla.model3 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct +
                           Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
                         data = LAGOS.MN.processed.Late)
 summary(late.chla.model3)
+Anova(late.chla.model3)
+
+late.chla.model3.2 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Late)
+summary(late.chla.model3.2)
+Anova(late.chla.model3.2)
+
+late.chla.model3.3 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          Pasture.pct + LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Late)
+summary(late.chla.model3.3)
+Anova(late.chla.model3.3)
+
+late.chla.model3.4 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Late)
+summary(late.chla.model3.4)
+Anova(late.chla.model3.4)
+#all remaining variables significant
+plot(late.chla.model3.4)
+
 
 #Saving the fitted values to the dataframe
 LAGOS.MN.processed.Late$LMER_Late_Chla <- fitted(late.chla.model3)
@@ -591,6 +727,53 @@ late.secchi.model3 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct +
                           Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
                         data = LAGOS.MN.processed.Late)
 summary(late.secchi.model3)
+Anova(late.secchi.model3)
+
+late.secchi.model3.2 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          Pasture.pct + LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Late)
+summary(late.secchi.model3.2)
+Anova(late.secchi.model3.2)
+
+late.secchi.model3.2 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          Pasture.pct + LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Late)
+summary(late.secchi.model3.2)
+Anova(late.secchi.model3.2)
+
+late.secchi.model3.2 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          Pasture.pct + LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Late)
+summary(late.secchi.model3.2)
+Anova(late.secchi.model3.2)
+
+late.secchi.model3.3 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Barren.pct + Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Late)
+summary(late.secchi.model3.3)
+Anova(late.secchi.model3.3)
+
+late.secchi.model3.4 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Forest.pct + GrassShrub.pct + Wetland.pct + 
+                          LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Late)
+summary(late.secchi.model3.4)
+Anova(late.secchi.model3.4)
+
+late.secchi.model3.5 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
+                          Forest.pct + GrassShrub.pct + 
+                          LakeIWS.Ratio + (1|Ecoregion), 
+                        data = LAGOS.MN.processed.Late)
+summary(late.secchi.model3.5)
+Anova(late.secchi.model3.5)
+#remaining variables significant
+plot(late.secchi.model3.5)
+anova(late.secchi.model3, late.secchi.model3.2, late.secchi.model3.3, 
+      late.secchi.model3.4, late.secchi.model3.5)
 
 #Saving the fitted values to the dataframe
 LAGOS.MN.processed.Late$LMER_Late_Secchi <- fitted(late.secchi.model3)
@@ -608,4 +791,26 @@ plot(late.secchi.model3)
 
 
 ```
+Early Chla model:
+* pasture and row crop direct/positive relationship, openurban, forest, and ratio indirect/negative relationship
+* log(chla) = -0.010769(open urban) +  -0.015262(forest) + 0.008496(pasture) + 0.003201(rowcrop) + -0.308617(ratio) + 2.479692
 
+Early Secchi model:
+* open urban, barren, forest, grassshrub, and ratio direct/positive relationship
+* log(secchi) = 0.012368(open urban) + 0.019564(barren) + 0.012288(forest) +0.010243(grass shrub) +  0.214416(ratio) + -0.045792
+
+Prime Chla model: 
+* intenseurban, openurban, forest, grassshrub, wetland, rowcrop, and ratio indirect/negative relationsihp
+* log(chla) = -0.0100841(intense urban) + -0.0252362(open urban) + -0.0244790(forest) + -0.0252642(grass shrub) + -0.0125302(wetland) + -0.0069355(rowcrop) + -0.4174341(ratio) + 3.8867381
+
+Prime Secchi model:
+* intense urban, openurban, barren, forest, grassshrub, pasture, rowcrop, and ratio direct/positive relationship
+* log(secchi) = 0.0042302(intense urban) + 0.0155867(open urban) + 0.0075966(barren) + 0.0159693(forest) + 0.0144579(grass shrub) + 0.0033298(pasture) + 0.0046399(rowcrop) + 0.3943152(ratio) + -0.5862860
+
+Late Chla model: 
+* Intenseurban, openurban, forest, grassshrub, wetland, and ratio indirect/negative relationship
+* log(chla) = -0.013306(intense urban) + -0.023772(open urban) + -0.024870(forest) + -0.028149(grass shrub) + -0.011284(wetland) + -0.263348(ratio) + 3.665338
+
+Late Secchi model:
+* Intenseurban, openurban, forest, grassshurb, and ratio indirect/negative relationship
+* log(secchi) = 0.004109(intense urban) + 0.014590(open urban) + 0.016406(forest) + 0.017732(grass shrub) + 0.250633(ratio) + -0.245145
