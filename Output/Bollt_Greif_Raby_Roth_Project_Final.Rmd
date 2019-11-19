@@ -67,7 +67,7 @@ LAGOS.MN.processed.Prime <-read.csv("./data/processed/LAGOS.MN.processed.Prime.c
 
 <At the end of your rationale, introduce a numbered list of your questions (or an overarching question and sub-questions). Each question should be accompanied by one or more working hypotheses, inserted beneath each question.>
 
-Land use has a large impact on nutrient runoff into streams, lakes, and other water bodies. Understanding the causes of nutrient problems will better inform management strategies. A study looking at land use and water quality in the Chaohu Basin in China found that forest and grassland has a statistically significant negative correlation with water quality, while urbanization has a statistically significant positive correlation with water quality and farmland has a more complex relationship (Huang et al., 2013). We applied some of the basic research questions of the Huang et al. study to the United States. Nutrient management has been a challenge for states in the effort to control harmful algal blooms and coastal dead zones (Wurtsbaugh et al., 2019). We selected the state of Minnesota for our study because Minnesota has wide variety of land uses.  It includes a large urban center (the Twin Cities metropolitan area), natural lands in the northern part of the state, and large agricultural areas. It also has a large number of lakes with water quality sampling. In addition, studies performed in Minnesota have shown that water quality has been adversely affected by land use changes (Christensen et al., 2012); (Maalim et al., 2013). There may also be seasonal relationships between water quality and land use; for example, we know that farmers apply nutrients at certain times of year and lakes naturally have higher levels of algae in summer months.
+Land use has a large impact on nutrient runoff into streams, lakes, and other water bodies. Understanding the causes of nutrient problems will better inform management strategies. A study looking at land use and water quality in the Chaohu Basin in China found that forest and grassland has a statistically significant negative correlation with water quality, while urbanization has a statistically significant positive correlation with water quality and farmland has a more complex relationship (Huang et al., 2013). We applied some of the basic research questions of the Huang et al. study to the US. Nutrient management has been a challenge for states in the effort to control harmful algal blooms and coastal dead zones (Wurtsbaugh et al., 2019). We selected the state of Minnesota for our study because Minnesota has wide variety of land uses.  It includes a large urban center (the Twin Cities metropolitan area), natural lands in the northern part of the state, and large agricultural areas. It also has a large number of lakes with water quality sampling. In addition, studies performed in Minnesota have shown that water quality has been adversely affected by land use changes (Christensen et al., 2012); (Maalim et al., 2013). There may also be seasonal relationships between water quality and land use; for example, we know that farmers apply nutrients at certain times of year and lakes naturally have higher levels of algae in summer months. It is important that states like Minnesota have sound nutrient management regimes because they affect water quality downstream of their borders. The Gulf of Mexico has been experiencing hypoxia, or low dissolved oxygen levels, as a result of agricultural runoff in the Mississippi River basin. Minnesota is the source of the Mississippi River and a large agricultural state, so it is important that Minnesota properly manages its agricultural runoff (Minnesota Pollution Control Agency, 2019).
 * * 
 Research Questions:
 	In order to evaluate the relationship between land use wand lacustrine water quality in the state of Minnesota, we asked the following two questions to help guide our research:
@@ -94,6 +94,21 @@ Goals:
 
 <Add a table that summarizes your data structure (variables, units, ranges and/or central tendencies, data source if multiple are used, etc.). This table can be made in markdown text or inserted as a `kable` function in an R chunk. If the latter, do not include the code used to generate your table.>
 
+The data used in this analysis include data from the Lake Multi-Scaled Geospatial and Temporal Database (LAGOSNE) and the EPA ecoregion spatial datasets.
+
+
+LAGOSNE is a collection of several data modules that contain information on lakes in the northern United States. The modules contain data from thousands of lakes in 17 states in the northeastern and midwestern United States, from Missouri to Maine. The dataset includes a complete list of all lakes bigger than 4 hectacres in the 17 state area, and water quality data on a large number of lakes, spanning every state. 
+
+Ecoregions are developed by the US Environmental Protection Agency and are used by planning managers to understand the type of land use that occurs in different regions of the United States. There are different levels of ecoregions. Level I has low resolution, and divides North America into 15 ecological regions, while Level IV offers fine ecological resolution for each state. This data was published by the U.S. EPA Office of Research and Development (ORD) - National Health and Environmental Effects Research Laboratory (NHEERL). We selected Level II ecoregions for our project. Minnesota contains parts of three distinct Level II ecoregions. This level of resolution allows us to broadly capture the natural ecosystem variation in different parts of the state in our statistical models.
+
+
+```{r ,echo=FALSE}
+Variables.table <- read.csv("./Output/Variable_Descriptions_Table.csv")
+library(knitr)
+kable(Variables.table)
+```
+
+
 \newpage
 
 # Exploratory Analysis 
@@ -101,6 +116,14 @@ Goals:
 <Insert exploratory visualizations of your dataset. This may include, but is not limited to, graphs illustrating the distributions of variables of interest and/or maps of the spatial context of your dataset. Format your R chunks so that graphs are displayed but code is not displayed. Accompany these graphs with text sections that describe the visualizations and provide context for further analyses.>
 
 <Each figure should be accompanied by a caption, and each figure should be referenced within the text>
+
+We came in to our exploratory analysis knowing we wanted to look at how water quality was affected by varying land use. Our exploratory analysis had four main goals: selecting a study area, selecting a study period, selecting what land use classifications (independent variables) and water quality proxies (dependent variables) to study, and preparing a dataframe to test our research questions and hypotheses.
+	Our first step was to load the LAGOSNE data columns we though we would need and to look at how much data each state in our study contained. We decided on Minnesota because of its high number of lakes in the LAGOSNE dataset, and its high land use variation. We observed that the latest land use classification by USGS was from 2011; the second oldest was from 2006. Therefore, we limited our study to the period from 2009 through 2015 inclusive, so we did not extrapolate too much from our 2011 land use dataset. 
+	We filtered out just the variables we wanted for our study and created a “LAGOS.MN.processed” dataframe. We decided to use Chlorophyll a and secchi depth as proxies of water quality after we visualized our data and confirmed that we had enough data on these two variables in Minnesota between 2009 and 2015 to make claims about land use and water quality; in fact we had over 19,000 lakes with data! We decided what land uses we cared about, based on our background readings and prior knowledge of water quality and land use, grouped some land uses together, and assigned them names in our dataframe. We also created an IWS ratio column, which is the lake area divided by watershed area. We reasoned a big lake in a small watershed would be affected by land use differently than a small lake in a big watershed, and we wanted this to be captured in our analysis.
+	Our next step was to create a growing “seasons” column in order to account for seasonality in our statistical models. We divided up the calendar year into three bins: Early (May 15 and Before), Prime (May 16 - September 30), and Late (October 1 and later). These season designations are somewhat arbitrary, but are based off of our prior knowledge of when the prime biological growing season is in Minnesota. We created a dataframe for each of the three seasons. 
+	At this point, we visualized land use percentage versus secchi depth and versus Chlorophyll a for three representative land uses for the Late season. We were hoping to visually confirm that we might find a trend when we ran our statistical tests in our analysis section. We found that some ggplots showed a possible trend, whereas some ggplots did not appear to show a trend. This told us that we had, in fact selected useful land use classifications and useful seasonal demarcations. We performed a summary function, and gave all of our columns useful names and removed NAs. Our statistical tests would not all run if our dataset contained NAs.The next step we performed was to convert our dataframes to sf dataframes so we could add Level II ecoregion column.
+	Our final visualization test was to spatially visualize secchi depth and land use percentage on a map of Minnesota. We discovered that there are a large number of lake samples around the Twin Cities area, and that there is enough spatial variation in our data to capture the different ecoregions and land uses in the state of Minnesota. We concluded our data wrangling by exporting our three non-sf season processed dataframes as csv files to our processed data folder.
+
 
 \newpage
 
@@ -128,11 +151,11 @@ Goals:
 <add references here> 
 Christensen, Victoria G., et al. "Relations between Retired Agricultural Land, Water Quality, and	Aquatic-Community Health, Minnesota River Basin." Journal of Environmental Quality,	vol. 41, no. 5, 2012, pp. 1459-72. ProQuest,	https://login.proxy.lib.duke.edu/login?url=https://search.proquest.com/docview/1	95114913?accountid=10598.
 
-Maalim, Fukhrudin K., Melesse, Assefa M., Belmont, Patrick., Gran, Karen B. "Modeling the	impact of land use changes on runoff and sediment yield in the Le Sueur watershed,	Minnesota using GeoWEPP." CATENA Volume 107, 2013, Pages 35	45, https://doi.org/10.1016/j.catena.2013.03.004.
-
 Huang, J., Zhan, J., Yan, H., Wu, F., Xiangzheng Deng, X. “Evaluation of the Impacts of Land	Use on Water Quality: A Case Study in The Chaohu Lake Basin,” The Scientific World	Journal, vol. 2013, Article ID 329187, 7 pages,	2013. https://doi.org/10.1155/2013/329187.
 
-Ramstack, Joy M., Sherilyn C. Fritz, and Daniel R. Engstrom. "Twentieth Century Water Quality	Trends	in Minnesota Lakes Compared with Presettlement Variability." Canadian Journal	of Fisheries and Aquatic Sciences, vol. 61, no. 4, 2004, pp. 561-576.	ProQuest, https://login.proxy.lib.duke.edu/login?url=https://search.proquest.com/docvi	ew/29317301?accountid=10598.
+Maalim, Fukhrudin K., Melesse, Assefa M., Belmont, Patrick., Gran, Karen B. "Modeling the	impact of land use changes on runoff and sediment yield in the Le Sueur watershed,	Minnesota using GeoWEPP." CATENA Volume 107, 2013, Pages 35	45, https://doi.org/10.1016/j.catena.2013.03.004.
 
-Wurtsbaugh, WA, Paerl, HW, Dodds, WK. “Nutrients, eutrophication and harmful algal blooms	along the freshwater to marine continuum.” WIREs	Water. 2019; 6:e1373. https://doi.org/10.1002/wat2.1373
+“Nutrient Reduction Strategy.” Minnesota Pollution Control Agency, 6 Mar. 2019, www.pca.state.mn.us/water/nutrient-reduction-strategy#resources-b7ca91dc.
+
+Ramstack, Joy M., Sherilyn C. Fritz, and Daniel R. Engstrom. "Twentieth Century Water Quality	Trends	in Minnesota Lakes Compared with Presettlement Variability." Canadian Journal	of Fisheries and Aquatic Sciences, vol. 61, no. 4, 2004, pp. 561-576.
 
