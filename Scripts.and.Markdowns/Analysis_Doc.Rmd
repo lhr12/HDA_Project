@@ -422,6 +422,20 @@ plot(late.secchi.model1.5)
 
 ```
 
+FRAComment: the next chunk is a plot that we can use to show model results. If we dont need to show results with plots we can only just talk about coeficients and trends.
+
+```{r}
+#Saving the fitted values to the dataframe
+LAGOS.MN.processed.Late$LM_Late_Secchi <- fitted(late.secchi.model1.5)
+
+# Plotting the model
+ggplot(LAGOS.MN.processed.Late, aes(x=LakeIWS.Ratio, y=log(secchi))) +
+  geom_point(alpha = 0.3, size = 3) +
+  geom_line(aes(y = LM_Late_Secchi), color ="red") +
+  facet_wrap(~Ecoregion)
+```
+
+
 
 ```{r Interaction models}
 ## Model 2
