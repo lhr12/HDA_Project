@@ -791,4 +791,20 @@ plot(late.secchi.model3)
 
 
 ```
+Early Chla model:
+* pasture and row crop direct/positive relationship, openurban, forest, and ratio indirect/negative relationship
 
+Early Secchi model:
+* open urban, barren, forest, grassshrub, and ratio direct/positive relationship
+
+Prime Chla model: 
+* intenseurban, openurban, forest, grassshrub, wetland, rowcrop, and ratio indirect/negative relationsihp
+
+Prime Secchi model:
+* intense urban, openurban, barren, forest, grassshrub, pasture, rowcrop, and ratio direct/positive relationship
+
+Late Chla model: 
+* Intenseurban, openurban, forest, grassshrub, wetland, and ratio indirect/negative relationship
+
+Late Secchi model:
+* Intenseurban, openurban, forest, grassshurb, and ratio indirect/negative relationship
