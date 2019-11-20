@@ -14,6 +14,12 @@ mainfont: Times New Roman
 ---
 
 \newpage
+\tableofcontents 
+\newpage
+\listoftables 
+\newpage
+\listoffigures 
+\newpage
 
 <Arrow brackets are used for annotating the RMarkdown files. Text within these brackets should not appear in the final version of the PDF document>
 
@@ -68,6 +74,8 @@ LAGOS.MN.processed.Prime <-read.csv("./data/processed/LAGOS.MN.processed.Prime.c
 <At the end of your rationale, introduce a numbered list of your questions (or an overarching question and sub-questions). Each question should be accompanied by one or more working hypotheses, inserted beneath each question.>
 
 Land use has a large impact on nutrient runoff into streams, lakes, and other water bodies. Understanding the causes of nutrient problems will better inform management strategies. A study looking at land use and water quality in the Chaohu Basin in China found that forest and grassland has a statistically significant negative correlation with water quality, while urbanization has a statistically significant positive correlation with water quality and farmland has a more complex relationship (Huang et al., 2013). We applied some of the basic research questions of the Huang et al. study to the US. Nutrient management has been a challenge for states in the effort to control harmful algal blooms and coastal dead zones (Wurtsbaugh et al., 2019). We selected the state of Minnesota for our study because Minnesota has wide variety of land uses.  It includes a large urban center (the Twin Cities metropolitan area), natural lands in the northern part of the state, and large agricultural areas. It also has a large number of lakes with water quality sampling. In addition, studies performed in Minnesota have shown that water quality has been adversely affected by land use changes (Christensen et al., 2012); (Maalim et al., 2013). There may also be seasonal relationships between water quality and land use; for example, we know that farmers apply nutrients at certain times of year and lakes naturally have higher levels of algae in summer months. It is important that states like Minnesota have sound nutrient management regimes because they affect water quality downstream of their borders. The Gulf of Mexico has been experiencing hypoxia, or low dissolved oxygen levels, as a result of agricultural runoff in the Mississippi River basin. Minnesota is the source of the Mississippi River and a large agricultural state, so it is important that Minnesota properly manages its agricultural runoff (Minnesota Pollution Control Agency, 2019).
+
+
 * * 
 Research Questions:
 	In order to evaluate the relationship between land use wand lacustrine water quality in the state of Minnesota, we asked the following two questions to help guide our research:
