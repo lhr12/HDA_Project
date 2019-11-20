@@ -181,31 +181,6 @@ LAGOS.MN.processed.sf <- na.omit(LAGOS.MN.processed.sf)
 
 ```
 
-```{r Adding_Ecoregions, eval = FALSE}
-LAGOS.MN.processed.sf <- st_as_sf(LAGOS.MN.processed, coords = c("nhd_long", "nhd_lat"), crs = 4326)
-
-LAGOS.MN.processed.UTM.sf <- st_transform(LAGOS.MN.processed.sf, crs=26917)
-
-MN.Ecoregions.sf <- st_read('./Data/Raw/mn_eco_l3.shp')
-
-#Selecting level 3 ecoregions names
-MN.Ecoregions.sf <- select(MN.Ecoregions.sf, US_L3NAME)
-colnames(MN.Ecoregions.sf)[1] <- "Ecoregion"
-
-#mapview(MN.Ecoregions.sf)
-
-MN.Ecoregions.UTM.sf <- st_transform(MN.Ecoregions.sf, crs=26917)
-
-LAGOS.MN.processed.sf <- st_join(LAGOS.MN.processed.UTM.sf, MN.Ecoregions.UTM.sf)
-LAGOS.MN.processed.sf <- na.omit(LAGOS.MN.processed.sf)
-
-colnames(data)[colnames(data)=="old_name"] <- "new_name"
-LAGOS.MN.processed.sf <- LAGOS.MN.processed.sf %>%
-  mutate(LevelIII_Ecoregion = US_L3NAME)
-LAGOS.MN.processed.sf$US_L3NAME <- NULL
-summary(LAGOS.MN.processed.sf)
-```
-
 ```{r Creating_Seasons_dfs}
 #Creating sf seasons files
 LAGOS.MN.processed.Early.sf <- filter(LAGOS.MN.processed.sf, Season == "Early")
@@ -303,34 +278,22 @@ summarise(secchi.mean = mean(secchi),
           ) %>%
   drop_na()
 
+#Creating a MN.Ecoregions.sf_UTM variable without water (just for visualization)
+
+MN.Ecoregions.sf_UTM_plot <- MN.Ecoregions.sf_UTM %>% 
+  filter(Ecoregion != "WATER")
+
 #SF file with the summary
 LAGOS.MN.Summary.Early.sf <- st_as_sf(LAGOS.MN.Summary.Early, coords = c("Long", "Lat"), crs = 4326)
 
-secchiplot1.Early.MN <- ggplot() +
-  geom_sf(data = MN.Ecoregions.sf_UTM, aes(fill = Ecoregion)) +
-  geom_sf(data = LAGOS.MN.Summary.Early.sf, 
-          aes(size = IntenseUrban.pct, color = secchi.mean),
+Early.MN <- ggplot() +
+  geom_sf(data = MN.Ecoregions.sf_UTM_plot, aes(fill = Ecoregion)) +
+  geom_sf(data = LAGOS.MN.Summary.Early.sf,
           alpha = 0.4, show.legend = "point") +
-  scale_color_viridis_c(option = "inferno") +
-  labs(color = "Average \n Secchi \n Depth (m)", 
-       size = "Intense Urban \n Area \n %") +
   theme(legend.position = "right", legend.text = element_text(size = 7),
         legend.title = element_text(size = 8),
         legend.margin = margin(0,0,0,0)) 
-print(secchiplot1.Early.MN)
-
-chlaplot1.Early.MN <- ggplot() +
-  geom_sf(data = MN.Ecoregions.sf_UTM, aes(fill = Ecoregion)) +
-  geom_sf(data = LAGOS.MN.Summary.Early.sf, 
-          aes(size = IntenseUrban.pct, color = chla.mean),
-          alpha = 0.4, show.legend = "point") +
-  scale_color_viridis_c(option = "inferno") +
-  labs(color = "Average \n Chla \n (mg/L)", 
-       size = "Intense Urban \n Area \n %") +
-  theme(legend.position = "right", legend.text = element_text(size = 7),
-        legend.title = element_text(size = 8),
-        legend.margin = margin(0,0,0,0)) 
-print(chlaplot1.Early.MN)
+print(Early.MN)
 
 ```
 
@@ -356,32 +319,14 @@ summarise(secchi.mean = mean(secchi),
 #SF file with the summary
 LAGOS.MN.Summary.Prime.sf <- st_as_sf(LAGOS.MN.Summary.Prime, coords = c("Long", "Lat"), crs = 4326)
 
-secchiplot1.Prime.MN <- ggplot() +
-  geom_sf(data = MN.Ecoregions.sf_UTM, aes(fill = Ecoregion)) +
+Prime.MN <- ggplot() +
+  geom_sf(data = MN.Ecoregions.sf_UTM_plot, aes(fill = Ecoregion)) +
   geom_sf(data = LAGOS.MN.Summary.Prime.sf, 
-          aes(size = IntenseUrban.pct, color = secchi.mean),
           alpha = 0.4, show.legend = "point") +
-  scale_color_viridis_c(option = "inferno") +
-  labs(color = "Average \n Secchi \n Depth (m)", 
-       size = "Intense Urban \n Area \n %") +
   theme(legend.position = "right", legend.text = element_text(size = 7),
         legend.title = element_text(size = 8),
         legend.margin = margin(0,0,0,0)) 
-print(secchiplot1.Prime.MN)
-
-chlaplot1.Prime.MN <- ggplot() +
-  geom_sf(data = MN.Ecoregions.sf_UTM, aes(fill = Ecoregion)) +
-  geom_sf(data = LAGOS.MN.Summary.Prime.sf, 
-          aes(size = IntenseUrban.pct, color = chla.mean),
-          alpha = 0.4, show.legend = "point") +
-  scale_color_viridis_c(option = "inferno") +
-  labs(color = "Average \n Chla \n (mg/L)", 
-       size = "Intense Urban \n Area \n %") +
-  theme(legend.position = "right", legend.text = element_text(size = 7),
-        legend.title = element_text(size = 8),
-        legend.margin = margin(0,0,0,0)) 
-print(chlaplot1.Prime.MN)
-
+print(Prime.MN)
 ```
 
 ```{r summary.for.late.season, eval = TRUE}
@@ -406,34 +351,14 @@ summarise(secchi.mean = mean(secchi),
 #SF file with the summary
 LAGOS.MN.Summary.Late.sf <- st_as_sf(LAGOS.MN.Summary.Late, coords = c("Long", "Lat"), crs = 4326)
 
-secchiplot1.Late.MN <- ggplot() +
-  geom_sf(data = MN.Ecoregions.sf_UTM, aes(fill = Ecoregion)) +
+Late.MN <- ggplot() +
+  geom_sf(data = MN.Ecoregions.sf_UTM_plot, aes(fill = Ecoregion)) +
   geom_sf(data = LAGOS.MN.Summary.Late.sf, 
-          aes(size = IntenseUrban.pct, color = secchi.mean),
           alpha = 0.4, show.legend = "point") +
-  scale_color_viridis_c(option = "inferno") +
-  labs(color = "Average \n Secchi \n Depth (m)", 
-       size = "Intense Urban \n Area \n %") +
   theme(legend.position = "right", legend.text = element_text(size = 7),
         legend.title = element_text(size = 8),
         legend.margin = margin(0,0,0,0)) 
-print(secchiplot1.Late.MN)
-
-chlaplot1.Late.MN <- ggplot() +
-  geom_sf(data = MN.Ecoregions.sf_UTM, aes(fill = Ecoregion)) +
-  geom_sf(data = LAGOS.MN.Summary.Late.sf, 
-          aes(size = IntenseUrban.pct, color = chla.mean),
-          alpha = 0.4, show.legend = "point") +
-  scale_color_viridis_c(option = "inferno") +
-  labs(color = "Average \n Chla \n (mg/L)", 
-       size = "Intense Urban \n Area \n %") +
-  theme(legend.position = "right", legend.text = element_text(size = 7),
-        legend.title = element_text(size = 8),
-        legend.margin = margin(0,0,0,0)) 
-print(chlaplot1.Late.MN)
-
-
-
+print(Late.MN)
 
 ```
 
