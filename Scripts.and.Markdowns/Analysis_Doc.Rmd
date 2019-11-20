@@ -814,3 +814,10 @@ Late Chla model:
 Late Secchi model:
 * Intenseurban, openurban, forest, grassshurb, and ratio indirect/negative relationship
 * log(secchi) = 0.004109(intense urban) + 0.014590(open urban) + 0.016406(forest) + 0.017732(grass shrub) + 0.250633(ratio) + -0.245145
+
+```{r results table}
+MixedResults.table <- read.csv("./Output/MixedResultsTable.csv")
+library(knitr)
+kable(MixedResults.table)
+```
+
