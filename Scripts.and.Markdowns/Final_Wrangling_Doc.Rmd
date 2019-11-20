@@ -259,6 +259,28 @@ theme(plot.title = element_text(hjust = 0.5))
 
 FRA Comment: Next plot main purpose is to check is we have enough data in each ecoregion.
 
+```{r}
+#creating tables number of lakes per ecoregions
+
+LAGOS.MN.LakesperRegion.Early <- LAGOS.MN.processed.Early.sf %>%
+  group_by(Ecoregion) %>%
+  summarise(Count = n_distinct(lagoslakeid))
+
+LAGOS.MN.LakesperRegion.Prime <- LAGOS.MN.processed.Prime.sf %>%
+  group_by(Ecoregion) %>%
+  summarise(Count = n_distinct(lagoslakeid))
+
+LAGOS.MN.LakesperRegion.Late <- LAGOS.MN.processed.Late.sf %>%
+  group_by(Ecoregion) %>%
+  summarise(Count = n_distinct(lagoslakeid))
+
+st_geometry(LAGOS.MN.LakesperRegion.Early) <- NULL
+st_geometry(LAGOS.MN.LakesperRegion.Prime) <- NULL
+st_geometry(LAGOS.MN.LakesperRegion.Late) <- NULL
+
+```
+
+
 ```{r summary.for.early.season, eval = TRUE}
 LAGOS.MN.Summary.Early <- LAGOS.MN.processed.Early %>%
 group_by(lagoslakeid) %>%
