@@ -171,6 +171,30 @@ LAGOSiws.nutrient.2011.MN <- LAGOSiws.nutrient.2011.MN %>%
          iws_nlcd2011_pct_41, iws_nlcd2011_pct_42, iws_nlcd2011_pct_43, 
          iws_nlcd2011_pct_52, iws_nlcd2011_pct_71, iws_nlcd2011_pct_81, 
          iws_nlcd2011_pct_82, iws_nlcd2011_pct_90, iws_nlcd2011_pct_95)
+
+##Create year column
+LAGOSiws.nutrient.2011.MN$Year <- substring(LAGOSiws.nutrient.2011.MN$sampledate, 1,4)
+
+##Create separate datasets for secchi depth and chla
+LAGOSiws.secchi.2011.MN <- LAGOSiws.nutrient.2011.MN %>%
+    select(lagoslakeid, nhd_lat, nhd_long, lake_area_ha, lake_perim_meters,
+         iws_zoneid, iws_ha, state_zoneid.x, elevation_m, sampledate, secchi, 
+         iws_nlcd2011_pct_11, iws_nlcd2011_pct_21, iws_nlcd2011_pct_22, 
+         iws_nlcd2011_pct_23, iws_nlcd2011_pct_24, iws_nlcd2011_pct_31, 
+         iws_nlcd2011_pct_41, iws_nlcd2011_pct_42, iws_nlcd2011_pct_43, 
+         iws_nlcd2011_pct_52, iws_nlcd2011_pct_71, iws_nlcd2011_pct_81, 
+         iws_nlcd2011_pct_82, iws_nlcd2011_pct_90, iws_nlcd2011_pct_95, Year) %>%
+  na.omit()
+
+LAGOSiws.chla.2011.MN <- LAGOSiws.nutrient.2011.MN %>%
+    select(lagoslakeid, nhd_lat, nhd_long, lake_area_ha, lake_perim_meters,
+         iws_zoneid, iws_ha, state_zoneid.x, elevation_m, sampledate, chla, 
+         iws_nlcd2011_pct_11, iws_nlcd2011_pct_21, iws_nlcd2011_pct_22, 
+         iws_nlcd2011_pct_23, iws_nlcd2011_pct_24, iws_nlcd2011_pct_31, 
+         iws_nlcd2011_pct_41, iws_nlcd2011_pct_42, iws_nlcd2011_pct_43, 
+         iws_nlcd2011_pct_52, iws_nlcd2011_pct_71, iws_nlcd2011_pct_81, 
+         iws_nlcd2011_pct_82, iws_nlcd2011_pct_90, iws_nlcd2011_pct_95, Year) %>%
+  na.omit()
 ```
 
 ```{r, Visualize_data, echo=FALSE, warning=FALSE, fig.height = 3, fig.width = 5, fig.cap = "This plot provides a sense of how secchi depth measurements are distributed between and within years, as well as the general range of secchi depth measurements. Sampling occurs during the middle portion of each year, and ceases during the winter season."}
@@ -180,11 +204,23 @@ ggplot(LAGOSiws.nutrient.2011.MN,
   labs(y = "Secchi Depth (m)", x = "Year")
 ```
 
+```{r echo=FALSE, warning=FALSE}
+secchi.count <- count(LAGOSiws.secchi.2011.MN, vars = Year)
+colnames(secchi.count) <- c("Year", "Count")
+kable(secchi.count)
+```
+
 ```{recho=FALSE, warning=FALSE, fig.height = 3, fig.width = 5, fig.cap = "Chlorophyll a vs. Time. This plot provides a sense of how chlorophyll a measurements are distributed between and within years, as well as the general range of chlorophyll a measurements. Sampling occurs during the middle portion of each year, and ceases during the winter season."}
 ggplot(LAGOSiws.nutrient.2011.MN, 
        aes(x = sampledate, y = chla)) +
   geom_point(alpha = 0.2) +
   labs(y = "Chlorophyll a (ug/L)", x = "Year")
+```
+
+```{r echo=FALSE, warning=FALSE}
+chla.count <- count(LAGOSiws.chla.2011.MN, vars = Year)
+colnames(chla.count) <- c("Year", "Count")
+kable(chla.count)
 ```
 
 ```{r Create_Full_df,echo=FALSE, warning=FALSE}
@@ -341,43 +377,88 @@ ylab(expression("")) +
 #ggtitle("% Row Crops vs Secchi Depth, Late Season") +
 theme(plot.title = element_text(hjust = 0.5))
 
-title1 = grid.text("Secchi Depth vs. % Land Use")
 ```
 
 ```{r, fig.height = 4, fig.width = 6,  fig.cap = "These plots shows that there are trends in secchi depth relative to the given land uses during the 'Late Season'. The presence of trends supports the inclusion of the above land uses in the analysis. Note that the x-axes are on different scales.", message=FALSE, warning=FALSE}
 grid.arrange(secchi.int.urb.late, secchi.open.urb.late, secchi.barren.late,
              secchi.forest.late, secchi.grass.shrub.late, secchi.wet.late,
-             secchi.past.late, secchi.row.crop.late, top = title1)
+             secchi.past.late, secchi.row.crop.late)
 ```
 
 ```{r,echo=FALSE, warning=FALSE}
-
-knitr::opts_chunk$set(cache=TRUE, error=FALSE, fig.cap = "These plots shows that there are trends in chlorophyll a relative to the given land uses during the 'Late Season'. The presence of trends supports the inclusion of the above land uses in the analysis.", message=FALSE, warning=FALSE)
-
 chla.int.urb.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = IntenseUrban.pct, y = chla)) +
-geom_point() +
+geom_point(alpha = 0.5) +
 geom_smooth(method=lm, se=FALSE) +
 xlab(expression("% Intense Urban")) +
-ylab(expression("chla (mg/L)")) +
-ggtitle("% Intense Urban vs Chla Scatterplot, Late Season") +
+ylab("") +
+#ggtitle("% Intense Urban vs Chla, Late Season") +
+theme(plot.title = element_text(hjust = 0.5))
+
+chla.open.urb.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = OpenUrban.pct, y = chla)) +
+geom_point(alpha = 0.5) +
+geom_smooth(method=lm, se=FALSE) +
+xlab(expression("% Open Urban")) +
+ylab(expression("")) +
+#ggtitle("% Open Urban vs Chla, Late Season") +
+theme(plot.title = element_text(hjust = 0.5))
+
+chla.barren.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = Barren.pct, y = chla)) +
+geom_point(alpha = 0.5) +
+geom_smooth(method=lm, se=FALSE) +
+xlab(expression("% Barren")) +
+ylab(expression("")) +
+#ggtitle("% Barren Land vs Secchi Depth, Late Season") +
 theme(plot.title = element_text(hjust = 0.5))
 
 chla.forest.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = Forest.pct, y = chla)) +
 geom_point() +
 geom_smooth(method=lm, se=FALSE) +
 xlab(expression("% Forest")) +
-ylab(expression("chla (mg/L)")) +
-ggtitle("% Forest vs Chla Scatterplot, Late Season") +
+ylab(expression("Chlorophyll a" (mu*g / L))) +
+#ggtitle("% Forest vs Chla Scatterplot, Late Season") +
+theme(plot.title = element_text(hjust = 0.5))
+
+chla.grass.shrub.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = GrassShrub.pct, y = chla)) +
+geom_point(alpha = 0.5) +
+geom_smooth(method=lm, se=FALSE) +
+xlab(expression("% Grass-Shrub")) +
+ylab(expression("")) +
+#ggtitle("% Grass-Shrub vs Secchi Depth, Late Season") +
+theme(plot.title = element_text(hjust = 0.5))
+
+chla.wet.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = Wetland.pct, y = chla)) +
+geom_point(alpha = 0.5) +
+geom_smooth(method=lm, se=FALSE) +
+xlab(expression("% Wetland")) +
+ylab(expression("")) +
+#ggtitle("% Wetland vs Secchi Depth, Late Season") +
+theme(plot.title = element_text(hjust = 0.5))
+
+chla.past.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = Pasture.pct, y = chla)) +
+geom_point(alpha = 0.5) +
+geom_smooth(method=lm, se=FALSE) +
+xlab(expression("% Pasture")) +
+ylab("") +
+#ggtitle("% Pasture vs Secchi Depth, Late Season") +
 theme(plot.title = element_text(hjust = 0.5))
 
 chla.row.crop.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = RowCrop.pct, y = chla)) +
 geom_point() +
 geom_smooth(method=lm, se=FALSE) +
 xlab(expression("% Row Crops")) +
-ylab(expression("chla (mg/L)")) +
-ggtitle("% Row Crops vs Chla Scatterplot, Late Season") +
+ylab(expression("")) +
+#ggtitle("% Row Crops vs Chla, Late Season") +
 theme(plot.title = element_text(hjust = 0.5))
 ```
+
+```{r, fig.height = 4, fig.width = 6,  fig.cap = "These plots shows that there are trends in chlorophyll a concentrations relative to the given land uses during the 'Late Season'. The presence of trends supports the inclusion of the above land uses in the analysis. Note that the x-axes are on different scales.", message=FALSE, warning=FALSE}
+grid.arrange(chla.int.urb.late, chla.open.urb.late, chla.barren.late,
+             chla.forest.late, chla.grass.shrub.late, chla.wet.late,
+             chla.past.late, chla.row.crop.late)
+```
+
+Figures XX and YY explore the trends in secchi depth and chlorophyll a by the percentage of each land use type in the late season. The late season was chosen for exploration because it had to lowest and highest mean secchi depth and mean chlorophyll a, respectively. 
+
 
 Late season has the highest mean Chla concentrations and lowest Secchi depth, so next we explore spatially the variables only for this season (to minimize maps output).
 
