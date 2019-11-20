@@ -486,7 +486,7 @@ summary(late.secchi.model2)
 ```
 
 
-```{r No interaction mixed effects models}
+```{r Mixed_effects_models_Early}
 ####Early Season
 ###Chla
 early.chla.model3 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
@@ -534,7 +534,7 @@ coefficients(early.chla.model3.5)
 
 #Saving the fitted values to the dataframe
 LAGOS.MN.processed.Early$LMER_Early_Chla <- fitted(early.chla.model3.5)
-#should this be the simplest model or the full model?
+#should this be the simplest model or the full model? FRA: The simplest model
 
 # Plotting the model
 ggplot(LAGOS.MN.processed.Early) +
@@ -596,9 +596,10 @@ ggplot(LAGOS.MN.processed.Early, aes(x=LakeIWS.Ratio, y=log(secchi))) +
   facet_wrap(~Ecoregion)
 
 plot(early.secchi.model3)
+```
 
 
-
+```{r Mixed_effects_models_Prime}
 ####Prime Season
 ###Chla
 prime.chla.model3 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
@@ -670,11 +671,10 @@ ggplot(LAGOS.MN.processed.Prime, aes(x=LakeIWS.Ratio, y=log(secchi))) +
   facet_wrap(~Ecoregion)
 
 plot(prime.secchi.model3)
+```
 
 
-
-
-
+```{r Mixed_effects_models_Late}
 #### Late Season
 ###Chla
 late.chla.model3 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
@@ -797,10 +797,6 @@ ggplot(LAGOS.MN.processed.Late, aes(x=LakeIWS.Ratio, y=log(secchi))) +
   facet_wrap(~Ecoregion)
 
 plot(late.secchi.model3)
-
-
-
-
 
 ```
 Early Chla model:
