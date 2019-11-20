@@ -16,7 +16,7 @@ https://cont-limno.github.io/LAGOSNE/articles/lagosne_structure.html
 
 ## Information About the Minnesota Ecoregions Shapefile
 
-Ecoregions are used by planning managers to understand the type of land use that occurs in different regions of the United States. There are different levels of ecoregions. Level 1 divides North America into 15 ecological regions, while Level IV offers fine ecological resolution for each state. We selected Level II ecoregions for our project. Minnesota contains three distinct Level II ecoregions. This level of resolution allows us to broadly capture the natural ecosystem variation in different parts of the state in our statistical models.
+Ecoregions are developed by the US Environmental Protection Agency and are used by planning managers to understand the type of land use that occurs in different regions of the United States. There are different levels of ecoregions. Level I has low resolution, and divides North America into 15 ecological regions, while Level IV offers fine ecological resolution for each state. This data was published by the U.S. EPA Office of Research and Development (ORD) - National Health and Environmental Effects Research Laboratory (NHEERL). Minnesota contains parts of three distinct Level II ecoregions. We selected Level II ecoregions for our project. This level of resolution allows us to broadly capture the natural ecosystem variation in different parts of the state in our statistical models. We did not use Level III ecoregions because not every Level III ecoregion contained enough water quality data.
 
 The following information is copied directly from the EPA's metadata page about the Minnesota Level II ecoregions: 
 
