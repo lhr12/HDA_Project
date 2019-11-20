@@ -16,27 +16,27 @@ https://cont-limno.github.io/LAGOSNE/articles/lagosne_structure.html
 
 ## Information About the Minnesota Ecoregions Shapefile
 
-Ecoregions are used by planning managers to understand the type of land use that occurs in different regions of the United States. There are different levels of ecoregions. Level 1 divides North America into 15 ecological regions, while Level IV offers fine ecological resolution for each state. For the purposes of our project, we selected Level III ecoregions because they appear to offer a descriptive narrative of the land use patterns of Minnesota without making a 'distinction without a difference'.
+Ecoregions are used by planning managers to understand the type of land use that occurs in different regions of the United States. There are different levels of ecoregions. Level 1 divides North America into 15 ecological regions, while Level IV offers fine ecological resolution for each state. We selected Level II ecoregions for our project. Minnesota contains three distinct Level II ecoregions. This level of resolution allows us to broadly capture the natural ecosystem variation in different parts of the state in our statistical models.
 
-The following information is copied directly from the EPA's metadata page about the Minnesota Level III ecoregions: 
+The following information is copied directly from the EPA's metadata page about the Minnesota Level II ecoregions: 
 
-"Title: Level III Ecoregions of Minnesota
-Originators: US Environmental Protection Agency
-Publisher: U.S. EPA Office of Research and Development (ORD) - National Health and Environmental Effects Research Laboratory (NHEERL)
-Publication place: Corvallis, OR
-Publication date: 2012
-Data type: vector digital data
-Data location: ftp://ftp.epa.gov/wed/ecoregions/mn/mn_eco_l3.zip, http://edg.epa.gov"
-
-For more information about the Minnesota Ecoregions Shapefile and to access the metadata page where this information came from, download the Minnesota Level III informational file at: 
-https://www.epa.gov/eco-research/ecoregion-download-files-state-region-5
+"Originator: U.S. Environmental Protection Agency
+Publication_Date: 20100501
+Title: NA_CEC_Eco_Level2
+Geospatial_Data_Presentation_Form: vector digital data
+Series_Information:
+Publication_Information:
+Publication_Place: Corvallis, OR
+Publisher:
+U.S. EPA Office of Research & Development (ORD) - National Health and Environmental Effects Research Laboratory (NHEERL)
+Online_Linkage: <ftp://ftp.epa.gov/wed/ecoregions/cec_na/NA_CEC_Eco_Level2.zip>"
 
 
 ## Information About the Creation of Our Master Raw Dataframe
 
 The LAGOSNE dataset contains hundreds of variables on water quality, many of which are not relevant or pertinent to our specific research questions. In addition, our questions are limited to the state of Minnesota. Therefore, we wrangled the entire LAGOSNE dataset to create a master raw dataframe from which we would answer our research questions. For more information about which variables we chose, see the next section in our metadata file.
 
-We joined our LAGOSNE sub-dataset with our Level III Ecoregions of Minnesota shapefile so our master dataset reflects which ecoregion each lake in our study is located. 
+We joined our LAGOSNE sub-dataset with our Level II Ecoregions shapefile so our master dataset reflects which ecoregion each lake in our study is located. 
 
 
 ## Information About The Variables In Our Master Raw Dataframe
@@ -99,7 +99,7 @@ We did some simplification of land use to focus on land uses we expect will have
 
 In addition, our master raw dataset contains the following three independent variables:
 
-* EPA Level III Ecoregion: From the Minnesota Level III Ecoregion shapefile. This will be used to test questions one and two.
+* EPA Level II Ecoregion: From the EPA Level II Ecoregion shapefile. This will be used to test questions one and two.
 * Season of data collection: Early (May 15 and Before), Prime (May 16 - September 30), and Late (October 1 and later). These season designations are somewhat arbitrary, but are based off of our prior knowledge of when the prime biological growing season is in Minnesota.
 * Lake IWS Ratio: The ratio of lake size to watershed size
 

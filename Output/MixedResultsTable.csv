@@ -1,0 +1,37 @@
+﻿Season,Variable,Significant Predictors,Relationship
+Early,Chla,Open Urban,Negative
+,,Forest,Negative
+,,Pasture,Positive
+,,Row Crop,Positive
+,,Watershed Ratio,Negative
+,Secchi,Open Urban,Positive
+,,Barren,Positive
+,,Forest,Positive
+,,Grass Shrub,Positive
+,,Watershed Ratio,Positive
+Prime,Chla,Intense Urban,Negative
+,,Open Urban,Negative
+,,Forest,Negative
+,,Grass Shrub,Negative
+,,Wetland,Negative
+,,Row Crop,Negative
+,,Watershed Ratio,Negative
+,Secchi,Intense Urban,Positive
+,,Open Urban,Positive
+,,Barren,Positive
+,,Forest,Positive
+,,Grass Shrub,Positive
+,,Pasture,Positive
+,,Row Crop,Positive
+,,Watershed Ratio,Positive
+Late,Chla,Intense Urban,Negative
+,,Open Urban,Negative
+,,Forest,Negative
+,,Grass Shrub,Negative
+,,Wetland,Negative
+,,Watershed Ratio,Negative
+,Secchi,Intense Urban,Positive
+,,Open Urban,Positive
+,,Forest,Positive
+,,Grass Shrub,Positive
+,,Watershed Ratio,Positive
