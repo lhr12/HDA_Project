@@ -207,10 +207,10 @@ ggplot(LAGOSiws.nutrient.2011.MN,
 ```{r echo=FALSE, warning=FALSE}
 secchi.count <- count(LAGOSiws.secchi.2011.MN, vars = Year)
 colnames(secchi.count) <- c("Year", "Count")
-kable(secchi.count)
+kable(secchi.count, caption = "Number of secchi depth measurements in each of the years to be included in the analysis, which provides a sense of the amount of data, as well as the distribution of data.")
 ```
 
-```{recho=FALSE, warning=FALSE, fig.height = 3, fig.width = 5, fig.cap = "Chlorophyll a vs. Time. This plot provides a sense of how chlorophyll a measurements are distributed between and within years, as well as the general range of chlorophyll a measurements. Sampling occurs during the middle portion of each year, and ceases during the winter season."}
+```{r echo=FALSE, warning=FALSE, fig.height = 3, fig.width = 5, fig.cap = "Chlorophyll a vs. Time. This plot provides a sense of how chlorophyll a measurements are distributed between and within years, as well as the general range of chlorophyll a measurements. Sampling occurs during the middle portion of each year, and ceases during the winter season."}
 ggplot(LAGOSiws.nutrient.2011.MN, 
        aes(x = sampledate, y = chla)) +
   geom_point(alpha = 0.2) +
@@ -220,7 +220,7 @@ ggplot(LAGOSiws.nutrient.2011.MN,
 ```{r echo=FALSE, warning=FALSE}
 chla.count <- count(LAGOSiws.chla.2011.MN, vars = Year)
 colnames(chla.count) <- c("Year", "Count")
-kable(chla.count)
+kable(chla.count, caption = "Number of chlorophyll a measurements in each of the years to be included in the analysis, which provides a sense of the amount of data, as well as the distribution of data.")
 ```
 
 ```{r Create_Full_df,echo=FALSE, warning=FALSE}
@@ -273,20 +273,37 @@ LAGOS.MN.processed  <- LAGOS.MN.processed %>%
   select(-c(EarlyTrue, PrimeTrue, LateTrue))
 ```
 
-```{r Adding_Ecoregions,echo=FALSE, warning=FALSE}
-LAGOS.MN.processed.sf <- st_as_sf(LAGOS.MN.processed, 
-                                  coords = c("nhd_long", "nhd_lat"), crs = 4326)
+```{r Adding_Ecoregions2, echo=FALSE, warning=FALSE}
+LAGOS.MN.processed.sf <- st_as_sf(LAGOS.MN.processed, coords = c("nhd_long", "nhd_lat"), crs = 4326)
 
-LAGOS.MN.processed.UTM.sf <- st_transform(LAGOS.MN.processed.sf, crs=26917)
+LAGOS.MN.processed.UTM.sf <- st_transform(LAGOS.MN.processed.sf, crs=32615)
 
-MN.Ecoregions.sf <- st_read('./Data/Raw/mn_eco_l3.shp')
+#Loading US Ecoregions Level II
+US.Ecoregions.sf <- st_read('./Data/Raw/NA_CEC_Eco_Level2.shp')
 
-#Selecting level 3 ecoregions names
-MN.Ecoregions.sf <- select(MN.Ecoregions.sf, US_L3NAME)
+US.Ecoregions.sf_UTM <- st_transform(US.Ecoregions.sf, crs=32615) 
 
-MN.Ecoregions.UTM.sf <- st_transform(MN.Ecoregions.sf, crs=26917)
 
-LAGOS.MN.processed.sf <- st_join(LAGOS.MN.processed.UTM.sf, MN.Ecoregions.UTM.sf)
+#Loading the MN state boundary  
+# generate a map of U.S. states
+states <- st_as_sf(map(database = "state", plot = FALSE, fill = TRUE, col = "white"))
+
+# filter MN
+states.MN <- filter(states, ID %in%
+c("minnesota"))
+
+states.MN_UTM <- st_transform(states.MN, crs=32615) 
+
+#Ecoregions level II for Minnesota
+MN.Ecoregions.sf_UTM <- st_intersection(US.Ecoregions.sf_UTM, states.MN_UTM)
+
+#Selecting level 2 ecoregions names
+MN.Ecoregions.sf_UTM <- select(MN.Ecoregions.sf_UTM, NA_L2NAME)
+colnames(MN.Ecoregions.sf_UTM)[1] <- "Ecoregion"
+
+LAGOS.MN.processed.sf <- st_join(LAGOS.MN.processed.UTM.sf, MN.Ecoregions.sf_UTM)
+LAGOS.MN.processed.sf <- na.omit(LAGOS.MN.processed.sf)
+
 ```
 
 ```{r Creating_Seasons_dfs,echo=FALSE, warning=FALSE}
@@ -299,7 +316,9 @@ LAGOS.MN.processed.Late.sf <- filter(LAGOS.MN.processed.sf, Season == "Late")
 LAGOS.MN.processed.Early <- filter(LAGOS.MN.processed, Season == "Early")
 LAGOS.MN.processed.Prime <- filter(LAGOS.MN.processed, Season == "Prime")
 LAGOS.MN.processed.Late <- filter(LAGOS.MN.processed, Season == "Late")
+```
 
+```{r echo=FALSE, warning=FALSE, eval=FALSE}
 #To look at the statistics
 summary(LAGOS.MN.processed.Early.sf$chla)
 summary(LAGOS.MN.processed.Prime.sf$chla)
@@ -317,7 +336,7 @@ secchi.int.urb.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = IntenseUrban.p
 geom_point(alpha = 0.5) +
 geom_smooth(method=lm, se=FALSE) +
 xlab(expression("% Intense Urban")) +
-ylab(expression("Secchi Depth (m)")) +
+ylab(expression("")) +
 #ggtitle("% Intense Urban vs Secchi Depth, Late Season") +
 theme(plot.title = element_text(hjust = 0.5))
 
@@ -365,7 +384,7 @@ secchi.past.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = Pasture.pct, y = 
 geom_point(alpha = 0.5) +
 geom_smooth(method=lm, se=FALSE) +
 xlab(expression("% Pasture")) +
-ylab(expression("Secchi Depth (m)")) +
+ylab(expression("")) +
 #ggtitle("% Pasture vs Secchi Depth, Late Season") +
 theme(plot.title = element_text(hjust = 0.5))
 
@@ -379,7 +398,7 @@ theme(plot.title = element_text(hjust = 0.5))
 
 ```
 
-```{r, fig.height = 4, fig.width = 6,  fig.cap = "These plots shows that there are trends in secchi depth relative to the given land uses during the 'Late Season'. The presence of trends supports the inclusion of the above land uses in the analysis. Note that the x-axes are on different scales.", message=FALSE, warning=FALSE}
+```{r, fig.height = 4, fig.width = 6,  fig.cap = "Plots displaying trends in secchi depth relative to the given land uses during the 'Late Season'. The presence of trends supports the inclusion of the above land uses in the analysis. Note that the x-axes are on different scales.", echo=FALSE, warning=FALSE}
 grid.arrange(secchi.int.urb.late, secchi.open.urb.late, secchi.barren.late,
              secchi.forest.late, secchi.grass.shrub.late, secchi.wet.late,
              secchi.past.late, secchi.row.crop.late)
@@ -451,7 +470,7 @@ ylab(expression("")) +
 theme(plot.title = element_text(hjust = 0.5))
 ```
 
-```{r, fig.height = 4, fig.width = 6,  fig.cap = "These plots shows that there are trends in chlorophyll a concentrations relative to the given land uses during the 'Late Season'. The presence of trends supports the inclusion of the above land uses in the analysis. Note that the x-axes are on different scales.", message=FALSE, warning=FALSE}
+```{r, fig.height = 4, fig.width = 6,  fig.cap = "Plots displaying trends in chlorophyll a concentrations relative to the given land uses during the 'Late Season'. The presence of trends supports the inclusion of the above land uses in the analysis. Note that the x-axes are on different scales.", echo=FALSE, warning=FALSE}
 grid.arrange(chla.int.urb.late, chla.open.urb.late, chla.barren.late,
              chla.forest.late, chla.grass.shrub.late, chla.wet.late,
              chla.past.late, chla.row.crop.late)
@@ -462,7 +481,29 @@ Figures XX and YY explore the trends in secchi depth and chlorophyll a by the pe
 
 FRA Comment: Next plot main purpose is to check is we have enough data in each ecoregion.
 
-```{r summary.for.early.season, fig.height = 4, fig.width = 6,  fig.cap = "These plots shows that there are trends in chlorophyll a concentrations relative to the given land uses during the 'Late Season'. The presence of trends supports the inclusion of the above land uses in the analysis. Note that the x-axes are on different scales.", message=FALSE, warning=FALSE}
+```{r echo=FALSE, warning=FALSE}
+#creating tables number of lakes per ecoregions
+
+LAGOS.MN.LakesperRegion.Early <- LAGOS.MN.processed.Early.sf %>%
+  group_by(Ecoregion) %>%
+  summarise(Count = n_distinct(lagoslakeid))
+
+LAGOS.MN.LakesperRegion.Prime <- LAGOS.MN.processed.Prime.sf %>%
+  group_by(Ecoregion) %>%
+  summarise(Count = n_distinct(lagoslakeid))
+
+LAGOS.MN.LakesperRegion.Late <- LAGOS.MN.processed.Late.sf %>%
+  group_by(Ecoregion) %>%
+  summarise(Count = n_distinct(lagoslakeid))
+
+st_geometry(LAGOS.MN.LakesperRegion.Early) <- NULL
+st_geometry(LAGOS.MN.LakesperRegion.Prime) <- NULL
+st_geometry(LAGOS.MN.LakesperRegion.Late) <- NULL
+
+```
+
+
+```{r summary.for.early.season, echo=FALSE, warning=FALSE}
 LAGOS.MN.Summary.Early <- LAGOS.MN.processed.Early %>%
 group_by(lagoslakeid) %>%
 summarise(secchi.mean = mean(secchi),
@@ -488,7 +529,9 @@ MN.Ecoregions.sf_UTM_plot <- MN.Ecoregions.sf_UTM %>%
 
 #SF file with the summary
 LAGOS.MN.Summary.Early.sf <- st_as_sf(LAGOS.MN.Summary.Early, coords = c("Long", "Lat"), crs = 4326)
+```
 
+```{r fig.height = 3, fig.width = 5,  fig.cap = "Visual representation of the available secchi depth and/or chlorophyll a data in each Ecoregion during the 'Early Season', which confirms that there are a suitable number of lakes in each Ecoregion.", echo=FALSE, warning=FALSE}
 Early.MN <- ggplot() +
   geom_sf(data = MN.Ecoregions.sf_UTM_plot, aes(fill = Ecoregion)) +
   geom_sf(data = LAGOS.MN.Summary.Early.sf,
@@ -497,10 +540,13 @@ Early.MN <- ggplot() +
         legend.title = element_text(size = 8),
         legend.margin = margin(0,0,0,0)) 
 print(Early.MN)
-
 ```
 
-```{r summary.for.prime.season, eval = TRUE}
+```{r echo=FALSE, warning=FALSE}
+kable(LAGOS.MN.LakesperRegion.Early, caption = "Number of lakes with available secchi depth and/or chlorophyll a data in each Ecoregion during the 'Early Season.'")
+```
+
+```{r summary.for.prime.season, echo=FALSE, warning=FALSE}
 LAGOS.MN.Summary.Prime <- LAGOS.MN.processed.Prime %>%
 group_by(lagoslakeid) %>%
 summarise(secchi.mean = mean(secchi),
@@ -521,7 +567,9 @@ summarise(secchi.mean = mean(secchi),
 
 #SF file with the summary
 LAGOS.MN.Summary.Prime.sf <- st_as_sf(LAGOS.MN.Summary.Prime, coords = c("Long", "Lat"), crs = 4326)
+```
 
+```{r fig.height = 3, fig.width = 5,  fig.cap = "Visual representation of the available secchi depth and/or chlorophyll a data in each Ecoregion during the 'Prime Season', which confirms that there are a suitable number of lakes in each Ecoregion.", echo=FALSE, warning=FALSE}
 Prime.MN <- ggplot() +
   geom_sf(data = MN.Ecoregions.sf_UTM_plot, aes(fill = Ecoregion)) +
   geom_sf(data = LAGOS.MN.Summary.Prime.sf, 
@@ -532,7 +580,11 @@ Prime.MN <- ggplot() +
 print(Prime.MN)
 ```
 
-```{r summary.for.late.season, eval = TRUE}
+```{r echo=FALSE, warning=FALSE}
+kable(LAGOS.MN.LakesperRegion.Prime, caption = "Number of lakes with available secchi depth and/or chlorophyll a data in each Ecoregion during the 'Prime Season.'")
+```
+
+```{r summary.for.late.season, echo=FALSE, warning=FALSE}
 LAGOS.MN.Summary.Late <- LAGOS.MN.processed.Late %>%
 group_by(lagoslakeid) %>%
 summarise(secchi.mean = mean(secchi),
@@ -553,7 +605,9 @@ summarise(secchi.mean = mean(secchi),
 
 #SF file with the summary
 LAGOS.MN.Summary.Late.sf <- st_as_sf(LAGOS.MN.Summary.Late, coords = c("Long", "Lat"), crs = 4326)
+```
 
+```{r fig.height = 3, fig.width = 5,  fig.cap = "Visual representation of the amount of lakes with available secchi depth and/or chlorophyll a data in each Ecoregion during the 'Late Season', which confirms that there are a suitable number of lakes in each Ecoregion.", echo=FALSE, warning=FALSE}
 Late.MN <- ggplot() +
   geom_sf(data = MN.Ecoregions.sf_UTM_plot, aes(fill = Ecoregion)) +
   geom_sf(data = LAGOS.MN.Summary.Late.sf, 
@@ -565,96 +619,19 @@ print(Late.MN)
 
 ```
 
-
-
-
-
-
+```{r echo=FALSE, warning=FALSE}
+kable(LAGOS.MN.LakesperRegion.Late, caption = "Number of lakes with available secchi depth and/or chlorophyll a data in each Ecoregion during the 'Late Season.'")
+```
 
 
 
 
 
 FRA Comment: The next plot where the one we did for the proposal. We have to see if we want them
+JG Comment: Code that's referred to in the comment above is NOT included.
 
 
-
-```{r summary.for.late.season, fig.height = 4, fig.width = 6,  fig.cap = "These plots shows that there are trends in chlorophyll a concentrations relative to the given land uses during the 'Late Season'. The presence of trends supports the inclusion of the above land uses in the analysis. Note that the x-axes are on different scales.", message=FALSE, warning=FALSE}
-secchiplot2.Late.MN <- ggplot() +
-  geom_sf(data = states.MN, fill = "white") +
-  geom_sf(data = LAGOS.MN.Summary.Late.sf, 
-          aes(size = Urban.pct, color = secchi.mean),
-          alpha = 0.4, show.legend = "point") +
-  scale_color_viridis_c(option = "inferno") +
-  labs(color = "Average \n Secchi \n Depth (m)", 
-       size = "Urban \n Area \n %") +
-  theme(legend.position = "right", legend.text = element_text(size = 7),
-        legend.title = element_text(size = 8),
-        legend.margin = margin(0,0,0,0)) 
-print(secchiplot2.Late.MN)
-
-secchiplot3.Late.MN <- ggplot() +
-  geom_sf(data = states.MN, fill = "white") +
-  geom_sf(data = LAGOS.MN.Summary.Late.sf, 
-          aes(size = Ag.pct, color = secchi.mean),
-          alpha = 0.4, show.legend = "point") +
-  scale_color_viridis_c(option = "inferno") +
-  labs(color = "Average \n Secchi \n Depth (m)", 
-       size = "Agricultural \n Area \n %") +
-  theme(legend.position = "right", legend.text = element_text(size = 7),
-        legend.title = element_text(size = 8),
-        legend.margin = margin(0,0,0,0)) 
-print(secchiplot3.Late.MN)
-
-
-
-
-chlaplot1.Late.MN <- ggplot() +
-  geom_sf(data = states.MN, fill = "white") +
-  geom_sf(data = LAGOS.MN.Summary.Late.sf, 
-          aes(size = Undeveloped.pct, color = chla.mean),
-          alpha = 0.4, show.legend = "point") +
-  scale_color_viridis_c(option = "inferno") +
-  labs(color = "Average \n Chla \n Depth (m)", 
-       size = "Undeveloped \n Area \n %") +
-  theme(legend.position = "right", legend.text = element_text(size = 7),
-        legend.title = element_text(size = 8),
-        legend.margin = margin(0,0,0,0)) 
-print(chlaplot1.Late.MN)
-
-chlaplot2.Late.MN <- ggplot() +
-  geom_sf(data = states.MN, fill = "white") +
-  geom_sf(data = LAGOS.MN.Summary.Late.sf, 
-          aes(size = Urban.pct, color = chla.mean),
-          alpha = 0.4, show.legend = "point") +
-  scale_color_viridis_c(option = "inferno") +
-  labs(color = "Average \n Chla \n Depth (m)", 
-       size = "Urban \n Area \n %") +
-  theme(legend.position = "right", legend.text = element_text(size = 7),
-        legend.title = element_text(size = 8),
-        legend.margin = margin(0,0,0,0)) 
-print(chlaplot2.Late.MN)
-
-chlaplot3.Late.MN <- ggplot() +
-  geom_sf(data = states.MN, fill = "white") +
-  geom_sf(data = LAGOS.MN.Summary.Late.sf, 
-          aes(size = Ag.pct, color = chla.mean),
-          alpha = 0.4, show.legend = "point") +
-  scale_color_viridis_c(option = "inferno") +
-  labs(color = "Average \n Chla \n Depth (m)", 
-       size = "Agricultural \n Area \n %") +
-  theme(legend.position = "right", legend.text = element_text(size = 7),
-        legend.title = element_text(size = 8),
-        legend.margin = margin(0,0,0,0)) 
-print(secchiplot3.Late.MN)
-
-
-
-```
-
-
-
-```{r}
+```{r echo=FALSE, warning=FALSE}
 LAGOS.MN.processed.Early.sf <- LAGOS.MN.processed.Early.sf %>%
   na.omit()
 LAGOS.MN.processed.Prime.sf <- LAGOS.MN.processed.Prime.sf %>%
@@ -669,7 +646,7 @@ LAGOS.MN.processed.Late.sf <- LAGOS.MN.processed.Late.sf %>%
 
 
 
-```{r}
+```{r echo=FALSE, warning=FALSE}
 st_geometry(LAGOS.MN.processed.Early.sf) <- NULL
 write.csv(x =  LAGOS.MN.processed.Early.sf, row.names = FALSE,
           file =  "./data/processed/LAGOS.MN.processed.Early.csv")
@@ -682,6 +659,7 @@ st_geometry(LAGOS.MN.processed.Late.sf) <- NULL
 write.csv(x =  LAGOS.MN.processed.Late.sf, row.names = FALSE,
           file =  "./data/processed/LAGOS.MN.processed.Late.csv")
 ```
+
 
 
 \newpage
