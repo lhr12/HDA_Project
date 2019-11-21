@@ -542,7 +542,7 @@ grid.arrange(chla.int.urb.late, chla.open.urb.late, chla.barren.late,
 	
   Because of the presense of some relationships in Figures 3 and 4, we determined that we had, in fact selected useful land use classifications and useful seasonal demarcations. We performed a summary function, and gave all of our columns useful names and removed NAs. Our statistical tests would not all run if our dataset contained NAs.The next step we performed was to convert our dataframes to sf dataframes so we could add Level II ecoregion column.
   
-### Visualize Spatial Distribution of Data
+### Visualize Spatial Distribution of Data in Each Season
 	Our final exploratory analysis test was to see if we had enough lake data for each Level II ecoregion for each of our three seasons. We created three tables, one for each season, with a lake sample count for each ecoregion. See Tables 4, 5, and 6. From these tables, we learned that we had enough data to proceed with our statistical analysis, and therefore Level II ecoregions were the correct resolution for our study. We also displayed this information spatially in Figures 5, 6, and 7; each figure corresponds to a different season. We discovered that there are a large number of lake samples around the Twin Cities area, and that there is enough spatial variation in our data to capture the three different Level II ecoregions for all three of our seasons. We concluded our data wrangling by exporting our three non-sf season processed dataframes as csv files to our processed data folder.
 
 ```{r echo=FALSE, warning=FALSE}
