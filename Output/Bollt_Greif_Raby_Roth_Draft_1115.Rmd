@@ -24,6 +24,8 @@ editor_options:
 <3. Make sure your final knitted PDF looks professional. Format tables appropriately, size figures appropriately, make sure bulleted and numbered lists appear as such, avoid awkwardly placed page breaks, etc.>
 
 ```{r setup, include=FALSE, echo=FALSE, warning=FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, echo=FALSE)
+
 # Set working directory
 getwd()
 
@@ -273,6 +275,7 @@ LAGOS.MN.processed  <- LAGOS.MN.processed %>%
   select(-c(EarlyTrue, PrimeTrue, LateTrue))
 ```
 
+
 ```{r Adding_Ecoregions2, echo=FALSE, warning=FALSE}
 LAGOS.MN.processed.sf <- st_as_sf(LAGOS.MN.processed, coords = c("nhd_long", "nhd_lat"), crs = 4326)
 
@@ -303,7 +306,38 @@ colnames(MN.Ecoregions.sf_UTM)[1] <- "Ecoregion"
 
 LAGOS.MN.processed.sf <- st_join(LAGOS.MN.processed.UTM.sf, MN.Ecoregions.sf_UTM)
 LAGOS.MN.processed.sf <- na.omit(LAGOS.MN.processed.sf)
+```
 
+```{r Adding_Ecoregions,echo=FALSE, warning=FALSE}
+LAGOS.MN.processed.sf <- st_as_sf(LAGOS.MN.processed, coords = c("nhd_long", "nhd_lat"), crs = 4326)
+
+LAGOS.MN.processed.UTM.sf <- st_transform(LAGOS.MN.processed.sf, crs=32615)
+
+#Loading US Ecoregions Level II
+US.Ecoregions.sf <- st_read('./Data/Raw/NA_CEC_Eco_Level2.shp')
+
+US.Ecoregions.sf_UTM <- st_transform(US.Ecoregions.sf, crs=32615) 
+
+
+#Loading the MN state boundary  
+# generate a map of U.S. states
+states <- st_as_sf(map(database = "state", plot = FALSE, fill = TRUE, col = "white"))
+
+# filter MN
+states.MN <- filter(states, ID %in%
+c("minnesota"))
+
+states.MN_UTM <- st_transform(states.MN, crs=32615) 
+
+#Ecoregions level II for Minnesota
+MN.Ecoregions.sf_UTM <- st_intersection(US.Ecoregions.sf_UTM, states.MN_UTM)
+
+#Selecting level 2 ecoregions names
+MN.Ecoregions.sf_UTM <- select(MN.Ecoregions.sf_UTM, NA_L2NAME)
+colnames(MN.Ecoregions.sf_UTM)[1] <- "Ecoregion"
+
+LAGOS.MN.processed.sf <- st_join(LAGOS.MN.processed.UTM.sf, MN.Ecoregions.sf_UTM)
+LAGOS.MN.processed.sf <- na.omit(LAGOS.MN.processed.sf)
 ```
 
 ```{r Creating_Seasons_dfs,echo=FALSE, warning=FALSE}
@@ -324,7 +358,6 @@ summary(LAGOS.MN.processed.Early.sf$chla)
 summary(LAGOS.MN.processed.Prime.sf$chla)
 summary(LAGOS.MN.processed.Late.sf$chla)
 
-summary(LAGOS.MN.processed.Early.sf$secchi)
 summary(LAGOS.MN.processed.Prime.sf$secchi)
 summary(LAGOS.MN.processed.Late.sf$secchi)
 ```
@@ -631,7 +664,82 @@ FRA Comment: The next plot where the one we did for the proposal. We have to see
 JG Comment: Code that's referred to in the comment above is NOT included.
 
 
-```{r echo=FALSE, warning=FALSE}
+```{r summary.for.late.season2, fig.height = 4, fig.width = 6,  fig.cap = "These plots shows that there are trends in chlorophyll a concentrations relative to the given land uses during the 'Late Season'. The presence of trends supports the inclusion of the above land uses in the analysis. Note that the x-axes are on different scales.", message=FALSE, warning=FALSE, eval=FALSE}
+secchiplot2.Late.MN <- ggplot() +
+  geom_sf(data = states.MN, fill = "white") +
+  geom_sf(data = LAGOS.MN.Summary.Late.sf, 
+          aes(size = Urban.pct, color = secchi.mean),
+          alpha = 0.4, show.legend = "point") +
+  scale_color_viridis_c(option = "inferno") +
+  labs(color = "Average \n Secchi \n Depth (m)", 
+       size = "Urban \n Area \n %") +
+  theme(legend.position = "right", legend.text = element_text(size = 7),
+        legend.title = element_text(size = 8),
+        legend.margin = margin(0,0,0,0)) 
+print(secchiplot2.Late.MN)
+
+secchiplot3.Late.MN <- ggplot() +
+  geom_sf(data = states.MN, fill = "white") +
+  geom_sf(data = LAGOS.MN.Summary.Late.sf, 
+          aes(size = Ag.pct, color = secchi.mean),
+          alpha = 0.4, show.legend = "point") +
+  scale_color_viridis_c(option = "inferno") +
+  labs(color = "Average \n Secchi \n Depth (m)", 
+       size = "Agricultural \n Area \n %") +
+  theme(legend.position = "right", legend.text = element_text(size = 7),
+        legend.title = element_text(size = 8),
+        legend.margin = margin(0,0,0,0)) 
+print(secchiplot3.Late.MN)
+
+
+
+
+chlaplot1.Late.MN <- ggplot() +
+  geom_sf(data = states.MN, fill = "white") +
+  geom_sf(data = LAGOS.MN.Summary.Late.sf, 
+          aes(size = Undeveloped.pct, color = chla.mean),
+          alpha = 0.4, show.legend = "point") +
+  scale_color_viridis_c(option = "inferno") +
+  labs(color = "Average \n Chla \n Depth (m)", 
+       size = "Undeveloped \n Area \n %") +
+  theme(legend.position = "right", legend.text = element_text(size = 7),
+        legend.title = element_text(size = 8),
+        legend.margin = margin(0,0,0,0)) 
+print(chlaplot1.Late.MN)
+
+chlaplot2.Late.MN <- ggplot() +
+  geom_sf(data = states.MN, fill = "white") +
+  geom_sf(data = LAGOS.MN.Summary.Late.sf, 
+          aes(size = Urban.pct, color = chla.mean),
+          alpha = 0.4, show.legend = "point") +
+  scale_color_viridis_c(option = "inferno") +
+  labs(color = "Average \n Chla \n Depth (m)", 
+       size = "Urban \n Area \n %") +
+  theme(legend.position = "right", legend.text = element_text(size = 7),
+        legend.title = element_text(size = 8),
+        legend.margin = margin(0,0,0,0)) 
+print(chlaplot2.Late.MN)
+
+chlaplot3.Late.MN <- ggplot() +
+  geom_sf(data = states.MN, fill = "white") +
+  geom_sf(data = LAGOS.MN.Summary.Late.sf, 
+          aes(size = Ag.pct, color = chla.mean),
+          alpha = 0.4, show.legend = "point") +
+  scale_color_viridis_c(option = "inferno") +
+  labs(color = "Average \n Chla \n Depth (m)", 
+       size = "Agricultural \n Area \n %") +
+  theme(legend.position = "right", legend.text = element_text(size = 7),
+        legend.title = element_text(size = 8),
+        legend.margin = margin(0,0,0,0)) 
+print(secchiplot3.Late.MN)
+
+
+
+```
+
+
+
+```{r eval=FALSE}
 LAGOS.MN.processed.Early.sf <- LAGOS.MN.processed.Early.sf %>%
   na.omit()
 LAGOS.MN.processed.Prime.sf <- LAGOS.MN.processed.Prime.sf %>%
@@ -641,6 +749,7 @@ LAGOS.MN.processed.Late.sf <- LAGOS.MN.processed.Late.sf %>%
   na.omit()
 
 ```
+
 
 
 
