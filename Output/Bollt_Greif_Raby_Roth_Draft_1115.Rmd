@@ -24,6 +24,8 @@ editor_options:
 <3. Make sure your final knitted PDF looks professional. Format tables appropriately, size figures appropriately, make sure bulleted and numbered lists appear as such, avoid awkwardly placed page breaks, etc.>
 
 ```{r setup, include=FALSE, echo=FALSE, warning=FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, echo=FALSE)
+
 # Set working directory
 getwd()
 
@@ -210,7 +212,7 @@ colnames(secchi.count) <- c("Year", "Count")
 kable(secchi.count)
 ```
 
-```{recho=FALSE, warning=FALSE, fig.height = 3, fig.width = 5, fig.cap = "Chlorophyll a vs. Time. This plot provides a sense of how chlorophyll a measurements are distributed between and within years, as well as the general range of chlorophyll a measurements. Sampling occurs during the middle portion of each year, and ceases during the winter season."}
+```{r echo=FALSE, warning=FALSE, fig.height = 3, fig.width = 5, fig.cap = "Chlorophyll a vs. Time. This plot provides a sense of how chlorophyll a measurements are distributed between and within years, as well as the general range of chlorophyll a measurements. Sampling occurs during the middle portion of each year, and ceases during the winter season."}
 ggplot(LAGOSiws.nutrient.2011.MN, 
        aes(x = sampledate, y = chla)) +
   geom_point(alpha = 0.2) +
@@ -274,19 +276,35 @@ LAGOS.MN.processed  <- LAGOS.MN.processed %>%
 ```
 
 ```{r Adding_Ecoregions,echo=FALSE, warning=FALSE}
-LAGOS.MN.processed.sf <- st_as_sf(LAGOS.MN.processed, 
-                                  coords = c("nhd_long", "nhd_lat"), crs = 4326)
+LAGOS.MN.processed.sf <- st_as_sf(LAGOS.MN.processed, coords = c("nhd_long", "nhd_lat"), crs = 4326)
 
-LAGOS.MN.processed.UTM.sf <- st_transform(LAGOS.MN.processed.sf, crs=26917)
+LAGOS.MN.processed.UTM.sf <- st_transform(LAGOS.MN.processed.sf, crs=32615)
 
-MN.Ecoregions.sf <- st_read('./Data/Raw/mn_eco_l3.shp')
+#Loading US Ecoregions Level II
+US.Ecoregions.sf <- st_read('./Data/Raw/NA_CEC_Eco_Level2.shp')
 
-#Selecting level 3 ecoregions names
-MN.Ecoregions.sf <- select(MN.Ecoregions.sf, US_L3NAME)
+US.Ecoregions.sf_UTM <- st_transform(US.Ecoregions.sf, crs=32615) 
 
-MN.Ecoregions.UTM.sf <- st_transform(MN.Ecoregions.sf, crs=26917)
 
-LAGOS.MN.processed.sf <- st_join(LAGOS.MN.processed.UTM.sf, MN.Ecoregions.UTM.sf)
+#Loading the MN state boundary  
+# generate a map of U.S. states
+states <- st_as_sf(map(database = "state", plot = FALSE, fill = TRUE, col = "white"))
+
+# filter MN
+states.MN <- filter(states, ID %in%
+c("minnesota"))
+
+states.MN_UTM <- st_transform(states.MN, crs=32615) 
+
+#Ecoregions level II for Minnesota
+MN.Ecoregions.sf_UTM <- st_intersection(US.Ecoregions.sf_UTM, states.MN_UTM)
+
+#Selecting level 2 ecoregions names
+MN.Ecoregions.sf_UTM <- select(MN.Ecoregions.sf_UTM, NA_L2NAME)
+colnames(MN.Ecoregions.sf_UTM)[1] <- "Ecoregion"
+
+LAGOS.MN.processed.sf <- st_join(LAGOS.MN.processed.UTM.sf, MN.Ecoregions.sf_UTM)
+LAGOS.MN.processed.sf <- na.omit(LAGOS.MN.processed.sf)
 ```
 
 ```{r Creating_Seasons_dfs,echo=FALSE, warning=FALSE}
@@ -305,7 +323,6 @@ summary(LAGOS.MN.processed.Early.sf$chla)
 summary(LAGOS.MN.processed.Prime.sf$chla)
 summary(LAGOS.MN.processed.Late.sf$chla)
 
-summary(LAGOS.MN.processed.Early.sf$secchi)
 summary(LAGOS.MN.processed.Prime.sf$secchi)
 summary(LAGOS.MN.processed.Late.sf$secchi)
 ```
@@ -579,7 +596,7 @@ FRA Comment: The next plot where the one we did for the proposal. We have to see
 
 
 
-```{r summary.for.late.season, fig.height = 4, fig.width = 6,  fig.cap = "These plots shows that there are trends in chlorophyll a concentrations relative to the given land uses during the 'Late Season'. The presence of trends supports the inclusion of the above land uses in the analysis. Note that the x-axes are on different scales.", message=FALSE, warning=FALSE}
+```{r summary.for.late.season2, fig.height = 4, fig.width = 6,  fig.cap = "These plots shows that there are trends in chlorophyll a concentrations relative to the given land uses during the 'Late Season'. The presence of trends supports the inclusion of the above land uses in the analysis. Note that the x-axes are on different scales.", message=FALSE, warning=FALSE, eval=FALSE}
 secchiplot2.Late.MN <- ggplot() +
   geom_sf(data = states.MN, fill = "white") +
   geom_sf(data = LAGOS.MN.Summary.Late.sf, 
@@ -654,7 +671,7 @@ print(secchiplot3.Late.MN)
 
 
 
-```{r}
+```{r eval=FALSE}
 LAGOS.MN.processed.Early.sf <- LAGOS.MN.processed.Early.sf %>%
   na.omit()
 LAGOS.MN.processed.Prime.sf <- LAGOS.MN.processed.Prime.sf %>%
@@ -669,7 +686,7 @@ LAGOS.MN.processed.Late.sf <- LAGOS.MN.processed.Late.sf %>%
 
 
 
-```{r}
+```{r eval=FALSE}
 st_geometry(LAGOS.MN.processed.Early.sf) <- NULL
 write.csv(x =  LAGOS.MN.processed.Early.sf, row.names = FALSE,
           file =  "./data/processed/LAGOS.MN.processed.Early.csv")
