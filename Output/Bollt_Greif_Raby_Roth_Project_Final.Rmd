@@ -10,7 +10,8 @@ subtitle: "https://github.com/lhr12/HDA_Project"
 author: "Keith Bollt, Jake Greif, Felipe Raby-Amadori, & Lindsay Roth"
 fontsize: 12pt
 mainfont: Times New Roman
-
+editor_options: 
+  chunk_output_type: console
 ---
 
 \newpage
@@ -588,7 +589,8 @@ Early.MN <- ggplot() +
           alpha = 0.4, show.legend = "point") +
   theme(legend.position = "right", legend.text = element_text(size = 7),
         legend.title = element_text(size = 8),
-        legend.margin = margin(0,0,0,0)) 
+        legend.margin = margin(0,0,0,0)) +
+  scale_fill_brewer(palette="YlGnBu")
 print(Early.MN)
 ```
 
@@ -626,7 +628,8 @@ Prime.MN <- ggplot() +
           alpha = 0.4, show.legend = "point") +
   theme(legend.position = "right", legend.text = element_text(size = 7),
         legend.title = element_text(size = 8),
-        legend.margin = margin(0,0,0,0)) 
+        legend.margin = margin(0,0,0,0)) +
+  scale_fill_brewer(palette="YlGnBu") 
 print(Prime.MN)
 ```
 
@@ -664,7 +667,8 @@ Late.MN <- ggplot() +
           alpha = 0.4, show.legend = "point") +
   theme(legend.position = "right", legend.text = element_text(size = 7),
         legend.title = element_text(size = 8),
-        legend.margin = margin(0,0,0,0)) 
+        legend.margin = margin(0,0,0,0)) +
+  scale_fill_brewer(palette="YlGnBu") 
 print(Late.MN)
 
 ```
