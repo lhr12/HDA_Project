@@ -516,11 +516,11 @@ st_geometry(LAGOS.MN.LakesperRegion.Prime) <- NULL
 st_geometry(LAGOS.MN.LakesperRegion.Late) <- NULL
 
 write.csv(x =  LAGOS.MN.LakesperRegion.Early, row.names = FALSE,
-          file =  "./Output/LAGOS.MN.LakesperRegion.Early.csv")
+          file =  "../Output/LAGOS.MN.LakesperRegion.Early.csv")
 write.csv(x =  LAGOS.MN.LakesperRegion.Prime, row.names = FALSE,
-          file =  "./Output/LAGOS.MN.LakesperRegion.Prime.csv")
+          file =  "../Output/LAGOS.MN.LakesperRegion.Prime.csv")
 write.csv(x =  LAGOS.MN.LakesperRegion.Late, row.names = FALSE,
-          file =  "./Output/LAGOS.MN.LakesperRegion.Late.csv")
+          file =  "../Output/LAGOS.MN.LakesperRegion.Late.csv")
 
 ```
 
