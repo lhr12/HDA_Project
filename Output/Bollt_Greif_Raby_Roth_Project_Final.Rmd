@@ -223,7 +223,7 @@ Our first step was to load the LAGOSNE data columns we though we would need and 
 ### Visualize Temporal Distribution & Abundance of Data
 We filtered out just the variables we wanted for our study and created a “LAGOS.MN.processed” dataframe. We decided to use chlorophyll a and secchi depth as proxies of water quality after we visualized our data and confirmed that we had enough data on these two variables in Minnesota between 2009 and 2015 to make claims about land use and water quality; in fact we had over 19,000 lakes with data. Observe in Figure 1 and Table 2 that secchi depth data in Minnesota is available for a large number of lakes and for a large portion of the year, with gaps in the data every winter. Observe in Figure 2 and Table 3 a similar pattern in data availability for chlorophyll a. 
 	
-```{r, Visualize_data, echo=FALSE, warning=FALSE, fig.height = 3, fig.width = 5, fig.cap = "This plot provides a sense of how secchi depth measurements are distributed between and within years, as well as the general range of secchi depth measurements. Sampling occurs during the middle portion of each year, and ceases during the winter season."}
+```{r, Visualize_data, echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 3.3, fig.cap = "This plot provides a sense of how secchi depth measurements are distributed between and within years, as well as the general range of secchi depth measurements. Sampling occurs during the middle portion of each year, and ceases during the winter season."}
 ggplot(LAGOSiws.nutrient.2011.MN, 
        aes(x = sampledate, y = secchi)) +
   geom_point(alpha = 0.2) +
@@ -236,7 +236,7 @@ colnames(secchi.count) <- c("Year", "Count")
 kable(secchi.count, caption = "Number of secchi depth measurements in each of the years to be included in the analysis, which provides a sense of the amount of data, as well as the distribution of data.")
 ```
 
-```{r echo=FALSE, warning=FALSE, fig.height = 3, fig.width = 5, fig.cap = "Chlorophyll a vs. Time. This plot provides a sense of how chlorophyll a measurements are distributed between and within years, as well as the general range of chlorophyll a measurements. Sampling occurs during the middle portion of each year, and ceases during the winter season."}
+```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 3.3, fig.cap = "Chlorophyll a vs. Time. This plot provides a sense of how chlorophyll a measurements are distributed between and within years, as well as the general range of chlorophyll a measurements. Sampling occurs during the middle portion of each year, and ceases during the winter season."}
 ggplot(LAGOSiws.nutrient.2011.MN, 
        aes(x = sampledate, y = chla)) +
   geom_point(alpha = 0.2) +
@@ -254,7 +254,7 @@ We decided what land uses we cared about, based on our background readings and p
 	
 Our next step was to create a growing “seasons” column in order to account for seasonality in our statistical models. We divided up the calendar year into three bins: Early (May 15 and Before), Prime (May 16 - September 30), and Late (October 1 and later). These season designations are somewhat arbitrary, but are based off of our prior knowledge of when the prime biological growing season is in Minnesota. We created a dataframe for each of the three seasons. 
 	
-```{r Create_Full_df,echo=FALSE, warning=FALSE, eval=FALSE}
+```{r Create_Full_df,echo=FALSE, warning=FALSE}
 LAGOS.MN.processed <- LAGOSiws.nutrient.2011.MN %>%
   mutate(IntenseUrban.pct = iws_nlcd2011_pct_23 + iws_nlcd2011_pct_24,
          OpenUrban.pct = iws_nlcd2011_pct_21,
@@ -342,9 +342,9 @@ LAGOS.MN.processed.sf <- st_as_sf(LAGOS.MN.processed, coords = c("nhd_long", "nh
 LAGOS.MN.processed.UTM.sf <- st_transform(LAGOS.MN.processed.sf, crs=32615)
 
 #Loading US Ecoregions Level II
-US.Ecoregions.sf <- st_read('./Data/Raw/NA_CEC_Eco_Level2.shp')
+US.Ecoregions.sf <- st_read('./Data/Raw/NA_CEC_Eco_Level2.shp', quiet = TRUE)
 
-US.Ecoregions.sf_UTM <- st_transform(US.Ecoregions.sf, crs=32615) 
+US.Ecoregions.sf_UTM <- st_transform(US.Ecoregions.sf, crs=32615, quiet) 
 
 
 #Loading the MN state boundary  
@@ -462,7 +462,7 @@ theme(plot.title = element_text(hjust = 0.5))
 
 ```
 
-```{r, fig.height = 4, fig.width = 6,  fig.cap = "Plots displaying trends in secchi depth relative to the given land uses during the 'Late Season'. The presence of trends supports the inclusion of the above land uses in the analysis. Note that the x-axes are on different scales.", echo=FALSE, warning=FALSE}
+```{r, fig.height = 3, fig.width = 4.2,  fig.cap = "Plots displaying trends in secchi depth relative to the given land uses during the 'Late Season'. The presence of trends supports the inclusion of the above land uses in the analysis. Note that the x-axes are on different scales.", echo=FALSE, warning=FALSE}
 grid.arrange(secchi.int.urb.late, secchi.open.urb.late, secchi.barren.late,
              secchi.forest.late, secchi.grass.shrub.late, secchi.wet.late,
              secchi.past.late, secchi.row.crop.late)
@@ -534,7 +534,7 @@ ylab(expression("")) +
 theme(plot.title = element_text(hjust = 0.5))
 ```
 
-```{r, fig.height = 4, fig.width = 6,  fig.cap = "Plots displaying trends in chlorophyll a concentrations relative to the given land uses during the 'Late Season'. The presence of trends supports the inclusion of the above land uses in the analysis. Note that the x-axes are on different scales.", echo=FALSE, warning=FALSE}
+```{r, fig.height = 3, fig.width = 4.2,  fig.cap = "Plots displaying trends in chlorophyll a concentrations relative to the given land uses during the 'Late Season'. The presence of trends supports the inclusion of the above land uses in the analysis. Note that the x-axes are on different scales.", echo=FALSE, warning=FALSE}
 grid.arrange(chla.int.urb.late, chla.open.urb.late, chla.barren.late,
              chla.forest.late, chla.grass.shrub.late, chla.wet.late,
              chla.past.late, chla.row.crop.late)
@@ -595,11 +595,11 @@ MN.Ecoregions.sf_UTM_plot <- MN.Ecoregions.sf_UTM %>%
 LAGOS.MN.Summary.Early.sf <- st_as_sf(LAGOS.MN.Summary.Early, coords = c("Long", "Lat"), crs = 4326)
 ```
 
-```{r fig.height = 3, fig.width = 5,  fig.cap = "Visual representation of the available secchi depth and/or chlorophyll a data in each Ecoregion during the 'Early Season', which confirms that there are a suitable number of lakes in each Ecoregion.", echo=FALSE, warning=FALSE}
+```{r fig.height = 2, fig.width = 3.3,  fig.cap = "Visual representation of the available secchi depth and/or chlorophyll a data in each Ecoregion during the 'Early Season', which confirms that there are a suitable number of lakes in each Ecoregion.", echo=FALSE, warning=FALSE}
 Early.MN <- ggplot() +
   geom_sf(data = MN.Ecoregions.sf_UTM_plot, aes(fill = Ecoregion)) +
   geom_sf(data = LAGOS.MN.Summary.Early.sf,
-          alpha = 0.4, show.legend = "point") +
+          alpha = 0.4, show.legend = "point", size = 0.5) +
   theme(legend.position = "right", legend.text = element_text(size = 7),
         legend.title = element_text(size = 8),
         legend.margin = margin(0,0,0,0)) +
@@ -634,11 +634,11 @@ summarise(secchi.mean = mean(secchi),
 LAGOS.MN.Summary.Prime.sf <- st_as_sf(LAGOS.MN.Summary.Prime, coords = c("Long", "Lat"), crs = 4326)
 ```
 
-```{r fig.height = 3, fig.width = 5,  fig.cap = "Visual representation of the available secchi depth and/or chlorophyll a data in each Ecoregion during the 'Prime Season', which confirms that there are a suitable number of lakes in each Ecoregion.", echo=FALSE, warning=FALSE}
+```{r fig.height = 2, fig.width = 3.3,  fig.cap = "Visual representation of the available secchi depth and/or chlorophyll a data in each Ecoregion during the 'Prime Season', which confirms that there are a suitable number of lakes in each Ecoregion.", echo=FALSE, warning=FALSE}
 Prime.MN <- ggplot() +
   geom_sf(data = MN.Ecoregions.sf_UTM_plot, aes(fill = Ecoregion)) +
   geom_sf(data = LAGOS.MN.Summary.Prime.sf, 
-          alpha = 0.4, show.legend = "point") +
+          alpha = 0.4, show.legend = "point", size = 0.5) +
   theme(legend.position = "right", legend.text = element_text(size = 7),
         legend.title = element_text(size = 8),
         legend.margin = margin(0,0,0,0)) +
@@ -673,11 +673,11 @@ summarise(secchi.mean = mean(secchi),
 LAGOS.MN.Summary.Late.sf <- st_as_sf(LAGOS.MN.Summary.Late, coords = c("Long", "Lat"), crs = 4326)
 ```
 
-```{r fig.height = 3, fig.width = 5,  fig.cap = "Visual representation of the amount of lakes with available secchi depth and/or chlorophyll a data in each Ecoregion during the 'Late Season', which confirms that there are a suitable number of lakes in each Ecoregion.", echo=FALSE, warning=FALSE}
+```{r fig.height = 2, fig.width = 3.3,  fig.cap = "Visual representation of the amount of lakes with available secchi depth and/or chlorophyll a data in each Ecoregion during the 'Late Season', which confirms that there are a suitable number of lakes in each Ecoregion.", echo=FALSE, warning=FALSE}
 Late.MN <- ggplot() +
   geom_sf(data = MN.Ecoregions.sf_UTM_plot, aes(fill = Ecoregion)) +
   geom_sf(data = LAGOS.MN.Summary.Late.sf, 
-          alpha = 0.4, show.legend = "point") +
+          alpha = 0.4, show.legend = "point", size = 0.5) +
   theme(legend.position = "right", legend.text = element_text(size = 7),
         legend.title = element_text(size = 8),
         legend.margin = margin(0,0,0,0)) +
@@ -701,29 +701,29 @@ kable(LAGOS.MN.LakesperRegion.Late, caption = "Number of lakes with available se
 Before creating our models, we tested for autocorrelation between all of our variables to make sure none of them needed to be excluded. Then, we tested for normality of the distribution of our variables using qqplots and Shaprio-Wilkes tests. We used the function BestNormalize to determine what the best transformation for each variable would be if it were needed and used that transformation accordingly. We log-transformed chlorophyll a and secchi depth. We did not find an effective transformation for our land use variables or the lake IWS ratio, which we expected because they are proportion and ratio values. Therefore, we used them in our models with their original distributions. 
 
 ```{r echo=FALSE, warning=FALSE}
-#Early
-LAGOS.MN.processed.Early <- read.csv("./data/processed/LAGOS.MN.processed.Early.csv")
-#Late
-LAGOS.MN.processed.Late <-read.csv("./data/processed/LAGOS.MN.processed.Late.csv")
-#Prime
-LAGOS.MN.processed.Prime <-read.csv("./data/processed/LAGOS.MN.processed.Prime.csv")
+ #Early
+ LAGOS.MN.processed.Early <- read.csv("./data/processed/LAGOS.MN.processed.Early.csv")
+ #Late
+ LAGOS.MN.processed.Late <-read.csv("./data/processed/LAGOS.MN.processed.Late.csv")
+ #Prime
+ LAGOS.MN.processed.Prime <-read.csv("./data/processed/LAGOS.MN.processed.Prime.csv")
 
-early.model.variables <- LAGOS.MN.processed.Early %>%
-  select(chla, secchi, IntenseUrban.pct, OpenUrban.pct, Barren.pct, Forest.pct,
-         GrassShrub.pct, Wetland.pct, Pasture.pct, RowCrop.pct, LakeIWS.Ratio, Ecoregion)
-prime.model.variables <- LAGOS.MN.processed.Prime %>%
-  select(chla, secchi, IntenseUrban.pct, OpenUrban.pct, Barren.pct, Forest.pct,
-         GrassShrub.pct, Wetland.pct, Pasture.pct, RowCrop.pct, LakeIWS.Ratio, Ecoregion)
-late.model.variables <- LAGOS.MN.processed.Late %>%
-  select(chla, secchi, IntenseUrban.pct, OpenUrban.pct, Barren.pct, Forest.pct,
-         GrassShrub.pct, Wetland.pct, Pasture.pct, RowCrop.pct, LakeIWS.Ratio, Ecoregion)
+ early.model.variables <- LAGOS.MN.processed.Early %>%
+   select(chla, secchi, IntenseUrban.pct, OpenUrban.pct, Barren.pct, Forest.pct,
+          GrassShrub.pct, Wetland.pct, Pasture.pct, RowCrop.pct, LakeIWS.Ratio, Ecoregion)
+ prime.model.variables <- LAGOS.MN.processed.Prime %>%
+   select(chla, secchi, IntenseUrban.pct, OpenUrban.pct, Barren.pct, Forest.pct,
+          GrassShrub.pct, Wetland.pct, Pasture.pct, RowCrop.pct, LakeIWS.Ratio, Ecoregion)
+ late.model.variables <- LAGOS.MN.processed.Late %>%
+   select(chla, secchi, IntenseUrban.pct, OpenUrban.pct, Barren.pct, Forest.pct,
+          GrassShrub.pct, Wetland.pct, Pasture.pct, RowCrop.pct, LakeIWS.Ratio, Ecoregion)
 
-#pairs(early.model.variables, lower.panel = panel.smooth, 
-#      upper.panel = panel.cor, diag.panel = panel.hist)
-#pairs(prime.model.variables, lower.panel = panel.smooth, 
-#       upper.panel = panel.cor, diag.panel = panel.hist)
-#pairs(late.model.variables, lower.panel = panel.smooth, 
-#      upper.panel = panel.cor, diag.panel = panel.hist)
+ #pairs(early.model.variables, lower.panel = panel.smooth,
+ #      upper.panel = panel.cor, diag.panel = panel.hist)
+ #pairs(prime.model.variables, lower.panel = panel.smooth,
+ #       upper.panel = panel.cor, diag.panel = panel.hist)
+ #pairs(late.model.variables, lower.panel = panel.smooth,
+ #      upper.panel = panel.cor, diag.panel = panel.hist)
 ```
 
 
@@ -742,17 +742,17 @@ For our analysis, we ran mixed effect linear models with land use as fixed effec
 The significant predictors of early season chlorophyll a are Open Urban Percent (p = 2.453 * 10^-5), Forest Percent (p < 2.2 * 10^-16), Pasture Percent (p = 2.853* 10^-5), Row Crop Percent (p = 0.04671), and Lake IWS Ratio (p = 2.737*10^-6). The marginal R^2 = 0.1058 (represents the variance explained by the fixed effects), and the conditional R^2 = 0.1058 (interpreted as a variance explained by the entire model, including both fixed and random effects). 
 
 ```{r echo=FALSE, warning=FALSE}
-early.chla.model3.5 <- lmer(log(chla) ~ OpenUrban.pct + 
-                          Forest.pct +  
-                          Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
-                        data = LAGOS.MN.processed.Early, REML = TRUE)
-
-LAGOS.MN.processed.Early$LMER_Early_Chla <- fitted(early.chla.model3.5)
-
-ggplot(LAGOS.MN.processed.Early) +
-  geom_point(aes(x=Forest.pct, y=log(chla)), alpha = 0.3, size = 3) +
-  geom_line(aes(x = Forest.pct, y = LMER_Early_Chla), color ="red") +
-  facet_wrap(~Ecoregion)
+ early.chla.model3.5 <- lmer(log(chla) ~ OpenUrban.pct + 
+                           Forest.pct +  
+                           Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
+                         data = LAGOS.MN.processed.Early, REML = TRUE)
+ 
+ LAGOS.MN.processed.Early$LMER_Early_Chla <- fitted(early.chla.model3.5)
+ 
+ ggplot(LAGOS.MN.processed.Early) +
+   geom_point(aes(x=Forest.pct, y=log(chla)), alpha = 0.3, size = 3) +
+   geom_line(aes(x = Forest.pct, y = LMER_Early_Chla), color ="red") +
+   facet_wrap(~Ecoregion)
 ```
 
 
@@ -762,16 +762,16 @@ The significant predictors of early season secchi depth are Open Urban Percent (
 
 ```{r echo=FALSE, warning=FALSE}
 early.secchi.model3.5 <- lmer(log(secchi) ~ OpenUrban.pct + 
-                          Barren.pct + Forest.pct + GrassShrub.pct +
-                          LakeIWS.Ratio + (1|Ecoregion), 
-                        data = LAGOS.MN.processed.Early)
-
-LAGOS.MN.processed.Early$LMER_Early_Secchi <- fitted(early.secchi.model3.5)
-
-ggplot(LAGOS.MN.processed.Early, aes(x=LakeIWS.Ratio, y=log(secchi))) +
-  geom_point(alpha = 0.3, size = 3) +
-  geom_line(aes(y = LMER_Early_Secchi), color ="blue") +
-  facet_wrap(~Ecoregion)
+                           Barren.pct + Forest.pct + GrassShrub.pct +
+                           LakeIWS.Ratio + (1|Ecoregion), 
+                         data = LAGOS.MN.processed.Early)
+ 
+ LAGOS.MN.processed.Early$LMER_Early_Secchi <- fitted(early.secchi.model3.5)
+ 
+ ggplot(LAGOS.MN.processed.Early, aes(x=LakeIWS.Ratio, y=log(secchi))) +
+   geom_point(alpha = 0.3, size = 3) +
+   geom_line(aes(y = LMER_Early_Secchi), color ="blue") +
+   facet_wrap(~Ecoregion)
 ```
 
 
@@ -780,17 +780,17 @@ ggplot(LAGOS.MN.processed.Early, aes(x=LakeIWS.Ratio, y=log(secchi))) +
 The significant predictors of prime season chlorophyll a are Intense Urban Percent (p < 2.2 * 10^-16), Open Urban Percent (p < 2.2 * 10^-16), Forest Percent (p < 2.2 * 10^-16), Grass Shrub Percent (p < 2.2 * 10^-16), Wetland Percent (p < 2.2 * 10^-16), Row Crop Percent (p < 2.2 * 10^-16), and Lake IWS Ratio (p < 2.2 *10^-16). The marginal R^2 = 0.1665 and the conditional R^2 = 0.2513. This tells us that 9% of the variability in prime season chlorophyll a can be explained by the variance of ecoregion.
 
 ```{r echo=FALSE, warning=FALSE}
-prime.chla.model3.3 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
-                          Forest.pct + GrassShrub.pct + Wetland.pct + 
-                          RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
-                        data = LAGOS.MN.processed.Prime)
-
-LAGOS.MN.processed.Prime$LMER_Prime_Chla <- fitted(prime.chla.model3.3)
-
-ggplot(LAGOS.MN.processed.Prime, aes(x=LakeIWS.Ratio, y=log(chla))) +
-  geom_point(alpha = 0.3, size = 3) +
-  geom_line(aes(y = LMER_Prime_Chla), color ="red") +
-  facet_wrap(~Ecoregion)
+ prime.chla.model3.3 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
+                           Forest.pct + GrassShrub.pct + Wetland.pct + 
+                           RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
+                         data = LAGOS.MN.processed.Prime)
+ 
+ LAGOS.MN.processed.Prime$LMER_Prime_Chla <- fitted(prime.chla.model3.3)
+ 
+ ggplot(LAGOS.MN.processed.Prime, aes(x=LakeIWS.Ratio, y=log(chla))) +
+   geom_point(alpha = 0.3, size = 3) +
+   geom_line(aes(y = LMER_Prime_Chla), color ="red") +
+   facet_wrap(~Ecoregion)
 ```
 
 
@@ -799,17 +799,17 @@ ggplot(LAGOS.MN.processed.Prime, aes(x=LakeIWS.Ratio, y=log(chla))) +
 The significant predictors of prime season secchi depth are Intense Urban Percent (p = 3.028 * 10^-7), Open Urban Percent (p < 2.2 * 10^-16), Barren Percent (p = 0.04061), Forest Percent (p < 2.2  10^-16), Grass Shrub Percent (p < 2.2 * 10^-16), Pasture Percent (p = 1.234 * 10^-8), Row Crop Percent (p < 2.2 * 10^-16), and Lake IWS Ratio (p < 2.2 *10^-16).  The marginal R^2 = 0.1241 and the conditional R^2 = 0.4032. This tells us that 28% of the variability in prime season secchi depth can be explained by the variance of ecoregion
 
 ```{r echo=FALSE, warning=FALSE}
-prime.secchi.model3.2 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
-                          Barren.pct + Forest.pct + GrassShrub.pct + 
-                          Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
-                        data = LAGOS.MN.processed.Prime)
-
-LAGOS.MN.processed.Prime$LMER_Prime_Secchi <- fitted(prime.secchi.model3.2)
-
-ggplot(LAGOS.MN.processed.Prime, aes(x=LakeIWS.Ratio, y=log(secchi))) +
-  geom_point(alpha = 0.3, size = 3) +
-  geom_line(aes(y = LMER_Prime_Secchi), color ="blue") +
-  facet_wrap(~Ecoregion)
+ prime.secchi.model3.2 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
+                           Barren.pct + Forest.pct + GrassShrub.pct + 
+                           Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
+                         data = LAGOS.MN.processed.Prime)
+ 
+ LAGOS.MN.processed.Prime$LMER_Prime_Secchi <- fitted(prime.secchi.model3.2)
+ 
+ ggplot(LAGOS.MN.processed.Prime, aes(x=LakeIWS.Ratio, y=log(secchi))) +
+   geom_point(alpha = 0.3, size = 3) +
+   geom_line(aes(y = LMER_Prime_Secchi), color ="blue") +
+   facet_wrap(~Ecoregion)
 ```
 
 
@@ -819,16 +819,16 @@ The significant predictors of late season chlorophyll a are Intense Urban Percen
 
 ```{r echo=FALSE, warning=FALSE}
 late.chla.model3.4 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
-                          Forest.pct + GrassShrub.pct + Wetland.pct + 
-                          LakeIWS.Ratio + (1|Ecoregion), 
-                        data = LAGOS.MN.processed.Late)
-
-LAGOS.MN.processed.Late$LMER_Late_Chla <- fitted(late.chla.model3.4)
-
-ggplot(LAGOS.MN.processed.Late, aes(x=LakeIWS.Ratio, y=log(chla))) +
-  geom_point(alpha = 0.3, size = 3) +
-  geom_line(aes(y = LMER_Late_Chla), color ="red") +
-  facet_wrap(~Ecoregion)
+                           Forest.pct + GrassShrub.pct + Wetland.pct + 
+                           LakeIWS.Ratio + (1|Ecoregion), 
+                         data = LAGOS.MN.processed.Late)
+ 
+ LAGOS.MN.processed.Late$LMER_Late_Chla <- fitted(late.chla.model3.4)
+ 
+ ggplot(LAGOS.MN.processed.Late, aes(x=LakeIWS.Ratio, y=log(chla))) +
+   geom_point(alpha = 0.3, size = 3) +
+   geom_line(aes(y = LMER_Late_Chla), color ="red") +
+   facet_wrap(~Ecoregion)
 ```
 
 
@@ -837,17 +837,17 @@ ggplot(LAGOS.MN.processed.Late, aes(x=LakeIWS.Ratio, y=log(chla))) +
 The significant predictors of late season chlorophyll a are Intense Urban Percent (p = 0.03779), Open Urban Percent (p < 2.2 * 10^-16), Forest Percent (p < 2.2 * 10^-16), Grass Shrub Percent (p = 8.468 * 10^-5), and Lake IWS ratio (p = 3.170 * 10^-6). The marginal R^2 = 0.1595 and the conditional R^2 = 0.1889. This tells us that 3% of the variability in late season secchi depth can be explained by the variance of ecoregion. 
 
 ```{r echo=FALSE, warning=FALSE}
-late.secchi.model3.5 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
-                          Forest.pct + GrassShrub.pct + 
-                          LakeIWS.Ratio + (1|Ecoregion), 
-                        data = LAGOS.MN.processed.Late)
-
-LAGOS.MN.processed.Late$LMER_Late_Secchi <- fitted(late.secchi.model3.5)
-
-ggplot(LAGOS.MN.processed.Late, aes(x=LakeIWS.Ratio, y=log(secchi))) +
-  geom_point(alpha = 0.3, size = 3) +
-  geom_line(aes(y = LMER_Late_Secchi), color ="blue") +
-  facet_wrap(~Ecoregion)
+ late.secchi.model3.5 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
+                           Forest.pct + GrassShrub.pct + 
+                           LakeIWS.Ratio + (1|Ecoregion), 
+                         data = LAGOS.MN.processed.Late)
+ 
+ LAGOS.MN.processed.Late$LMER_Late_Secchi <- fitted(late.secchi.model3.5)
+ 
+ ggplot(LAGOS.MN.processed.Late, aes(x=LakeIWS.Ratio, y=log(secchi))) +
+   geom_point(alpha = 0.3, size = 3) +
+   geom_line(aes(y = LMER_Late_Secchi), color ="blue") +
+   facet_wrap(~Ecoregion)
 ```
 
 
