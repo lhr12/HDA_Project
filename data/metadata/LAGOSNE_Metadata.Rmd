@@ -44,12 +44,12 @@ We joined our LAGOSNE sub-dataset with our Level II Ecoregions shapefile so our 
 We selected only the variables that we need to answer our research questions. They are as follows:
 
 ###Dependent Variables: 
-* Secchi Depth (m): This variable measures the visibility of the water column, by using a secchi disk. Its units are meters. Along with Chlorophyll a concentration, secchi depth is one of two dependent variables in our study; we are considering it a proxy of land use. We will be using it to test research questions 1+2.
+* Secchi Depth (m): This variable measures the visibility of the water column, by using a secchi disk. Its units are meters. Along with chlorophyll a concentration, secchi depth is one of two dependent variables in our study; we are considering it a proxy of water quality, with higher secchi depth measurements indicating good water quality and lower secchi depth measurements indicating impaired water quality. We will be using secchi depth to test research questions 1+2.
 
-* Chlorophyll a (μg/L): This variable measures the Chlorophyll a concentration in a water quality sample. Its units are μg/L. Along with secchi depth, Chlorophyll a concentration is one of two dependent variables in our study; we are considering it a proxy of land use. We will be using it to test research questions 1+2.
+* Chlorophyll a (μg/L): This variable measures the chlorophyll a concentration in a water quality sample. Its units are μg/L. Along with secchi depth, chlorophyll a concentration is one of two dependent variables in our study; we are considering it a proxy of water quality, with lower chlorophyll a concentrations indicating good water quality and higher chlorophyll a concentrations indicating impaired water quality. We will be using chlorophyll a it to test research questions 1+2.
 
 ###Independent Variables:
-We are testing our hypotheses surrounding varying land use by comparing nitrogen and phosphorus concentrations by land use/land cover. We are using 2011 USGS land use/land cover information as it is listed in LAGOSNE. For more information about the USGS's 2011 classification scheme, visit
+We are testing our hypotheses surrounding varying land use by comparing secchi depth and chlorophyll a concentration by land use/land cover. We are using 2011 USGS land use/land cover information as it is listed in LAGOSNE. For more information about the USGS's 2011 classification scheme, visit
 
 https://www.mrlc.gov/data/legends/national-land-cover-database-2011-nlcd2011-legend
 
@@ -85,7 +85,7 @@ The raw list of land cover from the LAGOSNE dataset is as follows:
 * Emergent herbaceous wetlands
 
 
-We did some simplification of land use to focus on land uses we expect will have relationships with secchi depth and Chlorophyll a concentration. For example, we combined "Developed, Medium Intensity" and "Developed High Intensity" into an "Intense Urban" land use cover. All of these variables are independent variables in our study and will be used to test research questions one and two. Not all land uses were used in our study.
+We did some simplification of land use to focus on land uses we expect will have relationships with secchi depth and chlorophyll a concentration. For example, we combined "Developed, Medium Intensity" and "Developed High Intensity" into an "Intense Urban" land use cover. All of these variables are independent variables in our study and will be used to test research questions one and two. Not all land uses were used in our study.
 
 * Intense Urban: Contains "Developed, medium intensity", "Developed, high Intensity"
 * Open Urban: Contains "Developed, open space"
@@ -100,7 +100,7 @@ We did some simplification of land use to focus on land uses we expect will have
 In addition, our master raw dataset contains the following three independent variables:
 
 * EPA Level II Ecoregion: From the EPA Level II Ecoregion shapefile. This will be used to test questions one and two.
-* Season of data collection: Early (May 15 and Before), Prime (May 16 - September 30), and Late (October 1 and later). These season designations are somewhat arbitrary, but are based off of our prior knowledge of when the prime biological growing season is in Minnesota.
+* Season of data collection: Early (May 15 and Before), Prime (May 16 - September 30), and Late (October 1 and later). These season designations are somewhat arbitrary, but are based off of our prior knowledge of when the prime biological growing season occurs in Minnesota.
 * Lake IWS Ratio: The ratio of lake size to watershed size
 
 Ecoregions will allow us to account for natural land use and climatological variation across the state of Minnesota. Dividing our data into arbitrary but approximate delineations of when the prime growing season occurs in Minnesota will allow us to test for seasonality in our data analysis. The Lake IWS ratio is an important variable to keep track of because lake to watershed ratio may affect water quality.
