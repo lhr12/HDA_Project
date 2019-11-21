@@ -276,7 +276,7 @@ LAGOS.MN.processed  <- LAGOS.MN.processed %>%
 ```
 
 
-```{r Adding_Ecoregions2, echo=FALSE, warning=FALSE}
+```{r Adding_Ecoregions2, echo=FALSE, warning=FALSE, eval=FALSE}
 LAGOS.MN.processed.sf <- st_as_sf(LAGOS.MN.processed, coords = c("nhd_long", "nhd_lat"), crs = 4326)
 
 LAGOS.MN.processed.UTM.sf <- st_transform(LAGOS.MN.processed.sf, crs=32615)

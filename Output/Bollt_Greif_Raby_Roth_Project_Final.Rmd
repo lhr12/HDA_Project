@@ -131,6 +131,628 @@ We came in to our exploratory analysis knowing we wanted to look at how water qu
 	Our next step was to create a growing “seasons” column in order to account for seasonality in our statistical models. We divided up the calendar year into three bins: Early (May 15 and Before), Prime (May 16 - September 30), and Late (October 1 and later). These season designations are somewhat arbitrary, but are based off of our prior knowledge of when the prime biological growing season is in Minnesota. We created a dataframe for each of the three seasons. 
 	At this point, we visualized land use percentage versus secchi depth and versus Chlorophyll a for three representative land uses for the Late season. We were hoping to visually confirm that we might find a trend when we ran our statistical tests in our analysis section. We found that some ggplots showed a possible trend, whereas some ggplots did not appear to show a trend. This told us that we had, in fact selected useful land use classifications and useful seasonal demarcations. We performed a summary function, and gave all of our columns useful names and removed NAs. Our statistical tests would not all run if our dataset contained NAs.The next step we performed was to convert our dataframes to sf dataframes so we could add Level II ecoregion column.
 	Our final exploratory analysis test was to see if we had enough lake data for each Level II ecoregion for each of our three seasons. We created three tables, one for each season, with a lake sample count for each ecoregion. From these tables, we learned that we had enough data to proceed with our statistical analysis, and therefore Level II ecoregions were the correct resolution for our study. We also displayed this information spatially. We discovered that there are a large number of lake samples around the Twin Cities area, and that there is enough spatial variation in our data to capture the three different Level II ecoregions for all three of our seasons. We concluded our data wrangling by exporting our three non-sf season processed dataframes as csv files to our processed data folder.
+```{r Setup_Load_Data,echo=FALSE, warning=FALSE}
+# Load lagos data
+LAGOSdata <- lagosne_load()
+
+# creating specific lagos files
+LAGOSstate <- LAGOSdata$state
+LAGOSlocus <- LAGOSdata$locus
+LAGOSnutrient <- LAGOSdata$epi_nutr
+LAGOSiwslulc <- LAGOSdata$iws.lulc
+LAGOSiws <- LAGOSdata$iws
+```
+
+```{r MN_Nutrient_Data,echo=FALSE, warning=FALSE}
+#State 14: Minnesota
+LAGOSlocus.MN <- LAGOSlocus %>% filter (state_zoneid == "State_14")
+LAGOSnutrient.MN <- LAGOSlocus.MN %>%
+  left_join(LAGOSnutrient, by = "lagoslakeid") 
+```
+
+```{r Joining_MN_Nutrient_lulc,echo=FALSE, warning=FALSE}
+#getting the area of the iws
+LAGOSiws.area <- select(LAGOSiws, "lagoslakeid", "iws_ha")
+
+#joining MN locus with iwslulc and adding the area of IWS
+LAGOSiws.MN <- LAGOSlocus.MN %>% 
+  left_join(LAGOSiwslulc, by = "lagoslakeid") %>%
+  left_join(LAGOSiws.area, by = "lagoslakeid")
+
+##selecting 2011 lulc
+LAGOSiws2011.MN <- LAGOSiws.MN %>% 
+  select(lagoslakeid,state_zoneid, lake_area_ha, iws_ha,
+         iws_nlcd2011_pct_11, iws_nlcd2011_pct_21, iws_nlcd2011_pct_22,
+         iws_nlcd2011_pct_23, iws_nlcd2011_pct_24, iws_nlcd2011_pct_31,
+         iws_nlcd2011_pct_41, iws_nlcd2011_pct_42, iws_nlcd2011_pct_43,
+         iws_nlcd2011_pct_52, iws_nlcd2011_pct_71, iws_nlcd2011_pct_81,
+         iws_nlcd2011_pct_82, iws_nlcd2011_pct_90, iws_nlcd2011_pct_95)
+```
+
+```{r, Filter_Nutrient_Dates,echo=FALSE, warning=FALSE}
+#filtering state nutrient data #FRA. We can expand this range
+LAGOSnutrient.MN.skinny <- LAGOSnutrient.MN %>%
+  filter(sampledate > "2008-12-31" & sampledate < "2015-01-01")
+
+```
+
+```{r, Joined_MN_df,echo=FALSE, warning=FALSE}
+##Joining iws.lulc and nutrient
+LAGOSiws.nutrient.2011.MN <-  left_join(LAGOSnutrient.MN.skinny,
+                                        LAGOSiws2011.MN, by =
+                                          c("lagoslakeid", "lake_area_ha")) 
+
+LAGOSiws.nutrient.2011.MN <- LAGOSiws.nutrient.2011.MN %>%
+  select(lagoslakeid, nhd_lat, nhd_long, lake_area_ha, lake_perim_meters,
+         iws_zoneid, iws_ha, state_zoneid.x, elevation_m, sampledate, chla,secchi, 
+         iws_nlcd2011_pct_11, iws_nlcd2011_pct_21, iws_nlcd2011_pct_22, 
+         iws_nlcd2011_pct_23, iws_nlcd2011_pct_24, iws_nlcd2011_pct_31, 
+         iws_nlcd2011_pct_41, iws_nlcd2011_pct_42, iws_nlcd2011_pct_43, 
+         iws_nlcd2011_pct_52, iws_nlcd2011_pct_71, iws_nlcd2011_pct_81, 
+         iws_nlcd2011_pct_82, iws_nlcd2011_pct_90, iws_nlcd2011_pct_95)
+
+##Create year column
+LAGOSiws.nutrient.2011.MN$Year <- substring(LAGOSiws.nutrient.2011.MN$sampledate, 1,4)
+
+##Create separate datasets for secchi depth and chla
+LAGOSiws.secchi.2011.MN <- LAGOSiws.nutrient.2011.MN %>%
+    select(lagoslakeid, nhd_lat, nhd_long, lake_area_ha, lake_perim_meters,
+         iws_zoneid, iws_ha, state_zoneid.x, elevation_m, sampledate, secchi, 
+         iws_nlcd2011_pct_11, iws_nlcd2011_pct_21, iws_nlcd2011_pct_22, 
+         iws_nlcd2011_pct_23, iws_nlcd2011_pct_24, iws_nlcd2011_pct_31, 
+         iws_nlcd2011_pct_41, iws_nlcd2011_pct_42, iws_nlcd2011_pct_43, 
+         iws_nlcd2011_pct_52, iws_nlcd2011_pct_71, iws_nlcd2011_pct_81, 
+         iws_nlcd2011_pct_82, iws_nlcd2011_pct_90, iws_nlcd2011_pct_95, Year) %>%
+  na.omit()
+
+LAGOSiws.chla.2011.MN <- LAGOSiws.nutrient.2011.MN %>%
+    select(lagoslakeid, nhd_lat, nhd_long, lake_area_ha, lake_perim_meters,
+         iws_zoneid, iws_ha, state_zoneid.x, elevation_m, sampledate, chla, 
+         iws_nlcd2011_pct_11, iws_nlcd2011_pct_21, iws_nlcd2011_pct_22, 
+         iws_nlcd2011_pct_23, iws_nlcd2011_pct_24, iws_nlcd2011_pct_31, 
+         iws_nlcd2011_pct_41, iws_nlcd2011_pct_42, iws_nlcd2011_pct_43, 
+         iws_nlcd2011_pct_52, iws_nlcd2011_pct_71, iws_nlcd2011_pct_81, 
+         iws_nlcd2011_pct_82, iws_nlcd2011_pct_90, iws_nlcd2011_pct_95, Year) %>%
+  na.omit()
+```
+
+```{r, Visualize_data, echo=FALSE, warning=FALSE, fig.height = 3, fig.width = 5, fig.cap = "This plot provides a sense of how secchi depth measurements are distributed between and within years, as well as the general range of secchi depth measurements. Sampling occurs during the middle portion of each year, and ceases during the winter season."}
+ggplot(LAGOSiws.nutrient.2011.MN, 
+       aes(x = sampledate, y = secchi)) +
+  geom_point(alpha = 0.2) +
+  labs(y = "Secchi Depth (m)", x = "Year")
+```
+
+```{r echo=FALSE, warning=FALSE}
+secchi.count <- count(LAGOSiws.secchi.2011.MN, vars = Year)
+colnames(secchi.count) <- c("Year", "Count")
+kable(secchi.count, caption = "Number of secchi depth measurements in each of the years to be included in the analysis, which provides a sense of the amount of data, as well as the distribution of data.")
+```
+
+```{r echo=FALSE, warning=FALSE, fig.height = 3, fig.width = 5, fig.cap = "Chlorophyll a vs. Time. This plot provides a sense of how chlorophyll a measurements are distributed between and within years, as well as the general range of chlorophyll a measurements. Sampling occurs during the middle portion of each year, and ceases during the winter season."}
+ggplot(LAGOSiws.nutrient.2011.MN, 
+       aes(x = sampledate, y = chla)) +
+  geom_point(alpha = 0.2) +
+  labs(y = "Chlorophyll a (ug/L)", x = "Year")
+```
+
+```{r echo=FALSE, warning=FALSE}
+chla.count <- count(LAGOSiws.chla.2011.MN, vars = Year)
+colnames(chla.count) <- c("Year", "Count")
+kable(chla.count, caption = "Number of chlorophyll a measurements in each of the years to be included in the analysis, which provides a sense of the amount of data, as well as the distribution of data.")
+```
+
+```{r Create_Full_df,echo=FALSE, warning=FALSE}
+LAGOS.MN.processed <- LAGOSiws.nutrient.2011.MN %>%
+  mutate(IntenseUrban.pct = iws_nlcd2011_pct_23 + iws_nlcd2011_pct_24,
+         OpenUrban.pct = iws_nlcd2011_pct_21,
+         Barren.pct = iws_nlcd2011_pct_31,
+         Forest.pct = iws_nlcd2011_pct_41 + iws_nlcd2011_pct_42 + iws_nlcd2011_pct_43,
+         GrassShrub.pct = iws_nlcd2011_pct_52 + iws_nlcd2011_pct_71,
+         Wetland.pct = iws_nlcd2011_pct_90 + iws_nlcd2011_pct_95,
+         Pasture.pct =  iws_nlcd2011_pct_81,
+         RowCrop.pct = iws_nlcd2011_pct_82) %>%
+  select(-c(iws_nlcd2011_pct_11, iws_nlcd2011_pct_21, iws_nlcd2011_pct_22, 
+            iws_nlcd2011_pct_23, iws_nlcd2011_pct_24, iws_nlcd2011_pct_31, 
+            iws_nlcd2011_pct_41, iws_nlcd2011_pct_42, iws_nlcd2011_pct_43, 
+            iws_nlcd2011_pct_52, iws_nlcd2011_pct_71, iws_nlcd2011_pct_81, 
+            iws_nlcd2011_pct_82, iws_nlcd2011_pct_90, iws_nlcd2011_pct_95)) %>%
+  na.omit() %>%
+  mutate(LakeIWS.Ratio = lake_area_ha/iws_ha) %>%
+  mutate(DOY = yday(sampledate))
+```
+
+```{r adding a season column, echo=FALSE, warning=FALSE}
+#We are creating growing seasons; early, prime, late. 
+#They will be based off of water temperature and day of year. 
+#We choose May 15 and October 1 because these are arbitrary but 
+#approximate bookends to the prime growing season.
+
+LAGOS.MN.processed$EarlyTrue <- 
+  LAGOS.MN.processed$DOY < 136 #Before May 15
+LAGOS.MN.processed$PrimeTrue <- 
+  LAGOS.MN.processed$DOY >=136 & LAGOS.MN.processed$DOY <= 273 #May 15 to September 30
+LAGOS.MN.processed$LateTrue <- 
+  LAGOS.MN.processed$DOY > 273  #October 1 and later
+
+LAGOS.MN.processed$EarlyTrue <- 
+  ifelse(LAGOS.MN.processed$EarlyTrue == TRUE, "Early", "No")
+LAGOS.MN.processed$PrimeTrue <- 
+  ifelse(LAGOS.MN.processed$PrimeTrue == TRUE, "Prime", "No")
+LAGOS.MN.processed$LateTrue <- 
+  ifelse(LAGOS.MN.processed$LateTrue == TRUE, "Late", "No")
+
+LAGOS.MN.processed$Season <- LAGOS.MN.processed$EarlyTrue == "Early"
+  
+LAGOS.MN.processed$Season[LAGOS.MN.processed$EarlyTrue == "Early"] <- "Early"
+LAGOS.MN.processed$Season[LAGOS.MN.processed$PrimeTrue == "Prime"] <- "Prime"
+LAGOS.MN.processed$Season[LAGOS.MN.processed$LateTrue == "Late"] <- "Late"
+
+LAGOS.MN.processed  <- LAGOS.MN.processed %>%
+  select(-c(EarlyTrue, PrimeTrue, LateTrue))
+```
+
+
+```{r Adding_Ecoregions2, echo=FALSE, warning=FALSE, eval=FALSE}
+LAGOS.MN.processed.sf <- st_as_sf(LAGOS.MN.processed, coords = c("nhd_long", "nhd_lat"), crs = 4326)
+
+LAGOS.MN.processed.UTM.sf <- st_transform(LAGOS.MN.processed.sf, crs=32615)
+
+#Loading US Ecoregions Level II
+US.Ecoregions.sf <- st_read('./Data/Raw/NA_CEC_Eco_Level2.shp')
+
+US.Ecoregions.sf_UTM <- st_transform(US.Ecoregions.sf, crs=32615) 
+
+
+#Loading the MN state boundary  
+# generate a map of U.S. states
+states <- st_as_sf(map(database = "state", plot = FALSE, fill = TRUE, col = "white"))
+
+# filter MN
+states.MN <- filter(states, ID %in%
+c("minnesota"))
+
+states.MN_UTM <- st_transform(states.MN, crs=32615) 
+
+#Ecoregions level II for Minnesota
+MN.Ecoregions.sf_UTM <- st_intersection(US.Ecoregions.sf_UTM, states.MN_UTM)
+
+#Selecting level 2 ecoregions names
+MN.Ecoregions.sf_UTM <- select(MN.Ecoregions.sf_UTM, NA_L2NAME)
+colnames(MN.Ecoregions.sf_UTM)[1] <- "Ecoregion"
+
+LAGOS.MN.processed.sf <- st_join(LAGOS.MN.processed.UTM.sf, MN.Ecoregions.sf_UTM)
+LAGOS.MN.processed.sf <- na.omit(LAGOS.MN.processed.sf)
+```
+
+```{r Adding_Ecoregions,echo=FALSE, warning=FALSE}
+LAGOS.MN.processed.sf <- st_as_sf(LAGOS.MN.processed, coords = c("nhd_long", "nhd_lat"), crs = 4326)
+
+LAGOS.MN.processed.UTM.sf <- st_transform(LAGOS.MN.processed.sf, crs=32615)
+
+#Loading US Ecoregions Level II
+US.Ecoregions.sf <- st_read('./Data/Raw/NA_CEC_Eco_Level2.shp')
+
+US.Ecoregions.sf_UTM <- st_transform(US.Ecoregions.sf, crs=32615) 
+
+
+#Loading the MN state boundary  
+# generate a map of U.S. states
+states <- st_as_sf(map(database = "state", plot = FALSE, fill = TRUE, col = "white"))
+
+# filter MN
+states.MN <- filter(states, ID %in%
+c("minnesota"))
+
+states.MN_UTM <- st_transform(states.MN, crs=32615) 
+
+#Ecoregions level II for Minnesota
+MN.Ecoregions.sf_UTM <- st_intersection(US.Ecoregions.sf_UTM, states.MN_UTM)
+
+#Selecting level 2 ecoregions names
+MN.Ecoregions.sf_UTM <- select(MN.Ecoregions.sf_UTM, NA_L2NAME)
+colnames(MN.Ecoregions.sf_UTM)[1] <- "Ecoregion"
+
+LAGOS.MN.processed.sf <- st_join(LAGOS.MN.processed.UTM.sf, MN.Ecoregions.sf_UTM)
+LAGOS.MN.processed.sf <- na.omit(LAGOS.MN.processed.sf)
+```
+
+```{r Creating_Seasons_dfs,echo=FALSE, warning=FALSE}
+#Creating sf seasons files
+LAGOS.MN.processed.Early.sf <- filter(LAGOS.MN.processed.sf, Season == "Early")
+LAGOS.MN.processed.Prime.sf <- filter(LAGOS.MN.processed.sf, Season == "Prime")
+LAGOS.MN.processed.Late.sf <- filter(LAGOS.MN.processed.sf, Season == "Late")
+
+#Creating regular season files (doesn't have ecoregions column)
+LAGOS.MN.processed.Early <- filter(LAGOS.MN.processed, Season == "Early")
+LAGOS.MN.processed.Prime <- filter(LAGOS.MN.processed, Season == "Prime")
+LAGOS.MN.processed.Late <- filter(LAGOS.MN.processed, Season == "Late")
+```
+
+```{r echo=FALSE, warning=FALSE, eval=FALSE}
+#To look at the statistics
+summary(LAGOS.MN.processed.Early.sf$chla)
+summary(LAGOS.MN.processed.Prime.sf$chla)
+summary(LAGOS.MN.processed.Late.sf$chla)
+
+summary(LAGOS.MN.processed.Prime.sf$secchi)
+summary(LAGOS.MN.processed.Late.sf$secchi)
+```
+
+```{r scatterplots,echo=FALSE, warning=FALSE}
+#Exploring some preliminary trends for Late Season (Highest Mean Chla and Lowest Mean Secchi Depth)
+
+secchi.int.urb.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = IntenseUrban.pct, y = secchi)) +
+geom_point(alpha = 0.5) +
+geom_smooth(method=lm, se=FALSE) +
+xlab(expression("% Intense Urban")) +
+ylab(expression("")) +
+#ggtitle("% Intense Urban vs Secchi Depth, Late Season") +
+theme(plot.title = element_text(hjust = 0.5))
+
+secchi.open.urb.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = OpenUrban.pct, y = secchi)) +
+geom_point(alpha = 0.5) +
+geom_smooth(method=lm, se=FALSE) +
+xlab(expression("% Open Urban")) +
+ylab(expression("")) +
+#ggtitle("% Open Urban vs Secchi Depth, Late Season") +
+theme(plot.title = element_text(hjust = 0.5))
+
+secchi.barren.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = Barren.pct, y = secchi)) +
+geom_point(alpha = 0.5) +
+geom_smooth(method=lm, se=FALSE) +
+xlab(expression("% Barren")) +
+ylab(expression("")) +
+#ggtitle("% Barren Land vs Secchi Depth, Late Season") +
+theme(plot.title = element_text(hjust = 0.5))
+
+secchi.forest.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = Forest.pct, y = secchi)) +
+geom_point(alpha = 0.5) +
+geom_smooth(method=lm, se=FALSE) +
+xlab(expression("% Forest")) +
+ylab(expression("Secchi Depth (m)")) +
+#ggtitle("% Forest vs Secchi Depth Scatterplot, Late Season") +
+theme(plot.title = element_text(hjust = 0.5))
+
+secchi.grass.shrub.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = GrassShrub.pct, y = secchi)) +
+geom_point(alpha = 0.5) +
+geom_smooth(method=lm, se=FALSE) +
+xlab(expression("% Grass-Shrub")) +
+ylab(expression("")) +
+#ggtitle("% Grass-Shrub vs Secchi Depth, Late Season") +
+theme(plot.title = element_text(hjust = 0.5))
+
+secchi.wet.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = Wetland.pct, y = secchi)) +
+geom_point(alpha = 0.5) +
+geom_smooth(method=lm, se=FALSE) +
+xlab(expression("% Wetland")) +
+ylab(expression("")) +
+#ggtitle("% Wetland vs Secchi Depth, Late Season") +
+theme(plot.title = element_text(hjust = 0.5))
+
+secchi.past.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = Pasture.pct, y = secchi)) +
+geom_point(alpha = 0.5) +
+geom_smooth(method=lm, se=FALSE) +
+xlab(expression("% Pasture")) +
+ylab(expression("")) +
+#ggtitle("% Pasture vs Secchi Depth, Late Season") +
+theme(plot.title = element_text(hjust = 0.5))
+
+secchi.row.crop.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = RowCrop.pct, y = secchi)) +
+geom_point(alpha = 0.5) +
+geom_smooth(method=lm, se=FALSE) +
+xlab(expression("% Row Crops")) +
+ylab(expression("")) +
+#ggtitle("% Row Crops vs Secchi Depth, Late Season") +
+theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+```{r, fig.height = 4, fig.width = 6,  fig.cap = "Plots displaying trends in secchi depth relative to the given land uses during the 'Late Season'. The presence of trends supports the inclusion of the above land uses in the analysis. Note that the x-axes are on different scales.", echo=FALSE, warning=FALSE}
+grid.arrange(secchi.int.urb.late, secchi.open.urb.late, secchi.barren.late,
+             secchi.forest.late, secchi.grass.shrub.late, secchi.wet.late,
+             secchi.past.late, secchi.row.crop.late)
+```
+
+```{r,echo=FALSE, warning=FALSE}
+chla.int.urb.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = IntenseUrban.pct, y = chla)) +
+geom_point(alpha = 0.5) +
+geom_smooth(method=lm, se=FALSE) +
+xlab(expression("% Intense Urban")) +
+ylab("") +
+#ggtitle("% Intense Urban vs Chla, Late Season") +
+theme(plot.title = element_text(hjust = 0.5))
+
+chla.open.urb.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = OpenUrban.pct, y = chla)) +
+geom_point(alpha = 0.5) +
+geom_smooth(method=lm, se=FALSE) +
+xlab(expression("% Open Urban")) +
+ylab(expression("")) +
+#ggtitle("% Open Urban vs Chla, Late Season") +
+theme(plot.title = element_text(hjust = 0.5))
+
+chla.barren.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = Barren.pct, y = chla)) +
+geom_point(alpha = 0.5) +
+geom_smooth(method=lm, se=FALSE) +
+xlab(expression("% Barren")) +
+ylab(expression("")) +
+#ggtitle("% Barren Land vs Secchi Depth, Late Season") +
+theme(plot.title = element_text(hjust = 0.5))
+
+chla.forest.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = Forest.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm, se=FALSE) +
+xlab(expression("% Forest")) +
+ylab(expression("Chlorophyll a" (mu*g / L))) +
+#ggtitle("% Forest vs Chla Scatterplot, Late Season") +
+theme(plot.title = element_text(hjust = 0.5))
+
+chla.grass.shrub.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = GrassShrub.pct, y = chla)) +
+geom_point(alpha = 0.5) +
+geom_smooth(method=lm, se=FALSE) +
+xlab(expression("% Grass-Shrub")) +
+ylab(expression("")) +
+#ggtitle("% Grass-Shrub vs Secchi Depth, Late Season") +
+theme(plot.title = element_text(hjust = 0.5))
+
+chla.wet.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = Wetland.pct, y = chla)) +
+geom_point(alpha = 0.5) +
+geom_smooth(method=lm, se=FALSE) +
+xlab(expression("% Wetland")) +
+ylab(expression("")) +
+#ggtitle("% Wetland vs Secchi Depth, Late Season") +
+theme(plot.title = element_text(hjust = 0.5))
+
+chla.past.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = Pasture.pct, y = chla)) +
+geom_point(alpha = 0.5) +
+geom_smooth(method=lm, se=FALSE) +
+xlab(expression("% Pasture")) +
+ylab("") +
+#ggtitle("% Pasture vs Secchi Depth, Late Season") +
+theme(plot.title = element_text(hjust = 0.5))
+
+chla.row.crop.late <- ggplot(LAGOS.MN.processed.Late.sf, aes(x = RowCrop.pct, y = chla)) +
+geom_point() +
+geom_smooth(method=lm, se=FALSE) +
+xlab(expression("% Row Crops")) +
+ylab(expression("")) +
+#ggtitle("% Row Crops vs Chla, Late Season") +
+theme(plot.title = element_text(hjust = 0.5))
+```
+
+```{r, fig.height = 4, fig.width = 6,  fig.cap = "Plots displaying trends in chlorophyll a concentrations relative to the given land uses during the 'Late Season'. The presence of trends supports the inclusion of the above land uses in the analysis. Note that the x-axes are on different scales.", echo=FALSE, warning=FALSE}
+grid.arrange(chla.int.urb.late, chla.open.urb.late, chla.barren.late,
+             chla.forest.late, chla.grass.shrub.late, chla.wet.late,
+             chla.past.late, chla.row.crop.late)
+```
+
+Figures XX and YY explore the trends in secchi depth and chlorophyll a by the percentage of each land use type in the late season. The late season was chosen for exploration because it had to lowest and highest mean secchi depth and mean chlorophyll a, respectively. 
+
+
+FRA Comment: Next plot main purpose is to check is we have enough data in each ecoregion.
+
+```{r echo=FALSE, warning=FALSE}
+#creating tables number of lakes per ecoregions
+
+LAGOS.MN.LakesperRegion.Early <- LAGOS.MN.processed.Early.sf %>%
+  group_by(Ecoregion) %>%
+  summarise(Count = n_distinct(lagoslakeid))
+
+LAGOS.MN.LakesperRegion.Prime <- LAGOS.MN.processed.Prime.sf %>%
+  group_by(Ecoregion) %>%
+  summarise(Count = n_distinct(lagoslakeid))
+
+LAGOS.MN.LakesperRegion.Late <- LAGOS.MN.processed.Late.sf %>%
+  group_by(Ecoregion) %>%
+  summarise(Count = n_distinct(lagoslakeid))
+
+st_geometry(LAGOS.MN.LakesperRegion.Early) <- NULL
+st_geometry(LAGOS.MN.LakesperRegion.Prime) <- NULL
+st_geometry(LAGOS.MN.LakesperRegion.Late) <- NULL
+
+```
+
+
+```{r summary.for.early.season, echo=FALSE, warning=FALSE}
+LAGOS.MN.Summary.Early <- LAGOS.MN.processed.Early %>%
+group_by(lagoslakeid) %>%
+summarise(secchi.mean = mean(secchi),
+          chla.mean = mean(chla),
+          LakeIWS.Ratio = mean(LakeIWS.Ratio),
+          IntenseUrban.pct = mean(IntenseUrban.pct),
+          OpenUrban.pct = mean(OpenUrban.pct),
+          Barren.pct = mean(Barren.pct),
+          Forest.pct = mean(Forest.pct),
+          GrassShrub.pct = mean(GrassShrub.pct),
+          Wetland.pct = mean(Wetland.pct),
+          Pasture.pct = mean(Pasture.pct),
+          RowCrop.pct = mean(RowCrop.pct),
+          Lat = mean(nhd_lat),
+          Long = mean(nhd_long)
+          ) %>%
+  drop_na()
+
+#Creating a MN.Ecoregions.sf_UTM variable without water (just for visualization)
+
+MN.Ecoregions.sf_UTM_plot <- MN.Ecoregions.sf_UTM %>% 
+  filter(Ecoregion != "WATER")
+
+#SF file with the summary
+LAGOS.MN.Summary.Early.sf <- st_as_sf(LAGOS.MN.Summary.Early, coords = c("Long", "Lat"), crs = 4326)
+```
+
+```{r fig.height = 3, fig.width = 5,  fig.cap = "Visual representation of the available secchi depth and/or chlorophyll a data in each Ecoregion during the 'Early Season', which confirms that there are a suitable number of lakes in each Ecoregion.", echo=FALSE, warning=FALSE}
+Early.MN <- ggplot() +
+  geom_sf(data = MN.Ecoregions.sf_UTM_plot, aes(fill = Ecoregion)) +
+  geom_sf(data = LAGOS.MN.Summary.Early.sf,
+          alpha = 0.4, show.legend = "point") +
+  theme(legend.position = "right", legend.text = element_text(size = 7),
+        legend.title = element_text(size = 8),
+        legend.margin = margin(0,0,0,0)) 
+print(Early.MN)
+```
+
+```{r echo=FALSE, warning=FALSE}
+kable(LAGOS.MN.LakesperRegion.Early, caption = "Number of lakes with available secchi depth and/or chlorophyll a data in each Ecoregion during the 'Early Season.'")
+```
+
+```{r summary.for.prime.season, echo=FALSE, warning=FALSE}
+LAGOS.MN.Summary.Prime <- LAGOS.MN.processed.Prime %>%
+group_by(lagoslakeid) %>%
+summarise(secchi.mean = mean(secchi),
+          chla.mean = mean(chla),
+          LakeIWS.Ratio = mean(LakeIWS.Ratio),
+          IntenseUrban.pct = mean(IntenseUrban.pct),
+          OpenUrban.pct = mean(OpenUrban.pct),
+          Barren.pct = mean(Barren.pct),
+          Forest.pct = mean(Forest.pct),
+          GrassShrub.pct = mean(GrassShrub.pct),
+          Wetland.pct = mean(Wetland.pct),
+          Pasture.pct = mean(Pasture.pct),
+          RowCrop.pct = mean(RowCrop.pct),
+          Lat = mean(nhd_lat),
+          Long = mean(nhd_long)
+          ) %>%
+  drop_na()
+
+#SF file with the summary
+LAGOS.MN.Summary.Prime.sf <- st_as_sf(LAGOS.MN.Summary.Prime, coords = c("Long", "Lat"), crs = 4326)
+```
+
+```{r fig.height = 3, fig.width = 5,  fig.cap = "Visual representation of the available secchi depth and/or chlorophyll a data in each Ecoregion during the 'Prime Season', which confirms that there are a suitable number of lakes in each Ecoregion.", echo=FALSE, warning=FALSE}
+Prime.MN <- ggplot() +
+  geom_sf(data = MN.Ecoregions.sf_UTM_plot, aes(fill = Ecoregion)) +
+  geom_sf(data = LAGOS.MN.Summary.Prime.sf, 
+          alpha = 0.4, show.legend = "point") +
+  theme(legend.position = "right", legend.text = element_text(size = 7),
+        legend.title = element_text(size = 8),
+        legend.margin = margin(0,0,0,0)) 
+print(Prime.MN)
+```
+
+```{r echo=FALSE, warning=FALSE}
+kable(LAGOS.MN.LakesperRegion.Prime, caption = "Number of lakes with available secchi depth and/or chlorophyll a data in each Ecoregion during the 'Prime Season.'")
+```
+
+```{r summary.for.late.season, echo=FALSE, warning=FALSE}
+LAGOS.MN.Summary.Late <- LAGOS.MN.processed.Late %>%
+group_by(lagoslakeid) %>%
+summarise(secchi.mean = mean(secchi),
+          chla.mean = mean(chla),
+          LakeIWS.Ratio = mean(LakeIWS.Ratio),
+          IntenseUrban.pct = mean(IntenseUrban.pct),
+          OpenUrban.pct = mean(OpenUrban.pct),
+          Barren.pct = mean(Barren.pct),
+          Forest.pct = mean(Forest.pct),
+          GrassShrub.pct = mean(GrassShrub.pct),
+          Wetland.pct = mean(Wetland.pct),
+          Pasture.pct = mean(Pasture.pct),
+          RowCrop.pct = mean(RowCrop.pct),
+          Lat = mean(nhd_lat),
+          Long = mean(nhd_long)
+          ) %>%
+  drop_na()
+
+#SF file with the summary
+LAGOS.MN.Summary.Late.sf <- st_as_sf(LAGOS.MN.Summary.Late, coords = c("Long", "Lat"), crs = 4326)
+```
+
+```{r fig.height = 3, fig.width = 5,  fig.cap = "Visual representation of the amount of lakes with available secchi depth and/or chlorophyll a data in each Ecoregion during the 'Late Season', which confirms that there are a suitable number of lakes in each Ecoregion.", echo=FALSE, warning=FALSE}
+Late.MN <- ggplot() +
+  geom_sf(data = MN.Ecoregions.sf_UTM_plot, aes(fill = Ecoregion)) +
+  geom_sf(data = LAGOS.MN.Summary.Late.sf, 
+          alpha = 0.4, show.legend = "point") +
+  theme(legend.position = "right", legend.text = element_text(size = 7),
+        legend.title = element_text(size = 8),
+        legend.margin = margin(0,0,0,0)) 
+print(Late.MN)
+
+```
+
+```{r echo=FALSE, warning=FALSE}
+kable(LAGOS.MN.LakesperRegion.Late, caption = "Number of lakes with available secchi depth and/or chlorophyll a data in each Ecoregion during the 'Late Season.'")
+```
+
+
+
+
+
+FRA Comment: The next plot where the one we did for the proposal. We have to see if we want them
+JG Comment: Code that's referred to in the comment above is NOT included.
+
+
+```{r summary.for.late.season2, fig.height = 4, fig.width = 6,  fig.cap = "These plots shows that there are trends in chlorophyll a concentrations relative to the given land uses during the 'Late Season'. The presence of trends supports the inclusion of the above land uses in the analysis. Note that the x-axes are on different scales.", message=FALSE, warning=FALSE, eval=FALSE}
+secchiplot2.Late.MN <- ggplot() +
+  geom_sf(data = states.MN, fill = "white") +
+  geom_sf(data = LAGOS.MN.Summary.Late.sf, 
+          aes(size = Urban.pct, color = secchi.mean),
+          alpha = 0.4, show.legend = "point") +
+  scale_color_viridis_c(option = "inferno") +
+  labs(color = "Average \n Secchi \n Depth (m)", 
+       size = "Urban \n Area \n %") +
+  theme(legend.position = "right", legend.text = element_text(size = 7),
+        legend.title = element_text(size = 8),
+        legend.margin = margin(0,0,0,0)) 
+print(secchiplot2.Late.MN)
+
+secchiplot3.Late.MN <- ggplot() +
+  geom_sf(data = states.MN, fill = "white") +
+  geom_sf(data = LAGOS.MN.Summary.Late.sf, 
+          aes(size = Ag.pct, color = secchi.mean),
+          alpha = 0.4, show.legend = "point") +
+  scale_color_viridis_c(option = "inferno") +
+  labs(color = "Average \n Secchi \n Depth (m)", 
+       size = "Agricultural \n Area \n %") +
+  theme(legend.position = "right", legend.text = element_text(size = 7),
+        legend.title = element_text(size = 8),
+        legend.margin = margin(0,0,0,0)) 
+print(secchiplot3.Late.MN)
+
+
+
+
+chlaplot1.Late.MN <- ggplot() +
+  geom_sf(data = states.MN, fill = "white") +
+  geom_sf(data = LAGOS.MN.Summary.Late.sf, 
+          aes(size = Undeveloped.pct, color = chla.mean),
+          alpha = 0.4, show.legend = "point") +
+  scale_color_viridis_c(option = "inferno") +
+  labs(color = "Average \n Chla \n Depth (m)", 
+       size = "Undeveloped \n Area \n %") +
+  theme(legend.position = "right", legend.text = element_text(size = 7),
+        legend.title = element_text(size = 8),
+        legend.margin = margin(0,0,0,0)) 
+print(chlaplot1.Late.MN)
+
+chlaplot2.Late.MN <- ggplot() +
+  geom_sf(data = states.MN, fill = "white") +
+  geom_sf(data = LAGOS.MN.Summary.Late.sf, 
+          aes(size = Urban.pct, color = chla.mean),
+          alpha = 0.4, show.legend = "point") +
+  scale_color_viridis_c(option = "inferno") +
+  labs(color = "Average \n Chla \n Depth (m)", 
+       size = "Urban \n Area \n %") +
+  theme(legend.position = "right", legend.text = element_text(size = 7),
+        legend.title = element_text(size = 8),
+        legend.margin = margin(0,0,0,0)) 
+print(chlaplot2.Late.MN)
+
+chlaplot3.Late.MN <- ggplot() +
+  geom_sf(data = states.MN, fill = "white") +
+  geom_sf(data = LAGOS.MN.Summary.Late.sf, 
+          aes(size = Ag.pct, color = chla.mean),
+          alpha = 0.4, show.legend = "point") +
+  scale_color_viridis_c(option = "inferno") +
+  labs(color = "Average \n Chla \n Depth (m)", 
+       size = "Agricultural \n Area \n %") +
+  theme(legend.position = "right", legend.text = element_text(size = 7),
+        legend.title = element_text(size = 8),
+        legend.margin = margin(0,0,0,0)) 
+print(secchiplot3.Late.MN)
+
+
+
+```
 
 
 \newpage
