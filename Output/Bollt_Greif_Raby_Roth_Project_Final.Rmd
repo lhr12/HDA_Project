@@ -699,6 +699,34 @@ kable(LAGOS.MN.LakesperRegion.Late, caption = "Number of lakes with available se
 <Each figure should be accompanied by a caption, and each figure should be referenced within the text>
 
 Before creating our models, we tested for autocorrelation between all of our variables to make sure none of them needed to be excluded. Then, we tested for normality of the distribution of our variables using qqplots and Shaprio-Wilkes tests. We used the function BestNormalize to determine what the best transformation for each variable would be if it were needed and used that transformation accordingly. We log-transformed chlorophyll a and secchi depth. We did not find an effective transformation for our land use variables or the lake IWS ratio, which we expected because they are proportion and ratio values. Therefore, we used them in our models with their original distributions. 
+
+```{r echo=FALSE, warning=FALSE}
+#Early
+LAGOS.MN.processed.Early <- read.csv("./data/processed/LAGOS.MN.processed.Early.csv")
+#Late
+LAGOS.MN.processed.Late <-read.csv("./data/processed/LAGOS.MN.processed.Late.csv")
+#Prime
+LAGOS.MN.processed.Prime <-read.csv("./data/processed/LAGOS.MN.processed.Prime.csv")
+
+early.model.variables <- LAGOS.MN.processed.Early %>%
+  select(chla, secchi, IntenseUrban.pct, OpenUrban.pct, Barren.pct, Forest.pct,
+         GrassShrub.pct, Wetland.pct, Pasture.pct, RowCrop.pct, LakeIWS.Ratio, Ecoregion)
+prime.model.variables <- LAGOS.MN.processed.Prime %>%
+  select(chla, secchi, IntenseUrban.pct, OpenUrban.pct, Barren.pct, Forest.pct,
+         GrassShrub.pct, Wetland.pct, Pasture.pct, RowCrop.pct, LakeIWS.Ratio, Ecoregion)
+late.model.variables <- LAGOS.MN.processed.Late %>%
+  select(chla, secchi, IntenseUrban.pct, OpenUrban.pct, Barren.pct, Forest.pct,
+         GrassShrub.pct, Wetland.pct, Pasture.pct, RowCrop.pct, LakeIWS.Ratio, Ecoregion)
+
+#pairs(early.model.variables, lower.panel = panel.smooth, 
+#      upper.panel = panel.cor, diag.panel = panel.hist)
+#pairs(prime.model.variables, lower.panel = panel.smooth, 
+#       upper.panel = panel.cor, diag.panel = panel.hist)
+#pairs(late.model.variables, lower.panel = panel.smooth, 
+#      upper.panel = panel.cor, diag.panel = panel.hist)
+```
+
+
 For our analysis, we ran mixed effect linear models with land use as fixed effects and ecoregion as random effects in order to account for variability between ecoregions without considering each ecoregion as its own factor. We created models for both Chlorophyll a and Secchi depth as response variables for each of the three seasons making a total of six models. To determine the most parsimonious models, we eliminated non-significant variables with the highest p-values one by one until all remaining variables were significant. To check that this model was the best fit for the data, we ran an ANOVA on all of the models together to determine which model had the lowest AIC. If our simplest model had the lowest AIC or it’s AIC was not more than 3 points away from the lowest score, we chose that model as our best fit. 
 
 
@@ -732,7 +760,7 @@ ggplot(LAGOS.MN.processed.Early) +
 
 The significant predictors of early season secchi depth are Open Urban Percent (p < 2.2 * 10^-16), Barren Percent (p = 0.0316103), Forest Percent (p = < 2.2 * 10^-16), Grass Shrub Percent (p = 0.0007119), and Lake IWS Ratio (p = 1.856 * 10^-7). The marginal R^2 = 0.1081, and the conditional R^2 = 0.2648.  This tells us that 16% of the variability in secchi depth in the early season can be explained by the variance of ecoregion. 
 
-```{r}
+```{r echo=FALSE, warning=FALSE}
 early.secchi.model3.5 <- lmer(log(secchi) ~ OpenUrban.pct + 
                           Barren.pct + Forest.pct + GrassShrub.pct +
                           LakeIWS.Ratio + (1|Ecoregion), 
@@ -751,7 +779,7 @@ ggplot(LAGOS.MN.processed.Early, aes(x=LakeIWS.Ratio, y=log(secchi))) +
 
 The significant predictors of prime season chlorophyll a are Intense Urban Percent (p < 2.2 * 10^-16), Open Urban Percent (p < 2.2 * 10^-16), Forest Percent (p < 2.2 * 10^-16), Grass Shrub Percent (p < 2.2 * 10^-16), Wetland Percent (p < 2.2 * 10^-16), Row Crop Percent (p < 2.2 * 10^-16), and Lake IWS Ratio (p < 2.2 *10^-16). The marginal R^2 = 0.1665 and the conditional R^2 = 0.2513. This tells us that 9% of the variability in prime season chlorophyll a can be explained by the variance of ecoregion.
 
-```{r}
+```{r echo=FALSE, warning=FALSE}
 prime.chla.model3.3 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
                           Forest.pct + GrassShrub.pct + Wetland.pct + 
                           RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
@@ -770,7 +798,7 @@ ggplot(LAGOS.MN.processed.Prime, aes(x=LakeIWS.Ratio, y=log(chla))) +
 
 The significant predictors of prime season secchi depth are Intense Urban Percent (p = 3.028 * 10^-7), Open Urban Percent (p < 2.2 * 10^-16), Barren Percent (p = 0.04061), Forest Percent (p < 2.2  10^-16), Grass Shrub Percent (p < 2.2 * 10^-16), Pasture Percent (p = 1.234 * 10^-8), Row Crop Percent (p < 2.2 * 10^-16), and Lake IWS Ratio (p < 2.2 *10^-16).  The marginal R^2 = 0.1241 and the conditional R^2 = 0.4032. This tells us that 28% of the variability in prime season secchi depth can be explained by the variance of ecoregion
 
-```{r}
+```{r echo=FALSE, warning=FALSE}
 prime.secchi.model3.2 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
                           Barren.pct + Forest.pct + GrassShrub.pct + 
                           Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
@@ -789,7 +817,7 @@ ggplot(LAGOS.MN.processed.Prime, aes(x=LakeIWS.Ratio, y=log(secchi))) +
 
 The significant predictors of late season chlorophyll a are Intense Urban Percent (p = 3.663* 10^-6), Open Urban Percent (p < 2.2 * 10^-16), Forest Percent (p < 2.2 * 10^-16), Grass Shrub Percent (p = 0.3.231 * 10^-5, coefficient = -0.02814891), Wetland Percent (p = 0.035393), and Lake IWS Ratio (p = 0.001653). The marginal R^2 = 0.1515 and the conditional R^2 = 0.2314. This tells us that 8% of the variability in late season chlorophyll a can be explained by the variance of ecoregion.
 
-```{r}
+```{r echo=FALSE, warning=FALSE}
 late.chla.model3.4 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
                           Forest.pct + GrassShrub.pct + Wetland.pct + 
                           LakeIWS.Ratio + (1|Ecoregion), 
@@ -808,7 +836,7 @@ ggplot(LAGOS.MN.processed.Late, aes(x=LakeIWS.Ratio, y=log(chla))) +
 
 The significant predictors of late season chlorophyll a are Intense Urban Percent (p = 0.03779), Open Urban Percent (p < 2.2 * 10^-16), Forest Percent (p < 2.2 * 10^-16), Grass Shrub Percent (p = 8.468 * 10^-5), and Lake IWS ratio (p = 3.170 * 10^-6). The marginal R^2 = 0.1595 and the conditional R^2 = 0.1889. This tells us that 3% of the variability in late season secchi depth can be explained by the variance of ecoregion. 
 
-```{r}
+```{r echo=FALSE, warning=FALSE}
 late.secchi.model3.5 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
                           Forest.pct + GrassShrub.pct + 
                           LakeIWS.Ratio + (1|Ecoregion), 
@@ -830,10 +858,10 @@ ggplot(LAGOS.MN.processed.Late, aes(x=LakeIWS.Ratio, y=log(secchi))) +
 # Summary and Conclusions
 <Summarize your major findings from your analyses in a few paragraphs. What conclusions do you draw from your findings? Relate your findings back to the original research questions and rationale.>
 
-The aim of this project was to examine the impacts that land use had on water quality in Minnesota and if there was a seasonal characterization of these effects. Our findings support some of our hypotheses and does not support others. Our initial assumption as reflected in hypotheses 1a, 1b, and 1c was that urbanized and agricultural land would negatively impact water quality, and forest and natural lands have positive impact on water quality. We also predicted in hypothesis 2 that we would see seasonal variation in our results. Our results are less clear cut than our hypotheses predicted they would be.
-Our second hypothesis is largely supported by our statistical tests. We found a difference between seasons in our dataset. Observe in Table 7 that no two seasons for the two variables we looked at found the exact same variance coefficient. In many cases, the difference in coefficients was quite large, while in other cases the difference was close to negligible and potentially the result of unaccounted for variation or statistical noise. Observe our findings for Forest land cover. Prime and late season have similar results for both chlorophyll a and secchi depth, but these two values are quite different than the value for early season. In many cases, we found different significant land uses for the same dependent variable for different seasons. For example, we found that Intense Urban only has statistically significant coefficients for the prime and late seasons. We also found that prime has highest number of significant variables
+   The aim of this project was to examine the impacts that land use had on water quality in Minnesota and if there was a seasonal characterization of these effects. Our findings support some of our hypotheses and does not support others. Our initial assumption as reflected in hypotheses 1a, 1b, and 1c was that urbanized and agricultural land would negatively impact water quality, and forest and natural lands have positive impact on water quality. We also predicted in hypothesis 2 that we would see seasonal variation in our results. Our results are less clear cut than our hypotheses predicted they would be.
+   Our second hypothesis is largely supported by our statistical tests. We found a difference between seasons in our dataset. Observe in Table 7 that no two seasons for the two variables we looked at found the exact same variance coefficient. In many cases, the difference in coefficients was quite large, while in other cases the difference was close to negligible and potentially the result of unaccounted for variation or statistical noise. Observe our findings for Forest land cover. Prime and late season have similar results for both chlorophyll a and secchi depth, but these two values are quite different than the value for early season. In many cases, we found different significant land uses for the same dependent variable for different seasons. For example, we found that Intense Urban only has statistically significant coefficients for the prime and late seasons. We also found that prime has highest number of significant variables
 Our first hypothesis is partially supported by our statistical tests. Observe from Table 7 that our findings do not support our hypotheses 1a, 1b, and 1c for all the land uses that we looked at. Our initial assumption was that agricultural and urbanized land would negatively impact water quality, and forest and natural lands would have a positive impact on water quality. We found that land use has significant impact on both response variables and that an increase in chlorophyll a was paired with a decrease in secchi depth in all but one case (row crop, early). These impacts were sometimes but not always in the direction our hypotheses predicted. 
-Row crop showed increasing chlorophyll a in the early season, decreasing in prime, and was not significant in late. If hypothesis 1b, which dealt with agricultural land use, was to be true, we would have predicted to see increasing chlorophyll a for all three seasons. It is worth noting that the China study by Huang et al. (2013) found a similarly complex result from agricultural land use. We found several other noteworthy similarities and differences between our hypotheses 1a, 1b, and 1c:
+   Row crop showed increasing chlorophyll a in the early season, decreasing in prime, and was not significant in late. If hypothesis 1b, which dealt with agricultural land use, was to be true, we would have predicted to see increasing chlorophyll a for all three seasons. It is worth noting that the China study by Huang et al. (2013) found a similarly complex result from agricultural land use. We found several other noteworthy similarities and differences between our hypotheses 1a, 1b, and 1c:
 
 Similarities to hypotheses:
 
@@ -848,7 +876,7 @@ Differences from hypotheses:
 *	Open urban improves in all seasons
 *	Row crop improves water quality in prime season
 
-A major limitation of this study is that it does not consider all of the factors contributing to water quality. This can be seen in our relatively low R^2 values for all of our models. Another limitation is the uneven distribution of lakes across the three ecoregions. Ecoregions with less lakes will not be as thoroughly accounted for by this study, and therefore other water quality issues, such as those related to groundwater, are not captured by this dataset. These limitations should be considered when developing further studies and governing policies. Future studies could use more up to date land cover or alternatively examine the effects of changes in land cover over time 
+   A major limitation of this study is that it does not consider all of the factors contributing to water quality. This can be seen in our relatively low R^2 values for all of our models. Another limitation is the uneven distribution of lakes across the three ecoregions. Ecoregions with less lakes will not be as thoroughly accounted for by this study, and therefore other water quality issues, such as those related to groundwater, are not captured by this dataset. These limitations should be considered when developing further studies and governing policies. Future studies could use more up to date land cover or alternatively examine the effects of changes in land cover over time 
 
 
 
