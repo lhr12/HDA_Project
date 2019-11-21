@@ -46,7 +46,7 @@ We selected only the variables that we need to answer our research questions. Th
 ###Dependent Variables: 
 * Secchi Depth (m): This variable measures the visibility of the water column, by using a secchi disk. Its units are meters. Along with Chlorophyll a concentration, secchi depth is one of two dependent variables in our study; we are considering it a proxy of land use. We will be using it to test research questions 1+2.
 
-* Chlorophyll a (mg/L): This variable measures the Chlorophyll a concentration in a water quality sample. Its units are mg/L. Along with secchi depth, Chlorophyll a concentration is one of two dependent variables in our study; we are considering it a proxy of land use. We will be using it to test research questions 1+2.
+* Chlorophyll a (μg/L): This variable measures the Chlorophyll a concentration in a water quality sample. Its units are μg/L. Along with secchi depth, Chlorophyll a concentration is one of two dependent variables in our study; we are considering it a proxy of land use. We will be using it to test research questions 1+2.
 
 ###Independent Variables:
 We are testing our hypotheses surrounding varying land use by comparing nitrogen and phosphorus concentrations by land use/land cover. We are using 2011 USGS land use/land cover information as it is listed in LAGOSNE. For more information about the USGS's 2011 classification scheme, visit

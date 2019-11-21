@@ -59,11 +59,11 @@ theme_set(theme_classic())
 
 # Load your datasets
 #Early
-LAGOS.MN.processed.Early <- read.csv("./data/processed/LAGOS.MN.processed.Early.csv")
+LAGOS.MN.processed.Early <- read.csv("../data/processed/LAGOS.MN.processed.Early.csv")
 #Late
-LAGOS.MN.processed.Late <-read.csv("./data/processed/LAGOS.MN.processed.Late.csv")
+LAGOS.MN.processed.Late <-read.csv("../data/processed/LAGOS.MN.processed.Late.csv")
 #Prime
-LAGOS.MN.processed.Prime <-read.csv("./data/processed/LAGOS.MN.processed.Prime.csv")
+LAGOS.MN.processed.Prime <-read.csv("../data/processed/LAGOS.MN.processed.Prime.csv")
 ```
 
 
@@ -80,8 +80,8 @@ Land use has a large impact on nutrient runoff into streams, lakes, and other wa
 Research Questions:
 	In order to evaluate the relationship between land use wand lacustrine water quality in the state of Minnesota, we asked the following two questions to help guide our research:
 1.	What are the predictors of nutrients based on land use in watersheds in the state of Minnesota?
-Hypothesis 1a: The percentage of urbanized land in a lake’s watershed in the state of Minnesota will have a statistically significant negative effect on water quality, as measured by higher Chlorophyll a concentrations and lower secchi depth measurements.
-Hypothesis 1b: The percentage of agricultural land in a lake’s watershed in the state of Minnesota will have a statistically significant negative effect on water quality, as measured by higher Chlorophyll a concentrations and lower secchi depth measurements.
+Hypothesis 1a: The percentage of urbanized land in a lake’s watershed in the state of Minnesota will have a statistically significant negative effect on water quality, as measured by higher chlorophyll a concentrations and lower secchi depth measurements.
+Hypothesis 1b: The percentage of agricultural land in a lake’s watershed in the state of Minnesota will have a statistically significant negative effect on water quality, as measured by higher chlorophyll a concentrations and lower secchi depth measurements.
 2.	How do you characterize seasonal variation between the predictors of nutrients?
 Hypothesis 2: The water quality in Minnesota lakes will demonstrate a statistically significant seasonal pattern.
 
@@ -111,7 +111,7 @@ Ecoregions are developed by the US Environmental Protection Agency and are used 
 
 
 ```{r ,echo=FALSE}
-Variables.table <- read.csv("./Output/Variable_Descriptions_Table.csv")
+Variables.table <- read.csv("../Output/Variable_Descriptions_Table.csv")
 library(knitr)
 kable(Variables.table)
 ```
@@ -127,10 +127,11 @@ kable(Variables.table)
 
 We came in to our exploratory analysis knowing we wanted to look at how water quality was affected by varying land use. Our exploratory analysis had four main goals: selecting a study area, selecting a study period, selecting what land use classifications (independent variables) and water quality proxies (dependent variables) to study, and preparing a dataframe to test our research questions and hypotheses.
 	Our first step was to load the LAGOSNE data columns we though we would need and to look at how much data each state in our study contained. We decided on Minnesota because of its high number of lakes in the LAGOSNE dataset, and its high land use variation. We observed that the latest land use classification by USGS was from 2011; the second oldest was from 2006. Therefore, we limited our study to the period from 2009 through 2015 inclusive, so we did not extrapolate too much from our 2011 land use dataset. 
-	We filtered out just the variables we wanted for our study and created a “LAGOS.MN.processed” dataframe. We decided to use Chlorophyll a and secchi depth as proxies of water quality after we visualized our data and confirmed that we had enough data on these two variables in Minnesota between 2009 and 2015 to make claims about land use and water quality; in fact we had over 19,000 lakes with data. We decided what land uses we cared about, based on our background readings and prior knowledge of water quality and land use, grouped some land uses together, and assigned them names in our dataframe. We also created an IWS ratio column, which is the lake area divided by watershed area. We reasoned a big lake in a small watershed would be affected by land use differently than a small lake in a big watershed, and we wanted this to be captured in our analysis.
+	We filtered out just the variables we wanted for our study and created a “LAGOS.MN.processed” dataframe. We decided to use chlorophyll a and secchi depth as proxies of water quality after we visualized our data and confirmed that we had enough data on these two variables in Minnesota between 2009 and 2015 to make claims about land use and water quality; in fact we had over 19,000 lakes with data. Observe in Figure 1 and Table 2 that secchi depth data in Minnesota is available for a large number of lakes and for a large portion of the year, with gaps in the data every winter. Observe in Figure 2 and Table 3 a similar pattern in data availability for chlorophyll a. We decided what land uses we cared about, based on our background readings and prior knowledge of water quality and land use, grouped some land uses together, and assigned them names in our dataframe. We also created an IWS ratio column, which is the lake area divided by watershed area. We reasoned a big lake in a small watershed would be affected by land use differently than a small lake in a big watershed, and we wanted this to be captured in our analysis.
 	Our next step was to create a growing “seasons” column in order to account for seasonality in our statistical models. We divided up the calendar year into three bins: Early (May 15 and Before), Prime (May 16 - September 30), and Late (October 1 and later). These season designations are somewhat arbitrary, but are based off of our prior knowledge of when the prime biological growing season is in Minnesota. We created a dataframe for each of the three seasons. 
-	At this point, we visualized land use percentage versus secchi depth and versus Chlorophyll a for three representative land uses for the Late season. We were hoping to visually confirm that we might find a trend when we ran our statistical tests in our analysis section. We found that some ggplots showed a possible trend, whereas some ggplots did not appear to show a trend. This told us that we had, in fact selected useful land use classifications and useful seasonal demarcations. We performed a summary function, and gave all of our columns useful names and removed NAs. Our statistical tests would not all run if our dataset contained NAs.The next step we performed was to convert our dataframes to sf dataframes so we could add Level II ecoregion column.
-	Our final exploratory analysis test was to see if we had enough lake data for each Level II ecoregion for each of our three seasons. We created three tables, one for each season, with a lake sample count for each ecoregion. From these tables, we learned that we had enough data to proceed with our statistical analysis, and therefore Level II ecoregions were the correct resolution for our study. We also displayed this information spatially. We discovered that there are a large number of lake samples around the Twin Cities area, and that there is enough spatial variation in our data to capture the three different Level II ecoregions for all three of our seasons. We concluded our data wrangling by exporting our three non-sf season processed dataframes as csv files to our processed data folder.
+	Next, we visualized land use percentage versus secchi depth and versus chlorophyll a for three representative land uses for the Late season. We aimed to visually confirm that we might find a relationship between land use and our two response variables when we ran our statistical tests in our analysis section. Specifically, we expected to see an increase in secchi depth and a decrease in chlorophyll a with an increasing percentage of undeveloped land. Figures 3 and 4 explore the trends in secchi depth and chlorophyll a by the percentage of each land use type in the late season. The late season was chosen for exploration because it had to lowest and highest mean secchi depth and mean chlorophyll a, respectively. Observe in Figure 3 (secchi depth) and Figure 4 (chlorophyll a) that some ggplots showed a possible relationship between some land uses and our response variables in the directions that we predicted in Hypotheses 1a and 1b, whereas some ggplots did not appear to show a relationship. 
+  Because of the presense of some relationships in Figures 3 and 4, we determined that we had, in fact selected useful land use classifications and useful seasonal demarcations. We performed a summary function, and gave all of our columns useful names and removed NAs. Our statistical tests would not all run if our dataset contained NAs.The next step we performed was to convert our dataframes to sf dataframes so we could add Level II ecoregion column.
+	Our final exploratory analysis test was to see if we had enough lake data for each Level II ecoregion for each of our three seasons. We created three tables, one for each season, with a lake sample count for each ecoregion. See Tables 4, 5, and 6. From these tables, we learned that we had enough data to proceed with our statistical analysis, and therefore Level II ecoregions were the correct resolution for our study. We also displayed this information spatially in Figures 5, 6, and 7; each figure corresponds to a different season. We discovered that there are a large number of lake samples around the Twin Cities area, and that there is enough spatial variation in our data to capture the three different Level II ecoregions for all three of our seasons. We concluded our data wrangling by exporting our three non-sf season processed dataframes as csv files to our processed data folder.
 ```{r Setup_Load_Data,echo=FALSE, warning=FALSE}
 # Load lagos data
 LAGOSdata <- lagosne_load()
@@ -233,7 +234,7 @@ kable(secchi.count, caption = "Number of secchi depth measurements in each of th
 ggplot(LAGOSiws.nutrient.2011.MN, 
        aes(x = sampledate, y = chla)) +
   geom_point(alpha = 0.2) +
-  labs(y = "Chlorophyll a (ug/L)", x = "Year")
+  labs(y = expression("Chlorophyll a" (mu*g / L)), x = "Year")
 ```
 
 ```{r echo=FALSE, warning=FALSE}
@@ -526,10 +527,6 @@ grid.arrange(chla.int.urb.late, chla.open.urb.late, chla.barren.late,
              chla.past.late, chla.row.crop.late)
 ```
 
-Figures XX and YY explore the trends in secchi depth and chlorophyll a by the percentage of each land use type in the late season. The late season was chosen for exploration because it had to lowest and highest mean secchi depth and mean chlorophyll a, respectively. 
-
-
-FRA Comment: Next plot main purpose is to check is we have enough data in each ecoregion.
 
 ```{r echo=FALSE, warning=FALSE}
 #creating tables number of lakes per ecoregions
@@ -672,88 +669,6 @@ print(Late.MN)
 ```{r echo=FALSE, warning=FALSE}
 kable(LAGOS.MN.LakesperRegion.Late, caption = "Number of lakes with available secchi depth and/or chlorophyll a data in each Ecoregion during the 'Late Season.'")
 ```
-
-
-
-
-
-FRA Comment: The next plot where the one we did for the proposal. We have to see if we want them
-JG Comment: Code that's referred to in the comment above is NOT included.
-
-
-```{r summary.for.late.season2, fig.height = 4, fig.width = 6,  fig.cap = "These plots shows that there are trends in chlorophyll a concentrations relative to the given land uses during the 'Late Season'. The presence of trends supports the inclusion of the above land uses in the analysis. Note that the x-axes are on different scales.", message=FALSE, warning=FALSE, eval=FALSE}
-secchiplot2.Late.MN <- ggplot() +
-  geom_sf(data = states.MN, fill = "white") +
-  geom_sf(data = LAGOS.MN.Summary.Late.sf, 
-          aes(size = Urban.pct, color = secchi.mean),
-          alpha = 0.4, show.legend = "point") +
-  scale_color_viridis_c(option = "inferno") +
-  labs(color = "Average \n Secchi \n Depth (m)", 
-       size = "Urban \n Area \n %") +
-  theme(legend.position = "right", legend.text = element_text(size = 7),
-        legend.title = element_text(size = 8),
-        legend.margin = margin(0,0,0,0)) 
-print(secchiplot2.Late.MN)
-
-secchiplot3.Late.MN <- ggplot() +
-  geom_sf(data = states.MN, fill = "white") +
-  geom_sf(data = LAGOS.MN.Summary.Late.sf, 
-          aes(size = Ag.pct, color = secchi.mean),
-          alpha = 0.4, show.legend = "point") +
-  scale_color_viridis_c(option = "inferno") +
-  labs(color = "Average \n Secchi \n Depth (m)", 
-       size = "Agricultural \n Area \n %") +
-  theme(legend.position = "right", legend.text = element_text(size = 7),
-        legend.title = element_text(size = 8),
-        legend.margin = margin(0,0,0,0)) 
-print(secchiplot3.Late.MN)
-
-
-
-
-chlaplot1.Late.MN <- ggplot() +
-  geom_sf(data = states.MN, fill = "white") +
-  geom_sf(data = LAGOS.MN.Summary.Late.sf, 
-          aes(size = Undeveloped.pct, color = chla.mean),
-          alpha = 0.4, show.legend = "point") +
-  scale_color_viridis_c(option = "inferno") +
-  labs(color = "Average \n Chla \n Depth (m)", 
-       size = "Undeveloped \n Area \n %") +
-  theme(legend.position = "right", legend.text = element_text(size = 7),
-        legend.title = element_text(size = 8),
-        legend.margin = margin(0,0,0,0)) 
-print(chlaplot1.Late.MN)
-
-chlaplot2.Late.MN <- ggplot() +
-  geom_sf(data = states.MN, fill = "white") +
-  geom_sf(data = LAGOS.MN.Summary.Late.sf, 
-          aes(size = Urban.pct, color = chla.mean),
-          alpha = 0.4, show.legend = "point") +
-  scale_color_viridis_c(option = "inferno") +
-  labs(color = "Average \n Chla \n Depth (m)", 
-       size = "Urban \n Area \n %") +
-  theme(legend.position = "right", legend.text = element_text(size = 7),
-        legend.title = element_text(size = 8),
-        legend.margin = margin(0,0,0,0)) 
-print(chlaplot2.Late.MN)
-
-chlaplot3.Late.MN <- ggplot() +
-  geom_sf(data = states.MN, fill = "white") +
-  geom_sf(data = LAGOS.MN.Summary.Late.sf, 
-          aes(size = Ag.pct, color = chla.mean),
-          alpha = 0.4, show.legend = "point") +
-  scale_color_viridis_c(option = "inferno") +
-  labs(color = "Average \n Chla \n Depth (m)", 
-       size = "Agricultural \n Area \n %") +
-  theme(legend.position = "right", legend.text = element_text(size = 7),
-        legend.title = element_text(size = 8),
-        legend.margin = margin(0,0,0,0)) 
-print(secchiplot3.Late.MN)
-
-
-
-```
-
 
 \newpage
 
