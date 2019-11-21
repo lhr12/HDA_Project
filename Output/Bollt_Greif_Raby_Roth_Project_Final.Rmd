@@ -294,39 +294,7 @@ LAGOS.MN.processed  <- LAGOS.MN.processed %>%
 ```
 
 
-```{r Adding_Ecoregions2, echo=FALSE, warning=FALSE, eval=FALSE}
-LAGOS.MN.processed.sf <- st_as_sf(LAGOS.MN.processed, coords = c("nhd_long", "nhd_lat"), crs = 4326)
-
-LAGOS.MN.processed.UTM.sf <- st_transform(LAGOS.MN.processed.sf, crs=32615)
-
-#Loading US Ecoregions Level II
-US.Ecoregions.sf <- st_read('./Data/Raw/NA_CEC_Eco_Level2.shp')
-
-US.Ecoregions.sf_UTM <- st_transform(US.Ecoregions.sf, crs=32615) 
-
-
-#Loading the MN state boundary  
-# generate a map of U.S. states
-states <- st_as_sf(map(database = "state", plot = FALSE, fill = TRUE, col = "white"))
-
-# filter MN
-states.MN <- filter(states, ID %in%
-c("minnesota"))
-
-states.MN_UTM <- st_transform(states.MN, crs=32615) 
-
-#Ecoregions level II for Minnesota
-MN.Ecoregions.sf_UTM <- st_intersection(US.Ecoregions.sf_UTM, states.MN_UTM)
-
-#Selecting level 2 ecoregions names
-MN.Ecoregions.sf_UTM <- select(MN.Ecoregions.sf_UTM, NA_L2NAME)
-colnames(MN.Ecoregions.sf_UTM)[1] <- "Ecoregion"
-
-LAGOS.MN.processed.sf <- st_join(LAGOS.MN.processed.UTM.sf, MN.Ecoregions.sf_UTM)
-LAGOS.MN.processed.sf <- na.omit(LAGOS.MN.processed.sf)
-```
-
-```{r Adding_Ecoregions,echo=FALSE, warning=FALSE}
+```{r Adding_Ecoregions, echo=FALSE, warning=FALSE, eval=FALSE}
 LAGOS.MN.processed.sf <- st_as_sf(LAGOS.MN.processed, coords = c("nhd_long", "nhd_lat"), crs = 4326)
 
 LAGOS.MN.processed.UTM.sf <- st_transform(LAGOS.MN.processed.sf, crs=32615)
@@ -546,6 +514,13 @@ LAGOS.MN.LakesperRegion.Late <- LAGOS.MN.processed.Late.sf %>%
 st_geometry(LAGOS.MN.LakesperRegion.Early) <- NULL
 st_geometry(LAGOS.MN.LakesperRegion.Prime) <- NULL
 st_geometry(LAGOS.MN.LakesperRegion.Late) <- NULL
+
+write.csv(x =  LAGOS.MN.LakesperRegion.Early, row.names = FALSE,
+          file =  "./Output/LAGOS.MN.LakesperRegion.Early.csv")
+write.csv(x =  LAGOS.MN.LakesperRegion.Prime, row.names = FALSE,
+          file =  "./Output/LAGOS.MN.LakesperRegion.Prime.csv")
+write.csv(x =  LAGOS.MN.LakesperRegion.Late, row.names = FALSE,
+          file =  "./Output/LAGOS.MN.LakesperRegion.Late.csv")
 
 ```
 
