@@ -707,6 +707,9 @@ Before creating our models, we tested for autocorrelation between all of our var
  LAGOS.MN.processed.Late <-read.csv("./data/processed/LAGOS.MN.processed.Late.csv")
  #Prime
  LAGOS.MN.processed.Prime <-read.csv("./data/processed/LAGOS.MN.processed.Prime.csv")
+ 
+ LAGOS.MN.processed.Prime <- LAGOS.MN.processed.Prime %>% 
+   filter(chla > 0)
 
  early.model.variables <- LAGOS.MN.processed.Early %>%
    select(chla, secchi, IntenseUrban.pct, OpenUrban.pct, Barren.pct, Forest.pct,
@@ -718,7 +721,7 @@ Before creating our models, we tested for autocorrelation between all of our var
    select(chla, secchi, IntenseUrban.pct, OpenUrban.pct, Barren.pct, Forest.pct,
           GrassShrub.pct, Wetland.pct, Pasture.pct, RowCrop.pct, LakeIWS.Ratio, Ecoregion)
 
- #pairs(early.model.variables, lower.panel = panel.smooth,
+# pairs(early.model.variables, lower.panel = panel.smooth,
  #      upper.panel = panel.cor, diag.panel = panel.hist)
  #pairs(prime.model.variables, lower.panel = panel.smooth,
  #       upper.panel = panel.cor, diag.panel = panel.hist)
