@@ -72,18 +72,18 @@ LAGOS.MN.processed.Prime <-read.csv("./data/processed/LAGOS.MN.processed.Prime.c
 * * 
 Research Questions:
 	In order to evaluate the relationship between land use wand lacustrine water quality in the state of Minnesota, we asked the following two questions to help guide our research:
-1.	What are the predictors of nutrients based on land use in watersheds in the state of Minnesota?
-Hypothesis 1a: The percentage of urbanized land in a lake’s watershed in the state of Minnesota will have a statistically significant negative effect on water quality, as measured by higher chlorophyll a concentrations and lower secchi depth measurements.
-Hypothesis 1b: The percentage of agricultural land in a lake’s watershed in the state of Minnesota will have a statistically significant negative effect on water quality, as measured by higher chlorophyll a concentrations and lower secchi depth measurements.
-Hypothesis 1c: The precentage of undeveloped land in a lake’s watershed in the state of Minnesota will have a statistically significant positive effect on water quality, as measured by lower chlorophyll a concentrations and higher secchi depth measurements.
-2.	How do you characterize seasonal variation between the predictors of nutrients?
-Hypothesis 2: The water quality in Minnesota lakes will demonstrate a statistically significant seasonal pattern.
+* 1.	What are the predictors of nutrients based on land use in watersheds in the state of Minnesota?
+    * Hypothesis 1a: The percentage of urbanized land in a lake’s watershed in the state of Minnesota will have a statistically significant negative effect on water quality, as measured by higher chlorophyll a concentrations and lower secchi depth measurements.
+    * Hypothesis 1b: The percentage of agricultural land in a lake’s watershed in the state of Minnesota will have a statistically significant negative effect on water quality, as measured by higher chlorophyll a concentrations and lower secchi depth measurements.
+    * Hypothesis 1c: The precentage of undeveloped land in a lake’s watershed in the state of Minnesota will have a statistically significant positive effect on water quality, as measured by lower chlorophyll a concentrations and higher secchi depth measurements.
+* 2.	How do you characterize seasonal variation between the predictors of nutrients?
+    * Hypothesis 2: The water quality in Minnesota lakes will demonstrate a statistically significant seasonal pattern.
 
 Goals:
 	By testing our hypotheses, we aim to accomplish the following goals:
-1.	Determine how land use, watershed size, and ecoregion explain variation in nutrient loading indicators.
-2.	Discern whether there a seasonal trends in nutrient loading indicators based on land use types, watershed size, and ecoregion.
-3.	Provide insight to inform decisions about nutrient management practices based on land use types, watershed size, and ecoregion.
+* 1.	Determine how land use, watershed size, and ecoregion explain variation in nutrient loading indicators.
+* 2.	Discern whether there a seasonal trends in nutrient loading indicators based on land use types, watershed size, and ecoregion.
+* 3.	Provide insight to inform decisions about nutrient management practices based on land use types, watershed size, and ecoregion.
 
 
 \newpage
@@ -828,7 +828,8 @@ Differences from hypotheses:
 *	Open urban improves in all seasons
 *	Row crop improves water quality in prime season
 
-   A major limitation of this study is that it does not consider all of the factors contributing to water quality. This can be seen in our relatively low R^2 values for all of our models. Another limitation is the uneven distribution of lakes across the three ecoregions. Ecoregions with less lakes will not be as thoroughly accounted for by this study, and therefore other water quality issues, such as those related to groundwater, are not captured by this dataset. These limitations should be considered when developing further studies and governing policies. Future studies could use more up to date land cover or alternatively examine the effects of changes in land cover over time 
+   A major limitation of this study is that it does not consider all of the factors contributing to water quality. This can be seen in our relatively low R^2 values for all of our models. Another limitation is the uneven distribution of lakes across the three ecoregions. Ecoregions with less lakes will not be as thoroughly accounted for by this study, and therefore other water quality issues, such as those related to groundwater, are not captured by this dataset. These limitations should be considered when developing further studies and governing policies. Future studies could use more up to date land cover or alternatively examine the effects of changes in land cover over time.
+   Our findings offer potential insight for watershed managers in Minnesota, as well as in the Mississippi River basin. We were able to show in some cases that increasing the amount of developed land in a watershed decreases its water quality. In addition, our analysis found some seasonal variation in water quality. Taken together, these two findings suggest that land use management decisions in Minnesota potentially affect water quality far downstream of state lines. We recommend that managers consider increasing or slowing the decrease of undeveloped land in Minnesota. Managers also ought to be conscious of seasonal patterns in water quality impacts of land use. Potentially, states and Canadian provinces downstream of Minnesota could work together to improve land use practices at a watershed scale. The Mississippi River Basin Healthy Watershed Initiative was founded in 2009 and is a 13-state collaborative effort to pool resources from Farm Bill programs to improve water quality through nutrient management in the Mississippi River basin (Natural Resources Conservation Service, 2019). The Initiative is a strong step towards watershed-scale nutrient management, but it could benefit from an improved understanding of the types of effects different spatial and temporal land use management decisions have on downstream water quality.
 
 
 
@@ -841,6 +842,8 @@ Christensen, Victoria G., et al. "Relations between Retired Agricultural Land, W
 Huang, J., Zhan, J., Yan, H., Wu, F., Xiangzheng Deng, X. “Evaluation of the Impacts of Land	Use on Water Quality: A Case Study in The Chaohu Lake Basin,” The Scientific World	Journal, vol. 2013, Article ID 329187, 7 pages,	2013. https://doi.org/10.1155/2013/329187.
 
 Maalim, Fukhrudin K., Melesse, Assefa M., Belmont, Patrick., Gran, Karen B. "Modeling the	impact of land use changes on runoff and sediment yield in the Le Sueur watershed,	Minnesota using GeoWEPP." CATENA Volume 107, 2013, Pages 35	45, https://doi.org/10.1016/j.catena.2013.03.004.
+
+“Mississippi River Basin Healthy Watersheds Initiative-Natural Resources Conservation Service.” Natural Resources Conservation Service, www.nrcs.usda.gov/wps/portal/nrcs/detailfull/national/programs/initiatives/?cid=stelprdb1048200.
 
 “Nutrient Reduction Strategy.” Minnesota Pollution Control Agency, 6 Mar. 2019, www.pca.state.mn.us/water/nutrient-reduction-strategy#resources-b7ca91dc.
 
