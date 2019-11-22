@@ -664,8 +664,6 @@ Before creating our models, we tested for autocorrelation between all of our var
    select(chla, secchi, IntenseUrban.pct, OpenUrban.pct, Barren.pct, Forest.pct,
           GrassShrub.pct, Wetland.pct, Pasture.pct, RowCrop.pct, LakeIWS.Ratio, Ecoregion)
 
- #FINAL: Are we not showing the pairs plots? Are we showing something here?
- 
 # pairs(early.model.variables, lower.panel = panel.smooth,
  #      upper.panel = panel.cor, diag.panel = panel.hist)
  #pairs(prime.model.variables, lower.panel = panel.smooth,
@@ -692,9 +690,15 @@ Instead of splitting our results into two subsections, one for each research que
 
 The significant predictors of early season chlorophyll a are Open Urban Percent (p = 2.453 * 10^-5), Forest Percent (p < 2.2 * 10^-16), Pasture Percent (p = 2.853* 10^-5), Row Crop Percent (p = 0.04671), and Lake IWS Ratio (p = 2.737*10^-6). The marginal R^2 = 0.1058 (represents the variance explained by the fixed effects), and the conditional R^2 = 0.1058 (interpreted as a variance explained by the entire model, including both fixed and random effects). 
 
+FINAL: ADD Coef table (Analysis_Results.docx)
 
+Since the outcome variable of the model is log transformed, the coefficients must be exponentiated to be interpreted correctly. In table NNNNNN are presented the percentage increase or decrease that a 1% increase of the explanatory variables have on early season chlorophyll a.
 
-```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 3.3, fig.cap = "Early Season Chlorophyll a vs. Lake IWS Ratio and Mixed Effects Model"}
+FINAL: ADD Coef table (Analysis_Results.docx)
+
+In figure 8 is shown Early Season log Chlorophyll a vs. Lake IWS Ratio together with the Mixed Effects Model that we determined.
+
+```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 3.3, fig.cap = "Early Season log Chlorophyll a vs. Lake IWS Ratio and Mixed Effects Model"}
  early.chla.model3.5 <- lmer(log(chla) ~ OpenUrban.pct + 
                            Forest.pct +  
                            Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
@@ -713,7 +717,15 @@ The significant predictors of early season chlorophyll a are Open Urban Percent 
 
 The significant predictors of early season secchi depth are Open Urban Percent (p < 2.2 * 10^-16), Barren Percent (p = 0.0316103), Forest Percent (p = < 2.2 * 10^-16), Grass Shrub Percent (p = 0.0007119), and Lake IWS Ratio (p = 1.856 * 10^-7). The marginal R^2 = 0.1081, and the conditional R^2 = 0.2648.  This tells us that 16% of the variability in secchi depth in the early season can be explained by the variance of ecoregion. 
 
-```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 3.3, fig.cap = "Early Season Secchi Depth vs. Lake IWS Ratio and Mixed Effects Model"}
+FINAL: ADD Coef table (Analysis_Results.docx)
+
+Since the outcome variable of the model is log transformed, the coefficients must be exponentiated to be interpreted. In table NNNNNN are presented the percentage increase or decrease that a 1% increase of the explanatory variables have on early season secchi depth.
+
+FINAL: ADD Coef table (Analysis_Results.docx)
+
+In figure 9 is shown Early Season log Secchi Depth vs. Lake IWS Ratio together with the Mixed Effects Model that we determined.
+
+```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 3.3, fig.cap = "Early Season log Secchi Depth vs. Lake IWS Ratio and Mixed Effects Model"}
 early.secchi.model3.5 <- lmer(log(secchi) ~ OpenUrban.pct + 
                            Barren.pct + Forest.pct + GrassShrub.pct +
                            LakeIWS.Ratio + (1|Ecoregion), 
@@ -732,7 +744,15 @@ early.secchi.model3.5 <- lmer(log(secchi) ~ OpenUrban.pct +
 
 The significant predictors of prime season chlorophyll a are Intense Urban Percent (p < 2.2 * 10^-16), Open Urban Percent (p < 2.2 * 10^-16), Forest Percent (p < 2.2 * 10^-16), Grass Shrub Percent (p < 2.2 * 10^-16), Wetland Percent (p < 2.2 * 10^-16), Row Crop Percent (p < 2.2 * 10^-16), and Lake IWS Ratio (p < 2.2 *10^-16). The marginal R^2 = 0.1665 and the conditional R^2 = 0.2513. This tells us that 9% of the variability in prime season chlorophyll a can be explained by the variance of ecoregion.
 
-```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 3.3, fig.cap = "Prime Season Chlorophyll a vs. Lake IWS Ratio and Mixed Effects Model"}
+FINAL: ADD Coef table (Analysis_Results.docx)
+
+Since the outcome variable of the model is log transformed, the coefficients must be exponentiated to be interpreted. In table NNNNNN are presented the percentage increase or decrease that a 1% increase of the explanatory variables have on prime season chlorophyll a.
+
+FINAL: ADD Coef table (Analysis_Results.docx)
+
+In figure 10 is shown Prime Season log Chlorophyll a vs. Lake IWS Ratio together with the Mixed Effects Model that we determined.
+
+```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 3.3, fig.cap = "Prime Season log Chlorophyll a vs. Lake IWS Ratio and Mixed Effects Model"}
  prime.chla.model3.3 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
                            Forest.pct + GrassShrub.pct + Wetland.pct + 
                            RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
@@ -749,9 +769,17 @@ The significant predictors of prime season chlorophyll a are Intense Urban Perce
 
 ### Prime Season Secchi Depth
 
-The significant predictors of prime season secchi depth are Intense Urban Percent (p = 3.028 * 10^-7), Open Urban Percent (p < 2.2 * 10^-16), Barren Percent (p = 0.04061), Forest Percent (p < 2.2  10^-16), Grass Shrub Percent (p < 2.2 * 10^-16), Pasture Percent (p = 1.234 * 10^-8), Row Crop Percent (p < 2.2 * 10^-16), and Lake IWS Ratio (p < 2.2 *10^-16).  The marginal R^2 = 0.1241 and the conditional R^2 = 0.4032. This tells us that 28% of the variability in prime season secchi depth can be explained by the variance of ecoregion
+The significant predictors of prime season secchi depth are Intense Urban Percent (p = 3.028 * 10^-7), Open Urban Percent (p < 2.2 * 10^-16), Barren Percent (p = 0.04061), Forest Percent (p < 2.2  10^-16), Grass Shrub Percent (p < 2.2 * 10^-16), Pasture Percent (p = 1.234 * 10^-8), Row Crop Percent (p < 2.2 * 10^-16), and Lake IWS Ratio (p < 2.2 *10^-16).  The marginal R^2 = 0.1241 and the conditional R^2 = 0.4032. This tells us that 28% of the variability in prime season secchi depth can be explained by the variance of ecoregion.
 
-```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 3.3, fig.cap = "Prime Season Secchi Depth vs. Lake IWS Ratio and Mixed Effects Model"}
+FINAL: ADD Coef table (Analysis_Results.docx)
+
+Since the outcome variable of the model is log transformed, the coefficients must be exponentiated to be interpreted. In table NNNNNN are presented the percentage increase or decrease that a 1% increase of the explanatory variables have on prime season secchi depth.
+
+FINAL: ADD Coef table (Analysis_Results.docx)
+
+In figure 11 is shown Prime Season log Secchi Depth vs. Lake IWS Ratio together with the Mixed Effects Model that we determined.
+
+```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 3.3, fig.cap = "Prime Season log Secchi Depth vs. Lake IWS Ratio and Mixed Effects Model"}
  prime.secchi.model3.2 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
                            Barren.pct + Forest.pct + GrassShrub.pct + 
                            Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
@@ -770,7 +798,17 @@ The significant predictors of prime season secchi depth are Intense Urban Percen
 
 The significant predictors of late season chlorophyll a are Intense Urban Percent (p = 3.663* 10^-6), Open Urban Percent (p < 2.2 * 10^-16), Forest Percent (p < 2.2 * 10^-16), Grass Shrub Percent (p = 0.3.231 * 10^-5, coefficient = -0.02814891), Wetland Percent (p = 0.035393), and Lake IWS Ratio (p = 0.001653). The marginal R^2 = 0.1515 and the conditional R^2 = 0.2314. This tells us that 8% of the variability in late season chlorophyll a can be explained by the variance of ecoregion.
 
-```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 3.3, fig.cap = "Late Season Chlorophyll a vs. Lake IWS Ratio and Mixed Effects Model"}
+FINAL: ADD Coef table (Analysis_Results.docx)
+
+Since the outcome variable of the model is log transformed, the coefficients must be exponentiated to be interpreted. In table NNNNNN are presented the percentage increase or decrease that a 1% increase of the explanatory variables have on late season chlorophyll a.
+
+FINAL: ADD Coef table (Analysis_Results.docx)
+
+In figure 12 is shown Late Season log Chlorophyll a vs. Lake IWS Ratio together with the Mixed Effects Model that we determined.
+
+
+
+```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 3.3, fig.cap = "Late Season log Chlorophyll a vs. Lake IWS Ratio and Mixed Effects Model"}
 late.chla.model3.4 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
                            Forest.pct + GrassShrub.pct + Wetland.pct + 
                            LakeIWS.Ratio + (1|Ecoregion), 
@@ -789,7 +827,16 @@ late.chla.model3.4 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct +
 
 The significant predictors of late season chlorophyll a are Intense Urban Percent (p = 0.03779), Open Urban Percent (p < 2.2 * 10^-16), Forest Percent (p < 2.2 * 10^-16), Grass Shrub Percent (p = 8.468 * 10^-5), and Lake IWS ratio (p = 3.170 * 10^-6). The marginal R^2 = 0.1595 and the conditional R^2 = 0.1889. This tells us that 3% of the variability in late season secchi depth can be explained by the variance of ecoregion. 
 
-```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 3.3, fig.cap = "Late Season Secchi Depth vs. Lake IWS Ratio and Mixed Effects Model"}
+FINAL: ADD Coef table (Analysis_Results.docx)
+
+Since the outcome variable of the model is log transformed, the coefficients must be exponentiated to be interpreted. In table NNNNNN are presented the percentage increase or decrease that a 1% increase of the explanatory variables have on late season secchi.
+
+FINAL: ADD Coef table (Analysis_Results.docx)
+
+In figure 13 is shown Late Season log Secchi Depth vs. Lake IWS Ratio together with the Mixed Effects Model that we determined.
+
+
+```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 3.3, fig.cap = "Late Season log Secchi Depth vs. Lake IWS Ratio and Mixed Effects Model"}
  late.secchi.model3.5 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
                            Forest.pct + GrassShrub.pct + 
                            LakeIWS.Ratio + (1|Ecoregion), 

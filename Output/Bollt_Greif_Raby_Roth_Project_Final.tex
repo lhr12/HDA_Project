@@ -216,8 +216,8 @@ Column.Name & Description & Units & Variable.Type\tabularnewline
 Column.Name & Description & Units & Variable.Type\tabularnewline
 \midrule
 \endhead
-chla & Chlorophyll a & mg/L & Dependent\tabularnewline
-secchi & Secchi depth & m & Dependent\tabularnewline
+chla & Chlorophyll a & microgram per liter & Dependent\tabularnewline
+secchi & Secchi depth & meter & Dependent\tabularnewline
 IntenseUrban.pct & Percent med. and high intensity urban land cover & \%
 & Independent\tabularnewline
 OpenUrban.pct & Percent developed & \% & Independent\tabularnewline
@@ -552,6 +552,19 @@ Percent (p = 2.453 * 10\^{}-5), Forest Percent (p \textless{} 2.2 *
 conditional R\^{}2 = 0.1058 (interpreted as a variance explained by the
 entire model, including both fixed and random effects).
 
+FINAL: ADD Coef table (Analysis\_Results.docx)
+
+Since the outcome variable of the model is log transformed, the
+coefficients must be exponentiated to be interpreted correctly. In table
+NNNNNN are presented the percentage increase or decrease that a 1\%
+increase of the explanatory variables have on early season chlorophyll
+a.
+
+FINAL: ADD Coef table (Analysis\_Results.docx)
+
+In figure NNNNNN is shown Early Season log Chlorophyll a vs.~Lake IWS
+Ratio together with the Mixed Effects Model that we determined.
+
 \begin{verbatim}
 ## boundary (singular) fit: see ?isSingular
 \end{verbatim}
@@ -559,8 +572,8 @@ entire model, including both fixed and random effects).
 \begin{figure}
 \centering
 \includegraphics{Bollt_Greif_Raby_Roth_Project_Final_files/figure-latex/unnamed-chunk-17-1.pdf}
-\caption{Early Season Chlorophyll a vs.~Lake IWS Ratio and Mixed Effects
-Model}
+\caption{Early Season log Chlorophyll a vs.~Lake IWS Ratio and Mixed
+Effects Model}
 \end{figure}
 
 \hypertarget{early-season-secchi-depth}{%
@@ -575,11 +588,23 @@ R\^{}2 = 0.1081, and the conditional R\^{}2 = 0.2648. This tells us that
 16\% of the variability in secchi depth in the early season can be
 explained by the variance of ecoregion.
 
+FINAL: ADD Coef table (Analysis\_Results.docx)
+
+Since the outcome variable of the model is log transformed, the
+coefficients must be exponentiated to be interpreted. In table NNNNNN
+are presented the percentage increase or decrease that a 1\% increase of
+the explanatory variables have on early season secchi depth.
+
+FINAL: ADD Coef table (Analysis\_Results.docx)
+
+In figure NNNNNN is shown Early Season log Secchi Depth vs.~Lake IWS
+Ratio together with the Mixed Effects Model that we determined.
+
 \begin{figure}
 \centering
 \includegraphics{Bollt_Greif_Raby_Roth_Project_Final_files/figure-latex/unnamed-chunk-18-1.pdf}
-\caption{Early Season Secchi Depth vs.~Lake IWS Ratio and Mixed Effects
-Model}
+\caption{Early Season log Secchi Depth vs.~Lake IWS Ratio and Mixed
+Effects Model}
 \end{figure}
 
 \hypertarget{prime-season-chlorophyll-a}{%
@@ -596,11 +621,23 @@ marginal R\^{}2 = 0.1665 and the conditional R\^{}2 = 0.2513. This tells
 us that 9\% of the variability in prime season chlorophyll a can be
 explained by the variance of ecoregion.
 
+FINAL: ADD Coef table (Analysis\_Results.docx)
+
+Since the outcome variable of the model is log transformed, the
+coefficients must be exponentiated to be interpreted. In table NNNNNN
+are presented the percentage increase or decrease that a 1\% increase of
+the explanatory variables have on prime season chlorophyll a.
+
+FINAL: ADD Coef table (Analysis\_Results.docx)
+
+In figure NNNNNN is shown Prime Season log Chlorophyll a vs.~Lake IWS
+Ratio together with the Mixed Effects Model that we determined.
+
 \begin{figure}
 \centering
 \includegraphics{Bollt_Greif_Raby_Roth_Project_Final_files/figure-latex/unnamed-chunk-19-1.pdf}
-\caption{Prime Season Chlorophyll a vs.~Lake IWS Ratio and Mixed Effects
-Model}
+\caption{Prime Season log Chlorophyll a vs.~Lake IWS Ratio and Mixed
+Effects Model}
 \end{figure}
 
 \hypertarget{prime-season-secchi-depth}{%
@@ -615,13 +652,25 @@ Urban Percent (p = 3.028 * 10\^{}-7), Open Urban Percent (p \textless{}
 \textless{} 2.2 * 10\^{}-16), and Lake IWS Ratio (p \textless{} 2.2
 *10\^{}-16). The marginal R\^{}2 = 0.1241 and the conditional R\^{}2 =
 0.4032. This tells us that 28\% of the variability in prime season
-secchi depth can be explained by the variance of ecoregion
+secchi depth can be explained by the variance of ecoregion.
+
+FINAL: ADD Coef table (Analysis\_Results.docx)
+
+Since the outcome variable of the model is log transformed, the
+coefficients must be exponentiated to be interpreted. In table NNNNNN
+are presented the percentage increase or decrease that a 1\% increase of
+the explanatory variables have on prime season secchi depth.
+
+FINAL: ADD Coef table (Analysis\_Results.docx)
+
+In figure NNNNNN is shown Prime Season log Secchi Depth vs.~Lake IWS
+Ratio together with the Mixed Effects Model that we determined.
 
 \begin{figure}
 \centering
 \includegraphics{Bollt_Greif_Raby_Roth_Project_Final_files/figure-latex/unnamed-chunk-20-1.pdf}
-\caption{Prime Season Secchi Depth vs.~Lake IWS Ratio and Mixed Effects
-Model}
+\caption{Prime Season log Secchi Depth vs.~Lake IWS Ratio and Mixed
+Effects Model}
 \end{figure}
 
 \hypertarget{late-season-chlorophyll-a}{%
@@ -637,11 +686,23 @@ marginal R\^{}2 = 0.1515 and the conditional R\^{}2 = 0.2314. This tells
 us that 8\% of the variability in late season chlorophyll a can be
 explained by the variance of ecoregion.
 
+FINAL: ADD Coef table (Analysis\_Results.docx)
+
+Since the outcome variable of the model is log transformed, the
+coefficients must be exponentiated to be interpreted. In table NNNNNN
+are presented the percentage increase or decrease that a 1\% increase of
+the explanatory variables have on late season chlorophyll a.
+
+FINAL: ADD Coef table (Analysis\_Results.docx)
+
+In figure NNNNNN is shown Late Season log Chlorophyll a vs.~Lake IWS
+Ratio together with the Mixed Effects Model that we determined.
+
 \begin{figure}
 \centering
 \includegraphics{Bollt_Greif_Raby_Roth_Project_Final_files/figure-latex/unnamed-chunk-21-1.pdf}
-\caption{Late Season Chlorophyll a vs.~Lake IWS Ratio and Mixed Effects
-Model}
+\caption{Late Season log Chlorophyll a vs.~Lake IWS Ratio and Mixed
+Effects Model}
 \end{figure}
 
 \hypertarget{late-season-secchi-depth}{%
@@ -656,11 +717,23 @@ Percent (p = 8.468 * 10\^{}-5), and Lake IWS ratio (p = 3.170 *
 0.1889. This tells us that 3\% of the variability in late season secchi
 depth can be explained by the variance of ecoregion.
 
+FINAL: ADD Coef table (Analysis\_Results.docx)
+
+Since the outcome variable of the model is log transformed, the
+coefficients must be exponentiated to be interpreted. In table NNNNNN
+are presented the percentage increase or decrease that a 1\% increase of
+the explanatory variables have on late season secchi.
+
+FINAL: ADD Coef table (Analysis\_Results.docx)
+
+In figure NNNNNN is shown Late Season log Secchi Depth vs.~Lake IWS
+Ratio together with the Mixed Effects Model that we determined.
+
 \begin{figure}
 \centering
 \includegraphics{Bollt_Greif_Raby_Roth_Project_Final_files/figure-latex/unnamed-chunk-22-1.pdf}
-\caption{Late Season Secchi Depth vs.~Lake IWS Ratio and Mixed Effects
-Model}
+\caption{Late Season log Secchi Depth vs.~Lake IWS Ratio and Mixed
+Effects Model}
 \end{figure}
 
 \newpage
