@@ -1,6 +1,6 @@
 Column Name,Description,Units,Variable Type
-chla,Chlorophyll a,mg/L,Dependent
-secchi,Secchi depth,m,Dependent
+chla,Chlorophyll a,microgram per liter,Dependent
+secchi,Secchi depth,meter,Dependent
 IntenseUrban.pct,Percent med. and high intensity urban land cover,%,Independent
 OpenUrban.pct,Percent developed,%,Independent
 Barren.pct,Percent areas of bedrock and desert pavement land cover,%,Independent
