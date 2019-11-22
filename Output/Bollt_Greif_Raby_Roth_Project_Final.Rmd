@@ -22,12 +22,6 @@ editor_options:
 \listoffigures 
 \newpage
 
-<Arrow brackets are used for annotating the RMarkdown files. Text within these brackets should not appear in the final version of the PDF document>
-
-<**General Guidelines**>
-<1. Write in scientific style> 
-<2. [Global options for R chunks](https://rmarkdown.rstudio.com/lesson-3.html) should be set so that only relevant output is displayed>
-<3. Make sure your final knitted PDF looks professional. Format tables appropriately, size figures appropriately, make sure bulleted and numbered lists appear as such, avoid awkwardly placed page breaks, etc.>
 
 ```{r setup, include=FALSE}
 # Set your working directory
@@ -70,10 +64,6 @@ LAGOS.MN.processed.Prime <-read.csv("./data/processed/LAGOS.MN.processed.Prime.c
 
 # Rationale and Research Questions
 
-<Write 1-2 paragraph(s) detailing the rationale for your study. This should include both the context of the topic as well as a rationale for your choice of dataset (reason for location, variables, etc.) A few citations should be included to give context for your topic. You may choose to configure autoreferencing for your citations or add these manually.>
-
-<At the end of your rationale, introduce a numbered list of your questions (or an overarching question and sub-questions). Each question should be accompanied by one or more working hypotheses, inserted beneath each question.>
-
   Land use has a large impact on nutrient runoff into streams, lakes, and other water bodies. Understanding the causes of nutrient problems will better inform management strategies. A study looking at land use and water quality in the Chaohu Basin in China found that forest and grassland has a statistically significant negative correlation with water quality, while urbanization has a statistically significant positive correlation with water quality and farmland has a more complex relationship (Huang et al., 2013). We applied some of the basic research questions of the Huang et al. study to the United States. In the US, nutrient management has been a challenge for states trying to control harmful algal blooms and coastal dead zones in water bodies like the Gulf of Mexico (Wurtsbaugh et al., 2019). 
   We selected the state of Minnesota for our study because it has wide variety of land uses including a large urban center (the Twin Cities metropolitan area), natural lands in the northern part of the state, and large agricultural areas. It also has a large number of lakes with water quality sampling. Prior studies have shown that water quality in Minnesota has been adversely affected by land use changes (Christensen et al., 2012); (Maalim et al., 2013). We also want to look for seasonal relationships between water quality and land use. For example, we know that farmers apply nutrients at certain times of year and lakes naturally have higher levels of algae in summer months. 
   It is important that states like Minnesota have sound nutrient management regimes because they affect water quality downstream of their borders. The Gulf of Mexico has been experiencing hypoxia, or low dissolved oxygen levels, as a result of agricultural runoff in the Mississippi River basin. Minnesota is the source of the Mississippi River and a large agricultural state, so it is important that Minnesota properly manages its agricultural runoff (Minnesota Pollution Control Agency, 2019). Our project hopes to make management recommendations for Minnesota based off our findings.
@@ -100,12 +90,6 @@ Goals:
 
 # Dataset Information
 
-<Provide information on how the dataset for this analysis were collected, the data contained in the dataset, and any important pieces of information that are relevant to your analyses. This section should contain much of same information as the metadata file for the dataset but formatted in a way that is more narrative.>
-
-<Describe how your team wrangled your dataset in a format similar to a methods section of a journal article.>
-
-<Add a table that summarizes your data structure (variables, units, ranges and/or central tendencies, data source if multiple are used, etc.). This table can be made in markdown text or inserted as a `kable` function in an R chunk. If the latter, do not include the code used to generate your table.>
-
 The data used in this analysis include data from the Lake Multi-Scaled Geospatial and Temporal Database (LAGOSNE) and the EPA ecoregion spatial datasets.
 
 
@@ -117,17 +101,13 @@ Ecoregions are developed by the US Environmental Protection Agency and are used 
 ```{r ,echo=FALSE}
 Variables.table <- read.csv("./Output/Variable_Descriptions_Table.csv")
 library(knitr)
-kable(Variables.table)
+kable(Variables.table, caption = "Data structure, including variables, descriptions, units, and variable types.")
 ```
 
 
 \newpage
 
 # Exploratory Analysis 
-
-<Insert exploratory visualizations of your dataset. This may include, but is not limited to, graphs illustrating the distributions of variables of interest and/or maps of the spatial context of your dataset. Format your R chunks so that graphs are displayed but code is not displayed. Accompany these graphs with text sections that describe the visualizations and provide context for further analyses.>
-
-<Each figure should be accompanied by a caption, and each figure should be referenced within the text>
 
 ## Overview
 We came in to our exploratory analysis knowing we wanted to look at how water quality was affected by varying land use. Our exploratory analysis had four main goals: selecting a study area, selecting a study period, selecting what land use classifications (independent variables) and water quality proxies (dependent variables) to study, and preparing a dataframe to test our research questions and hypotheses.
@@ -218,10 +198,10 @@ LAGOSiws.chla.2011.MN <- LAGOSiws.nutrient.2011.MN %>%
 ```
 	
 ## Data	Compilation
-Our first step was to load the LAGOSNE data columns we though we would need and to look at how much data each state in our study contained. We decided on Minnesota because of its high number of lakes in the LAGOSNE dataset, and its high land use variation. We observed that the latest land use classification by USGS was from 2011; the second oldest was from 2006. Therefore, we limited our study to the period from 2009 through 2015 inclusive, so we did not extrapolate too much from our 2011 land use dataset. 
+Our first step was to load the LAGOSNE data columns we though we would need and to look at how much data each state in our study contained. We decided on Minnesota because of its high number of lakes in the LAGOSNE dataset, and its high land use variation. We observed that the latest land use classification by USGS was from 2011; the second oldest was from 2006. Therefore, we limited our study to the period from 2009 through 2014 inclusive, so we did not extrapolate too much from our 2011 land use dataset. 
 	
 ### Visualize Temporal Distribution & Abundance of Data
-We filtered out just the variables we wanted for our study and created a “LAGOS.MN.processed” dataframe. We decided to use chlorophyll a and secchi depth as proxies of water quality after we visualized our data and confirmed that we had enough data on these two variables in Minnesota between 2009 and 2015 to make claims about land use and water quality; in fact we had over 19,000 lakes with data. Observe in Figure 1 and Table 2 that secchi depth data in Minnesota is available for a large number of lakes and for a large portion of the year, with gaps in the data every winter. Observe in Figure 2 and Table 3 a similar pattern in data availability for chlorophyll a. 
+We filtered out just the variables we wanted for our study and created a “LAGOS.MN.processed” dataframe. We decided to use chlorophyll a and secchi depth as proxies of water quality after we visualized our data and confirmed that we had enough data on these two variables in Minnesota between 2009 and 2014 to make claims about land use and water quality; in fact we had over 19,000 lakes with data. Observe in Figure 1 and Table 2 that secchi depth data in Minnesota is available for a large number of lakes and for a large portion of the year, with gaps in the data every winter. Observe in Figure 2 and Table 3 a similar pattern in data availability for chlorophyll a. 
 	
 ```{r, Visualize_data, echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 3.3, fig.cap = "This plot provides a sense of how secchi depth measurements are distributed between and within years, as well as the general range of secchi depth measurements. Sampling occurs during the middle portion of each year, and ceases during the winter season."}
 ggplot(LAGOSiws.nutrient.2011.MN, 
@@ -302,39 +282,6 @@ LAGOS.MN.processed$Season[LAGOS.MN.processed$LateTrue == "Late"] <- "Late"
 
 LAGOS.MN.processed  <- LAGOS.MN.processed %>%
   select(-c(EarlyTrue, PrimeTrue, LateTrue))
-```
-
-
-```{r Adding_Ecoregions2, echo=FALSE, warning=FALSE, eval=FALSE}
-LAGOS.MN.processed.sf <- st_as_sf(LAGOS.MN.processed, coords = c("nhd_long", "nhd_lat"), crs = 4326)
-
-LAGOS.MN.processed.UTM.sf <- st_transform(LAGOS.MN.processed.sf, crs=32615)
-
-#Loading US Ecoregions Level II
-US.Ecoregions.sf <- st_read('./Data/Raw/NA_CEC_Eco_Level2.shp')
-
-US.Ecoregions.sf_UTM <- st_transform(US.Ecoregions.sf, crs=32615) 
-
-
-#Loading the MN state boundary  
-# generate a map of U.S. states
-states <- st_as_sf(map(database = "state", plot = FALSE, fill = TRUE, col = "white"))
-
-# filter MN
-states.MN <- filter(states, ID %in%
-c("minnesota"))
-
-states.MN_UTM <- st_transform(states.MN, crs=32615) 
-
-#Ecoregions level II for Minnesota
-MN.Ecoregions.sf_UTM <- st_intersection(US.Ecoregions.sf_UTM, states.MN_UTM)
-
-#Selecting level 2 ecoregions names
-MN.Ecoregions.sf_UTM <- select(MN.Ecoregions.sf_UTM, NA_L2NAME)
-colnames(MN.Ecoregions.sf_UTM)[1] <- "Ecoregion"
-
-LAGOS.MN.processed.sf <- st_join(LAGOS.MN.processed.UTM.sf, MN.Ecoregions.sf_UTM)
-LAGOS.MN.processed.sf <- na.omit(LAGOS.MN.processed.sf)
 ```
 
 ```{r Adding_Ecoregions,echo=FALSE, warning=FALSE}
@@ -694,10 +641,6 @@ kable(LAGOS.MN.LakesperRegion.Late, caption = "Number of lakes with available se
 
 # Analysis
 
-<Insert visualizations and text describing your main analyses. Format your R chunks so that graphs are displayed but code and other output is not displayed. Instead, describe the results of any statistical tests in the main text (e.g., "Variable x was significantly different among y groups (ANOVA; df = 300, F = 5.55, p < 0.0001)"). Each paragraph, accompanied by one or more visualizations, should describe the major findings and how they relate to the question and hypotheses. Divide this section into subsections, one for each research question.>
-
-<Each figure should be accompanied by a caption, and each figure should be referenced within the text>
-
 Before creating our models, we tested for autocorrelation between all of our variables to make sure none of them needed to be excluded. Then, we tested for normality of the distribution of our variables using qqplots and Shaprio-Wilkes tests. We used the function BestNormalize to determine what the best transformation for each variable would be if it were needed and used that transformation accordingly. We log-transformed chlorophyll a and secchi depth. We did not find an effective transformation for our land use variables or the lake IWS ratio, which we expected because they are proportion and ratio values. Therefore, we used them in our models with their original distributions. 
 
 ```{r echo=FALSE, warning=FALSE}
@@ -733,18 +676,21 @@ Before creating our models, we tested for autocorrelation between all of our var
 For our analysis, we ran mixed effect linear models with land use as fixed effects and ecoregion as random effects in order to account for variability between ecoregions without considering each ecoregion as its own factor. We created models for both Chlorophyll a and Secchi depth as response variables for each of the three seasons making a total of six models. To determine the most parsimonious models, we eliminated non-significant variables with the highest p-values one by one until all remaining variables were significant. To check that this model was the best fit for the data, we ran an ANOVA on all of the models together to determine which model had the lowest AIC. If our simplest model had the lowest AIC or it’s AIC was not more than 3 points away from the lowest score, we chose that model as our best fit. 
 
 
-## Question 1: <insert specific question here and add additional subsections for additional questions below>
+## Question 1 <insert specific question here and add additional subsections for additional questions below>
 
-## Question 2: 
+## Question 2
 
 ## Results
 
+Instead of splitting our results into two subsections, one for each research question, we explore both questions simultaneously. We formatted our results section in this way because our linear models test both questions at the same time.
 
-### Early Season Chlorophyll a:
+
+
+### Early Season Chlorophyll a
 
 The significant predictors of early season chlorophyll a are Open Urban Percent (p = 2.453 * 10^-5), Forest Percent (p < 2.2 * 10^-16), Pasture Percent (p = 2.853* 10^-5), Row Crop Percent (p = 0.04671), and Lake IWS Ratio (p = 2.737*10^-6). The marginal R^2 = 0.1058 (represents the variance explained by the fixed effects), and the conditional R^2 = 0.1058 (interpreted as a variance explained by the entire model, including both fixed and random effects). 
 
-```{r echo=FALSE, warning=FALSE}
+```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 3.3, fig.cap = ""}
  early.chla.model3.5 <- lmer(log(chla) ~ OpenUrban.pct + 
                            Forest.pct +  
                            Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
@@ -759,11 +705,11 @@ The significant predictors of early season chlorophyll a are Open Urban Percent 
 ```
 
 
-### Early Season Secchi Depth:
+### Early Season Secchi Depth
 
 The significant predictors of early season secchi depth are Open Urban Percent (p < 2.2 * 10^-16), Barren Percent (p = 0.0316103), Forest Percent (p = < 2.2 * 10^-16), Grass Shrub Percent (p = 0.0007119), and Lake IWS Ratio (p = 1.856 * 10^-7). The marginal R^2 = 0.1081, and the conditional R^2 = 0.2648.  This tells us that 16% of the variability in secchi depth in the early season can be explained by the variance of ecoregion. 
 
-```{r echo=FALSE, warning=FALSE}
+```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 3.3, fig.cap = ""}
 early.secchi.model3.5 <- lmer(log(secchi) ~ OpenUrban.pct + 
                            Barren.pct + Forest.pct + GrassShrub.pct +
                            LakeIWS.Ratio + (1|Ecoregion), 
@@ -778,11 +724,11 @@ early.secchi.model3.5 <- lmer(log(secchi) ~ OpenUrban.pct +
 ```
 
 
-### Prime Season Chlorophyll a:
+### Prime Season Chlorophyll a
 
 The significant predictors of prime season chlorophyll a are Intense Urban Percent (p < 2.2 * 10^-16), Open Urban Percent (p < 2.2 * 10^-16), Forest Percent (p < 2.2 * 10^-16), Grass Shrub Percent (p < 2.2 * 10^-16), Wetland Percent (p < 2.2 * 10^-16), Row Crop Percent (p < 2.2 * 10^-16), and Lake IWS Ratio (p < 2.2 *10^-16). The marginal R^2 = 0.1665 and the conditional R^2 = 0.2513. This tells us that 9% of the variability in prime season chlorophyll a can be explained by the variance of ecoregion.
 
-```{r echo=FALSE, warning=FALSE}
+```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 3.3, fig.cap = ""}
  prime.chla.model3.3 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
                            Forest.pct + GrassShrub.pct + Wetland.pct + 
                            RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
@@ -797,11 +743,11 @@ The significant predictors of prime season chlorophyll a are Intense Urban Perce
 ```
 
 
-### Prime Season Secchi Depth: 
+### Prime Season Secchi Depth
 
 The significant predictors of prime season secchi depth are Intense Urban Percent (p = 3.028 * 10^-7), Open Urban Percent (p < 2.2 * 10^-16), Barren Percent (p = 0.04061), Forest Percent (p < 2.2  10^-16), Grass Shrub Percent (p < 2.2 * 10^-16), Pasture Percent (p = 1.234 * 10^-8), Row Crop Percent (p < 2.2 * 10^-16), and Lake IWS Ratio (p < 2.2 *10^-16).  The marginal R^2 = 0.1241 and the conditional R^2 = 0.4032. This tells us that 28% of the variability in prime season secchi depth can be explained by the variance of ecoregion
 
-```{r echo=FALSE, warning=FALSE}
+```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 3.3, fig.cap = ""}
  prime.secchi.model3.2 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
                            Barren.pct + Forest.pct + GrassShrub.pct + 
                            Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
@@ -816,11 +762,11 @@ The significant predictors of prime season secchi depth are Intense Urban Percen
 ```
 
 
-### Late Season Chlorophyll a:
+### Late Season Chlorophyll a
 
 The significant predictors of late season chlorophyll a are Intense Urban Percent (p = 3.663* 10^-6), Open Urban Percent (p < 2.2 * 10^-16), Forest Percent (p < 2.2 * 10^-16), Grass Shrub Percent (p = 0.3.231 * 10^-5, coefficient = -0.02814891), Wetland Percent (p = 0.035393), and Lake IWS Ratio (p = 0.001653). The marginal R^2 = 0.1515 and the conditional R^2 = 0.2314. This tells us that 8% of the variability in late season chlorophyll a can be explained by the variance of ecoregion.
 
-```{r echo=FALSE, warning=FALSE}
+```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 3.3, fig.cap = ""}
 late.chla.model3.4 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
                            Forest.pct + GrassShrub.pct + Wetland.pct + 
                            LakeIWS.Ratio + (1|Ecoregion), 
@@ -835,11 +781,11 @@ late.chla.model3.4 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct +
 ```
 
 
-### Late Season Secchi Depth:
+### Late Season Secchi Depth
 
 The significant predictors of late season chlorophyll a are Intense Urban Percent (p = 0.03779), Open Urban Percent (p < 2.2 * 10^-16), Forest Percent (p < 2.2 * 10^-16), Grass Shrub Percent (p = 8.468 * 10^-5), and Lake IWS ratio (p = 3.170 * 10^-6). The marginal R^2 = 0.1595 and the conditional R^2 = 0.1889. This tells us that 3% of the variability in late season secchi depth can be explained by the variance of ecoregion. 
 
-```{r echo=FALSE, warning=FALSE}
+```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 3.3, fig.cap = ""}
  late.secchi.model3.5 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
                            Forest.pct + GrassShrub.pct + 
                            LakeIWS.Ratio + (1|Ecoregion), 
@@ -859,7 +805,6 @@ The significant predictors of late season chlorophyll a are Intense Urban Percen
 \newpage
 
 # Summary and Conclusions
-<Summarize your major findings from your analyses in a few paragraphs. What conclusions do you draw from your findings? Relate your findings back to the original research questions and rationale.>
 
    The aim of this project was to examine the impacts that land use had on water quality in Minnesota and if there was a seasonal characterization of these effects. Our findings support some of our hypotheses and does not support others. Our initial assumption as reflected in hypotheses 1a, 1b, and 1c was that urbanized and agricultural land would negatively impact water quality, and forest and natural lands have positive impact on water quality. We also predicted in hypothesis 2 that we would see seasonal variation in our results. Our results are less clear cut than our hypotheses predicted they would be.
    Our second hypothesis is largely supported by our statistical tests. We found a difference between seasons in our dataset. Observe in Table 7 that no two seasons for the two variables we looked at found the exact same variance coefficient. In many cases, the difference in coefficients was quite large, while in other cases the difference was close to negligible and potentially the result of unaccounted for variation or statistical noise. Observe our findings for Forest land cover. Prime and late season have similar results for both chlorophyll a and secchi depth, but these two values are quite different than the value for early season. In many cases, we found different significant land uses for the same dependent variable for different seasons. For example, we found that Intense Urban only has statistically significant coefficients for the prime and late seasons. We also found that prime has highest number of significant variables
