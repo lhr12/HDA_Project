@@ -304,10 +304,7 @@ LAGOS.MN.processed  <- LAGOS.MN.processed %>%
   select(-c(EarlyTrue, PrimeTrue, LateTrue))
 ```
 
-<<<<<<< HEAD
 
-```{r Adding_Ecoregions, echo=FALSE, warning=FALSE, eval=FALSE}
-=======
 ```{r Adding_Ecoregions2, echo=FALSE, warning=FALSE, eval=FALSE}
 LAGOS.MN.processed.sf <- st_as_sf(LAGOS.MN.processed, coords = c("nhd_long", "nhd_lat"), crs = 4326)
 
@@ -341,7 +338,6 @@ LAGOS.MN.processed.sf <- na.omit(LAGOS.MN.processed.sf)
 ```
 
 ```{r Adding_Ecoregions,echo=FALSE, warning=FALSE}
->>>>>>> a7b4d92f4dc2196aaa042a24a1ff224cc9217737
 LAGOS.MN.processed.sf <- st_as_sf(LAGOS.MN.processed, coords = c("nhd_long", "nhd_lat"), crs = 4326)
 
 LAGOS.MN.processed.UTM.sf <- st_transform(LAGOS.MN.processed.sf, crs=32615)
@@ -568,14 +564,6 @@ LAGOS.MN.LakesperRegion.Late <- LAGOS.MN.processed.Late.sf %>%
 st_geometry(LAGOS.MN.LakesperRegion.Early) <- NULL
 st_geometry(LAGOS.MN.LakesperRegion.Prime) <- NULL
 st_geometry(LAGOS.MN.LakesperRegion.Late) <- NULL
-
-write.csv(x =  LAGOS.MN.LakesperRegion.Early, row.names = FALSE,
-          file =  "../Output/LAGOS.MN.LakesperRegion.Early.csv")
-write.csv(x =  LAGOS.MN.LakesperRegion.Prime, row.names = FALSE,
-          file =  "../Output/LAGOS.MN.LakesperRegion.Prime.csv")
-write.csv(x =  LAGOS.MN.LakesperRegion.Late, row.names = FALSE,
-          file =  "../Output/LAGOS.MN.LakesperRegion.Late.csv")
-
 ```
 
 
