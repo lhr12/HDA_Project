@@ -538,8 +538,8 @@ LAGOS.MN.processed.Early$LMER_Early_Chla <- fitted(early.chla.model3.5)
 
 # Plotting the model
 ggplot(LAGOS.MN.processed.Early) +
-  geom_point(aes(x=Forest.pct, y=log(chla)), alpha = 0.3, size = 3) +
-  geom_line(aes(x = Forest.pct, y = LMER_Early_Chla), color ="red") +
+  geom_point(aes(x=LakeIWS.Ratio, y=log(chla)), alpha = 0.3, size = 3) +
+  geom_line(aes(x = LakeIWS.Ratio, y = LMER_Early_Chla), color ="red") +
   facet_wrap(~Ecoregion)
 
 
