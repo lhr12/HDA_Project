@@ -1,14 +1,14 @@
 Column Name,Description,Units,Variable Type
-chla,Chlorophyll a,microgram per liter,Dependent
-secchi,Secchi depth,meter,Dependent
-IntenseUrban.pct,Percent med. and high intensity urban land cover,%,Independent
-OpenUrban.pct,Percent developed,%,Independent
-Barren.pct,Percent areas of bedrock and desert pavement land cover,%,Independent
-Forest.pct,Percent deciduous,%,Independent
-GrassShrub.pct,Percent areas dominated by shrubs,%,Independent
-Wetland.pct,Percent wetlands land cover,%,Independent
-Pasture.pct,Percent areas of grasses,%,Independent
-RowCrop.pct ,Percent cultivated crops land cover,%,Independent
+chla,Chlorophyll a,micrograms per liter,Dependent
+secchi,Secchi depth,meters,Dependent
+IntenseUrban.pct,% med. and high intensity urban,%,Independent
+OpenUrban.pct,% developed,%,Independent
+Barren.pct,% areas of bedrock and desert pavement,%,Independent
+Forest.pct,% deciduous,%,Independent
+GrassShrub.pct,% areas dominated by shrubs,%,Independent
+Wetland.pct,% wetlands,%,Independent
+Pasture.pct,% areas of grasses,%,Independent
+RowCrop.pct ,% cultivated crops,%,Independent
 LakeIWS.Ratio,Lake surface area to watershed area ratio,N/A,Independent
 Season,Early/Prime/Late,N/A,Independent
 Ecoregion,Level II Ecoregions,N/A,Independent
