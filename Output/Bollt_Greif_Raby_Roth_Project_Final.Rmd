@@ -1,4 +1,7 @@
 ---
+header-includes: 
+- \usepackage{float} #use the 'float' package
+- \floatplacement{figure}{H} #make every figure with caption = h
 output: 
   pdf_document:
     keep_tex: yes
@@ -207,7 +210,7 @@ Our first step was to load the LAGOSNE data columns we though we would need and 
 ### Visualize Temporal Distribution & Abundance of Data
 We filtered out just the variables we wanted for our study and created a “LAGOS.MN.processed” dataframe. We decided to use chlorophyll a and secchi depth as proxies of water quality after we visualized our data and confirmed that we had enough data on these two variables in Minnesota between 2009 and 2014 to make claims about land use and water quality; in fact we had over 19,000 lakes with data. Observe in Figure 1 and Table 2 that secchi depth data in Minnesota is available for a large number of lakes and for a large portion of the year, with gaps in the data every winter. Observe in Figure 2 and Table 3 a similar pattern in data availability for chlorophyll a. 
 
-```{r, Visualize_data, echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 3.3, fig.cap = "This plot provides a sense of how secchi depth measurements are distributed between and within years, as well as the general range of secchi depth measurements. Sampling occurs during the middle portion of each year, and ceases during the winter season."}
+```{r, Visualize_data, echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 3.3, fig.cap = "Secchi Depth a vs. Time.This plot provides a sense of how secchi depth measurements are distributed between and within years, as well as the general range of secchi depth measurements. Sampling occurs during the middle portion of each year, and ceases during the winter season."}
 ggplot(LAGOSiws.nutrient.2011.MN, 
        aes(x = sampledate, y = secchi)) +
   geom_point(alpha = 0.2) +
@@ -680,9 +683,11 @@ Before creating our models, we tested for autocorrelation between all of our var
 For our analysis, we ran mixed effect linear models with land use as fixed effects and ecoregion as random effects in order to account for variability between ecoregions without considering each ecoregion as its own factor. We created models for both Chlorophyll a and Secchi depth as response variables for each of the three seasons making a total of six models. To determine the most parsimonious models, we eliminated non-significant variables with the highest p-values one by one until all remaining variables were significant. To check that this model was the best fit for the data, we ran an ANOVA on all of the models together to determine which model had the lowest AIC. If our simplest model had the lowest AIC or it’s AIC was not more than 3 points away from the lowest score, we chose that model as our best fit. 
 
 
-## Question 1 <insert specific question here and add additional subsections for additional questions below>
+## Research Questions
 
-## Question 2
+1. What are the predictors of nutrients based on land use in watersheds in the state of Minnesota?
+
+2. How do you characterize seasonal variation between the predictors of nutrients?
 
 ## Results
 
