@@ -230,7 +230,7 @@ ggplot(LAGOSiws.nutrient.2011.MN,
 ```{r echo=FALSE, warning=FALSE}
 chla.count <- count(LAGOSiws.chla.2011.MN, vars = Year)
 colnames(chla.count) <- c("Year", "Count")
-kable(chla.count, label="tab:tab2", caption = "Number of chlorophyll a measurements in each of the years to be included in the analysis, which provides a sense of the amount of data, as well as the distribution of data.")
+kable(chla.count, label="tab:tab2", caption = "Number of chlorophyll a measurements in each of the years to be included in the analysis, which provides a sense of the amount of data, as well as the distribution of data.") 
 ```
 	
 ## Explore Trends in Variables by Land Use & Season
@@ -930,13 +930,18 @@ Our findings offer potential insight for watershed managers in Minnesota, as wel
 <add references here> 
 Christensen, Victoria G., et al. "Relations between Retired Agricultural Land, Water Quality, and	Aquatic-Community Health, Minnesota River Basin." Journal of Environmental Quality,	vol. 41, no. 5, 2012, pp. 1459-72. ProQuest,	https://login.proxy.lib.duke.edu/login?url=https://search.proquest.com/docview/1	95114913?accountid=10598.
 
+
 Huang, J., Zhan, J., Yan, H., Wu, F., Xiangzheng Deng, X. “Evaluation of the Impacts of Land	Use on Water Quality: A Case Study in The Chaohu Lake Basin,” The Scientific World	Journal, vol. 2013, Article ID 329187, 7 pages,	2013. https://doi.org/10.1155/2013/329187.
+
 
 Maalim, Fukhrudin K., Melesse, Assefa M., Belmont, Patrick., Gran, Karen B. "Modeling the	impact of land use changes on runoff and sediment yield in the Le Sueur watershed,	Minnesota using GeoWEPP." CATENA Volume 107, 2013, Pages 35	45, https://doi.org/10.1016/j.catena.2013.03.004.
 
-“Mississippi River Basin Healthy Watersheds Initiative-Natural Resources Conservation Service.” Natural Resources Conservation Service, www.nrcs.usda.gov/wps/portal/nrcs/detailfull/national/programs/initiatives/?cid=stelprdb1048200.
+
+“Mississippi River Basin Healthy Watersheds Initiative-Natural Resources Conservation Service.” Natural Resources Conservation Service,   https://nrcs.usda.gov/wps/portal/nrcs/detailfull/national/programs/initiatives/?cid=stelprdb1048200.
+
 
 “Nutrient Reduction Strategy.” Minnesota Pollution Control Agency, 6 Mar. 2019, www.pca.state.mn.us/water/nutrient-reduction-strategy#resources-b7ca91dc.
+
 
 Ramstack, Joy M., Sherilyn C. Fritz, and Daniel R. Engstrom. "Twentieth Century Water Quality	Trends	in Minnesota Lakes Compared with Presettlement Variability." Canadian Journal	of Fisheries and Aquatic Sciences, vol. 61, no. 4, 2004, pp. 561-576.
 
