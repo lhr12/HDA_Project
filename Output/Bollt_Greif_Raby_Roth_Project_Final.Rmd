@@ -48,6 +48,7 @@ library(sf)
 library(maps)
 library(mapview)
 library(lme4)
+library(xtable)
 
 # Set your ggplot theme
 theme_set(theme_classic())
@@ -64,25 +65,28 @@ LAGOS.MN.processed.Prime <-read.csv("./data/processed/LAGOS.MN.processed.Prime.c
 
 # Rationale and Research Questions
 
-  Land use has a large impact on nutrient runoff into streams, lakes, and other water bodies. Understanding the causes of nutrient problems will better inform management strategies. A study looking at land use and water quality in the Chaohu Basin in China found that forest and grassland has a statistically significant negative correlation with water quality, while urbanization has a statistically significant positive correlation with water quality and farmland has a more complex relationship (Huang et al., 2013). We applied some of the basic research questions of the Huang et al. study to the United States. In the US, nutrient management has been a challenge for states trying to control harmful algal blooms and coastal dead zones in water bodies like the Gulf of Mexico (Wurtsbaugh et al., 2019). 
-  We selected the state of Minnesota for our study because it has wide variety of land uses including a large urban center (the Twin Cities metropolitan area), natural lands in the northern part of the state, and large agricultural areas. It also has a large number of lakes with water quality sampling. Prior studies have shown that water quality in Minnesota has been adversely affected by land use changes (Christensen et al., 2012); (Maalim et al., 2013). We also want to look for seasonal relationships between water quality and land use. For example, we know that farmers apply nutrients at certain times of year and lakes naturally have higher levels of algae in summer months. 
-  It is important that states like Minnesota have sound nutrient management regimes because they affect water quality downstream of their borders. The Gulf of Mexico has been experiencing hypoxia, or low dissolved oxygen levels, as a result of agricultural runoff in the Mississippi River basin. Minnesota is the source of the Mississippi River and a large agricultural state, so it is important that Minnesota properly manages its agricultural runoff (Minnesota Pollution Control Agency, 2019). Our project hopes to make management recommendations for Minnesota based off our findings.
+Land use has a large impact on nutrient runoff into streams, lakes, and other water bodies. Understanding the causes of nutrient problems will better inform management strategies. A study looking at land use and water quality in the Chaohu Basin in China found that forest and grassland has a statistically significant negative correlation with water quality, while urbanization has a statistically significant positive correlation with water quality and farmland has a more complex relationship (Huang et al., 2013). We applied some of the basic research questions of the Huang et al. study to the United States. In the US, nutrient management has been a challenge for states trying to control harmful algal blooms and coastal dead zones in water bodies like the Gulf of Mexico (Wurtsbaugh et al., 2019).
+
+We selected the state of Minnesota for our study because it has wide variety of land uses including a large urban center (the Twin Cities metropolitan area), natural lands in the northern part of the state, and large agricultural areas. It also has a large number of lakes with water quality sampling. Prior studies have shown that water quality in Minnesota has been adversely affected by land use changes (Christensen et al., 2012); (Maalim et al., 2013). We also want to look for seasonal relationships between water quality and land use. For example, we know that farmers apply nutrients at certain times of year and lakes naturally have higher levels of algae in summer months. 
+
+It is important that states like Minnesota have sound nutrient management regimes because they affect water quality downstream of their borders. The Gulf of Mexico has been experiencing hypoxia, or low dissolved oxygen levels, as a result of agricultural runoff in the Mississippi River basin. Minnesota is the source of the Mississippi River and a large agricultural state, so it is important that Minnesota properly manages its agricultural runoff (Minnesota Pollution Control Agency, 2019). Our project hopes to make management recommendations for Minnesota based off our findings.
 
 
-* * 
-Research Questions:
-	In order to evaluate the relationship between land use wand lacustrine water quality in the state of Minnesota, we asked the following two questions to help guide our research:
+In order to evaluate the relationship between land use wand lacustrine water quality in the state of Minnesota, we asked the following two questions to help guide our research:
+
 * 1.	What are the predictors of nutrients based on land use in watersheds in the state of Minnesota?
-    * Hypothesis 1a: The percentage of urbanized land in a lake’s watershed in the state of Minnesota will have a statistically significant negative effect on water quality, as measured by higher chlorophyll a concentrations and lower secchi depth measurements.
-    * Hypothesis 1b: The percentage of agricultural land in a lake’s watershed in the state of Minnesota will have a statistically significant negative effect on water quality, as measured by higher chlorophyll a concentrations and lower secchi depth measurements.
-    * Hypothesis 1c: The precentage of undeveloped land in a lake’s watershed in the state of Minnesota will have a statistically significant positive effect on water quality, as measured by lower chlorophyll a concentrations and higher secchi depth measurements.
+    + Hypothesis 1a: The percentage of urbanized land in a lake’s watershed in the state of Minnesota will have a statistically significant negative effect on water quality, as measured by higher chlorophyll a concentrations and lower secchi depth measurements.
+    + Hypothesis 1b: The percentage of agricultural land in a lake’s watershed in the state of Minnesota will have a statistically significant negative effect on water quality, as measured by higher chlorophyll a concentrations and lower secchi depth measurements.
+    + Hypothesis 1c: The precentage of undeveloped land in a lake’s watershed in the state of Minnesota will have a statistically significant positive effect on water quality, as measured by lower chlorophyll a concentrations and higher secchi depth measurements.
 * 2.	How do you characterize seasonal variation between the predictors of nutrients?
-    * Hypothesis 2: The water quality in Minnesota lakes will demonstrate a statistically significant seasonal pattern.
+    + Hypothesis 2: The water quality in Minnesota lakes will demonstrate a statistically significant seasonal pattern.
 
-Goals:
-	By testing our hypotheses, we aim to accomplish the following goals:
+By testing our hypotheses, we aim to accomplish the following goals:
+
 * 1.	Determine how land use, watershed size, and ecoregion explain variation in nutrient loading indicators.
+
 * 2.	Discern whether there a seasonal trends in nutrient loading indicators based on land use types, watershed size, and ecoregion.
+
 * 3.	Provide insight to inform decisions about nutrient management practices based on land use types, watershed size, and ecoregion.
 
 
@@ -202,7 +206,7 @@ Our first step was to load the LAGOSNE data columns we though we would need and 
 	
 ### Visualize Temporal Distribution & Abundance of Data
 We filtered out just the variables we wanted for our study and created a “LAGOS.MN.processed” dataframe. We decided to use chlorophyll a and secchi depth as proxies of water quality after we visualized our data and confirmed that we had enough data on these two variables in Minnesota between 2009 and 2014 to make claims about land use and water quality; in fact we had over 19,000 lakes with data. Observe in Figure 1 and Table 2 that secchi depth data in Minnesota is available for a large number of lakes and for a large portion of the year, with gaps in the data every winter. Observe in Figure 2 and Table 3 a similar pattern in data availability for chlorophyll a. 
-	
+
 ```{r, Visualize_data, echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 3.3, fig.cap = "This plot provides a sense of how secchi depth measurements are distributed between and within years, as well as the general range of secchi depth measurements. Sampling occurs during the middle portion of each year, and ceases during the winter season."}
 ggplot(LAGOSiws.nutrient.2011.MN, 
        aes(x = sampledate, y = secchi)) +
@@ -226,7 +230,7 @@ ggplot(LAGOSiws.nutrient.2011.MN,
 ```{r echo=FALSE, warning=FALSE}
 chla.count <- count(LAGOSiws.chla.2011.MN, vars = Year)
 colnames(chla.count) <- c("Year", "Count")
-kable(chla.count, caption = "Number of chlorophyll a measurements in each of the years to be included in the analysis, which provides a sense of the amount of data, as well as the distribution of data.")
+kable(chla.count, label="tab:tab2", caption = "Number of chlorophyll a measurements in each of the years to be included in the analysis, which provides a sense of the amount of data, as well as the distribution of data.")
 ```
 	
 ## Explore Trends in Variables by Land Use & Season
@@ -488,7 +492,7 @@ grid.arrange(chla.int.urb.late, chla.open.urb.late, chla.barren.late,
              chla.past.late, chla.row.crop.late)
 ```
 	
-Because of the presense of some relationships in Figures 3 and 4, we determined that we had, in fact selected useful land use classifications and useful seasonal demarcations. We performed a summary function, and gave all of our columns useful names and removed NAs. Our statistical tests would not all run if our dataset contained NAs.The next step we performed was to convert our dataframes to sf dataframes so we could add Level II ecoregion column.
+Because of the presence of some relationships in Figures 3 and 4, we determined that we had, in fact selected useful land use classifications and useful seasonal demarcations. We performed a summary function, and gave all of our columns useful names and removed NAs. Our statistical tests would not all run if our dataset contained NAs.The next step we performed was to convert our dataframes to sf dataframes so we could add Level II ecoregion column.
   
 ### Visualize Spatial Distribution of Data in Each Season
 Our final exploratory analysis test was to see if we had enough lake data for each Level II ecoregion for each of our three seasons. We created three tables, one for each season, with a lake sample count for each ecoregion. See Tables 4, 5, and 6. From these tables, we learned that we had enough data to proceed with our statistical analysis, and therefore Level II ecoregions were the correct resolution for our study. We also displayed this information spatially in Figures 5, 6, and 7; each figure corresponds to a different season. We discovered that there are a large number of lake samples around the Twin Cities area, and that there is enough spatial variation in our data to capture the three different Level II ecoregions for all three of our seasons. We concluded our data wrangling by exporting our three non-sf season processed dataframes as csv files to our processed data folder.
@@ -688,13 +692,19 @@ Instead of splitting our results into two subsections, one for each research que
 
 ### Early Season Chlorophyll a
 
-The significant predictors of early season chlorophyll a are Open Urban Percent (p = 2.453 * 10^-5), Forest Percent (p < 2.2 * 10^-16), Pasture Percent (p = 2.853* 10^-5), Row Crop Percent (p = 0.04671), and Lake IWS Ratio (p = 2.737*10^-6). The marginal R^2 = 0.1058 (represents the variance explained by the fixed effects), and the conditional R^2 = 0.1058 (interpreted as a variance explained by the entire model, including both fixed and random effects). 
+The significant predictors of early season chlorophyll a are Open Urban Percent (p = 2.453 * 10^-5), Forest Percent (p < 2.2 * 10^-16), Pasture Percent (p = 2.853* 10^-5), Row Crop Percent (p = 0.04671), and Lake IWS Ratio (p = 2.737*10^-6). The marginal R^2 = 0.1058 (represents the variance explained by the fixed effects), and the conditional R^2 = 0.1058 (interpreted as a variance explained by the entire model, including both fixed and random effects). Table 7 shows the coefficients for each significant explanatory variable.
 
-FINAL: ADD Coef table (Analysis_Results.docx)
+```{r echo=FALSE, warning=FALSE}
+Variables.table <- read.csv("./Output/EarlyChlaCoef.csv")
+kable(Variables.table, caption = "Model Coefficients. Early Season Chlorophyll a.")
+```
 
-Since the outcome variable of the model is log transformed, the coefficients must be exponentiated to be interpreted correctly. In table NNNNNN are presented the percentage increase or decrease that a 1% increase of the explanatory variables have on early season chlorophyll a.
+Since the outcome variable of the model is log transformed, the coefficients must be exponentiated to be interpreted correctly. In table 8 are presented the percentage increase or decrease that a 1% increase of the explanatory variables have on early season chlorophyll a. 
 
-FINAL: ADD Coef table (Analysis_Results.docx)
+```{r echo=FALSE, warning=FALSE}
+Variables.table <- read.csv("./Output/EarlyChlaCoef1.csv")
+kable(Variables.table, caption = "Transformed Model Coefficients. Early Season Chlorophyll a.")
+```
 
 In figure 8 is shown Early Season log Chlorophyll a vs. Lake IWS Ratio together with the Mixed Effects Model that we determined.
 
@@ -715,13 +725,19 @@ In figure 8 is shown Early Season log Chlorophyll a vs. Lake IWS Ratio together 
 
 ### Early Season Secchi Depth
 
-The significant predictors of early season secchi depth are Open Urban Percent (p < 2.2 * 10^-16), Barren Percent (p = 0.0316103), Forest Percent (p = < 2.2 * 10^-16), Grass Shrub Percent (p = 0.0007119), and Lake IWS Ratio (p = 1.856 * 10^-7). The marginal R^2 = 0.1081, and the conditional R^2 = 0.2648.  This tells us that 16% of the variability in secchi depth in the early season can be explained by the variance of ecoregion. 
+The significant predictors of early season secchi depth are Open Urban Percent (p < 2.2 * 10^-16), Barren Percent (p = 0.0316103), Forest Percent (p = < 2.2 * 10^-16), Grass Shrub Percent (p = 0.0007119), and Lake IWS Ratio (p = 1.856 * 10^-7). The marginal R^2 = 0.1081, and the conditional R^2 = 0.2648.  This tells us that 16% of the variability in secchi depth in the early season can be explained by the variance of ecoregion. Table 9 shows the coefficients for each significant explanatory variable.
 
-FINAL: ADD Coef table (Analysis_Results.docx)
+```{r echo=FALSE, warning=FALSE}
+Variables.table <- read.csv("./Output/EarlySecchiCoef.csv")
+kable(Variables.table, caption = "Model Coefficients. Early Season Secchi Depth.")
+```
 
-Since the outcome variable of the model is log transformed, the coefficients must be exponentiated to be interpreted. In table NNNNNN are presented the percentage increase or decrease that a 1% increase of the explanatory variables have on early season secchi depth.
+Since the outcome variable of the model is log transformed, the coefficients must be exponentiated to be interpreted. In table 10 are presented the percentage increase or decrease that a 1% increase of the explanatory variables have on early season secchi depth.
 
-FINAL: ADD Coef table (Analysis_Results.docx)
+```{r echo=FALSE, warning=FALSE}
+Variables.table <- read.csv("./Output/EarlySecchiCoef1.csv")
+kable(Variables.table, caption = "Transformed Model Coefficients. Early Season Secchi Depth.")
+```
 
 In figure 9 is shown Early Season log Secchi Depth vs. Lake IWS Ratio together with the Mixed Effects Model that we determined.
 
@@ -742,13 +758,19 @@ early.secchi.model3.5 <- lmer(log(secchi) ~ OpenUrban.pct +
 
 ### Prime Season Chlorophyll a
 
-The significant predictors of prime season chlorophyll a are Intense Urban Percent (p < 2.2 * 10^-16), Open Urban Percent (p < 2.2 * 10^-16), Forest Percent (p < 2.2 * 10^-16), Grass Shrub Percent (p < 2.2 * 10^-16), Wetland Percent (p < 2.2 * 10^-16), Row Crop Percent (p < 2.2 * 10^-16), and Lake IWS Ratio (p < 2.2 *10^-16). The marginal R^2 = 0.1665 and the conditional R^2 = 0.2513. This tells us that 9% of the variability in prime season chlorophyll a can be explained by the variance of ecoregion.
+The significant predictors of prime season chlorophyll a are Intense Urban Percent (p < 2.2 * 10^-16), Open Urban Percent (p < 2.2 * 10^-16), Forest Percent (p < 2.2 * 10^-16), Grass Shrub Percent (p < 2.2 * 10^-16), Wetland Percent (p < 2.2 * 10^-16), Row Crop Percent (p < 2.2 * 10^-16), and Lake IWS Ratio (p < 2.2 *10^-16). The marginal R^2 = 0.1665 and the conditional R^2 = 0.2513. This tells us that 9% of the variability in prime season chlorophyll a can be explained by the variance of ecoregion. Table 11 shows the coefficients for each significant explanatory variable.
 
-FINAL: ADD Coef table (Analysis_Results.docx)
+```{r echo=FALSE, warning=FALSE}
+Variables.table <- read.csv("./Output/PrimeChlaCoef.csv")
+kable(Variables.table, caption = "Model Coefficients. Prime Season Chlorophyll a.")
+```
 
-Since the outcome variable of the model is log transformed, the coefficients must be exponentiated to be interpreted. In table NNNNNN are presented the percentage increase or decrease that a 1% increase of the explanatory variables have on prime season chlorophyll a.
+Since the outcome variable of the model is log transformed, the coefficients must be exponentiated to be interpreted. In table 12 are presented the percentage increase or decrease that a 1% increase of the explanatory variables have on prime season chlorophyll a.
 
-FINAL: ADD Coef table (Analysis_Results.docx)
+```{r echo=FALSE, warning=FALSE}
+Variables.table <- read.csv("./Output/PrimeChlaCoef1.csv")
+kable(Variables.table, caption = "Transformed Model Coefficients. Prime Season Chlorophyll a.")
+```
 
 In figure 10 is shown Prime Season log Chlorophyll a vs. Lake IWS Ratio together with the Mixed Effects Model that we determined.
 
@@ -769,13 +791,19 @@ In figure 10 is shown Prime Season log Chlorophyll a vs. Lake IWS Ratio together
 
 ### Prime Season Secchi Depth
 
-The significant predictors of prime season secchi depth are Intense Urban Percent (p = 3.028 * 10^-7), Open Urban Percent (p < 2.2 * 10^-16), Barren Percent (p = 0.04061), Forest Percent (p < 2.2  10^-16), Grass Shrub Percent (p < 2.2 * 10^-16), Pasture Percent (p = 1.234 * 10^-8), Row Crop Percent (p < 2.2 * 10^-16), and Lake IWS Ratio (p < 2.2 *10^-16).  The marginal R^2 = 0.1241 and the conditional R^2 = 0.4032. This tells us that 28% of the variability in prime season secchi depth can be explained by the variance of ecoregion.
+The significant predictors of prime season secchi depth are Intense Urban Percent (p = 3.028 * 10^-7), Open Urban Percent (p < 2.2 * 10^-16), Barren Percent (p = 0.04061), Forest Percent (p < 2.2  10^-16), Grass Shrub Percent (p < 2.2 * 10^-16), Pasture Percent (p = 1.234 * 10^-8), Row Crop Percent (p < 2.2 * 10^-16), and Lake IWS Ratio (p < 2.2 *10^-16).  The marginal R^2 = 0.1241 and the conditional R^2 = 0.4032. This tells us that 28% of the variability in prime season secchi depth can be explained by the variance of ecoregion. Table 13 shows the coefficients for each significant explanatory variable.
 
-FINAL: ADD Coef table (Analysis_Results.docx)
+```{r echo=FALSE, warning=FALSE}
+Variables.table <- read.csv("./Output/PrimeSecchiCoef.csv")
+kable(Variables.table, caption = "Model Coefficients. Prime Season Secchi Depth.")
+```
 
-Since the outcome variable of the model is log transformed, the coefficients must be exponentiated to be interpreted. In table NNNNNN are presented the percentage increase or decrease that a 1% increase of the explanatory variables have on prime season secchi depth.
+Since the outcome variable of the model is log transformed, the coefficients must be exponentiated to be interpreted. In table 14 are presented the percentage increase or decrease that a 1% increase of the explanatory variables have on prime season secchi depth.
 
-FINAL: ADD Coef table (Analysis_Results.docx)
+```{r echo=FALSE, warning=FALSE}
+Variables.table <- read.csv("./Output/PrimeSecchiCoef1.csv")
+kable(Variables.table, caption = "Transformed Model Coefficients. Prime Season Secchi Depth.")
+```
 
 In figure 11 is shown Prime Season log Secchi Depth vs. Lake IWS Ratio together with the Mixed Effects Model that we determined.
 
@@ -796,13 +824,19 @@ In figure 11 is shown Prime Season log Secchi Depth vs. Lake IWS Ratio together 
 
 ### Late Season Chlorophyll a
 
-The significant predictors of late season chlorophyll a are Intense Urban Percent (p = 3.663* 10^-6), Open Urban Percent (p < 2.2 * 10^-16), Forest Percent (p < 2.2 * 10^-16), Grass Shrub Percent (p = 0.3.231 * 10^-5, coefficient = -0.02814891), Wetland Percent (p = 0.035393), and Lake IWS Ratio (p = 0.001653). The marginal R^2 = 0.1515 and the conditional R^2 = 0.2314. This tells us that 8% of the variability in late season chlorophyll a can be explained by the variance of ecoregion.
+The significant predictors of late season chlorophyll a are Intense Urban Percent (p = 3.663* 10^-6), Open Urban Percent (p < 2.2 * 10^-16), Forest Percent (p < 2.2 * 10^-16), Grass Shrub Percent (p = 0.3.231 * 10^-5, coefficient = -0.02814891), Wetland Percent (p = 0.035393), and Lake IWS Ratio (p = 0.001653). The marginal R^2 = 0.1515 and the conditional R^2 = 0.2314. This tells us that 8% of the variability in late season chlorophyll a can be explained by the variance of ecoregion. Table 15 shows the coefficients for each significant explanatory variable.
 
-FINAL: ADD Coef table (Analysis_Results.docx)
+```{r echo=FALSE, warning=FALSE}
+Variables.table <- read.csv("./Output/LateChlaCoef.csv")
+kable(Variables.table, caption = "Model Coefficients. Late Season Chlorophyll a.")
+```
 
-Since the outcome variable of the model is log transformed, the coefficients must be exponentiated to be interpreted. In table NNNNNN are presented the percentage increase or decrease that a 1% increase of the explanatory variables have on late season chlorophyll a.
+Since the outcome variable of the model is log transformed, the coefficients must be exponentiated to be interpreted. In table 16 are presented the percentage increase or decrease that a 1% increase of the explanatory variables have on late season chlorophyll a.
 
-FINAL: ADD Coef table (Analysis_Results.docx)
+```{r echo=FALSE, warning=FALSE}
+Variables.table <- read.csv("./Output/LateChlaCoef1.csv")
+kable(Variables.table, caption = "Transformed Model Coefficients. Late Season Chlorophyll a.")
+```
 
 In figure 12 is shown Late Season log Chlorophyll a vs. Lake IWS Ratio together with the Mixed Effects Model that we determined.
 
@@ -825,13 +859,19 @@ late.chla.model3.4 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct +
 
 ### Late Season Secchi Depth
 
-The significant predictors of late season chlorophyll a are Intense Urban Percent (p = 0.03779), Open Urban Percent (p < 2.2 * 10^-16), Forest Percent (p < 2.2 * 10^-16), Grass Shrub Percent (p = 8.468 * 10^-5), and Lake IWS ratio (p = 3.170 * 10^-6). The marginal R^2 = 0.1595 and the conditional R^2 = 0.1889. This tells us that 3% of the variability in late season secchi depth can be explained by the variance of ecoregion. 
+The significant predictors of late season chlorophyll a are Intense Urban Percent (p = 0.03779), Open Urban Percent (p < 2.2 * 10^-16), Forest Percent (p < 2.2 * 10^-16), Grass Shrub Percent (p = 8.468 * 10^-5), and Lake IWS ratio (p = 3.170 * 10^-6). The marginal R^2 = 0.1595 and the conditional R^2 = 0.1889. This tells us that 3% of the variability in late season secchi depth can be explained by the variance of ecoregion. Table 17 shows the coefficients for each significant explanatory variable.
 
-FINAL: ADD Coef table (Analysis_Results.docx)
+```{r echo=FALSE, warning=FALSE}
+Variables.table <- read.csv("./Output/LateSecchiCoef.csv")
+kable(Variables.table, caption = "Model Coefficients. Late Season Secchi Depth.")
+``` 
 
-Since the outcome variable of the model is log transformed, the coefficients must be exponentiated to be interpreted. In table NNNNNN are presented the percentage increase or decrease that a 1% increase of the explanatory variables have on late season secchi.
+Since the outcome variable of the model is log transformed, the coefficients must be exponentiated to be interpreted. In table 18 are presented the percentage increase or decrease that a 1% increase of the explanatory variables have on late season secchi.
 
-FINAL: ADD Coef table (Analysis_Results.docx)
+```{r echo=FALSE, warning=FALSE}
+Variables.table <- read.csv("./Output/LateSecchiCoef1.csv")
+kable(Variables.table, caption = "Transformed Model Coefficients. Late Season Secchi Depth.")
+```
 
 In figure 13 is shown Late Season log Secchi Depth vs. Lake IWS Ratio together with the Mixed Effects Model that we determined.
 
@@ -857,10 +897,13 @@ In figure 13 is shown Late Season log Secchi Depth vs. Lake IWS Ratio together w
 
 # Summary and Conclusions
 
-   The aim of this project was to examine the impacts that land use had on water quality in Minnesota and if there was a seasonal characterization of these effects. Our findings support some of our hypotheses and does not support others. Our initial assumption as reflected in hypotheses 1a, 1b, and 1c was that urbanized and agricultural land would negatively impact water quality, and forest and natural lands have positive impact on water quality. We also predicted in hypothesis 2 that we would see seasonal variation in our results. Our results are less clear cut than our hypotheses predicted they would be.
-   Our second hypothesis is largely supported by our statistical tests. We found a difference between seasons in our dataset. Observe in Table 7 that no two seasons for the two variables we looked at found the exact same variance coefficient. In many cases, the difference in coefficients was quite large, while in other cases the difference was close to negligible and potentially the result of unaccounted for variation or statistical noise. Observe our findings for Forest land cover. Prime and late season have similar results for both chlorophyll a and secchi depth, but these two values are quite different than the value for early season. In many cases, we found different significant land uses for the same dependent variable for different seasons. For example, we found that Intense Urban only has statistically significant coefficients for the prime and late seasons. We also found that prime has highest number of significant variables
+The aim of this project was to examine the impacts that land use had on water quality in Minnesota and if there was a seasonal characterization of these effects. Our findings support some of our hypotheses and does not support others. Our initial assumption as reflected in hypotheses 1a, 1b, and 1c was that urbanized and agricultural land would negatively impact water quality, and forest and natural lands have positive impact on water quality. We also predicted in hypothesis 2 that we would see seasonal variation in our results. Our results are less clear cut than our hypotheses predicted they would be.
+
+Our second hypothesis is largely supported by our statistical tests. We found a difference between seasons in our dataset. Observe in Table 7 that no two seasons for the two variables we looked at found the exact same variance coefficient. In many cases, the difference in coefficients was quite large, while in other cases the difference was close to negligible and potentially the result of unaccounted for variation or statistical noise. Observe our findings for Forest land cover. Prime and late season have similar results for both chlorophyll a and secchi depth, but these two values are quite different than the value for early season. In many cases, we found different significant land uses for the same dependent variable for different seasons. For example, we found that Intense Urban only has statistically significant coefficients for the prime and late seasons. We also found that prime has highest number of significant variables.
+
 Our first hypothesis is partially supported by our statistical tests. Observe from Table 7 that our findings do not support our hypotheses 1a, 1b, and 1c for all the land uses that we looked at. Our initial assumption was that agricultural and urbanized land would negatively impact water quality, and forest and natural lands would have a positive impact on water quality. We found that land use has significant impact on both response variables and that an increase in chlorophyll a was paired with a decrease in secchi depth in all but one case (row crop, early). These impacts were sometimes but not always in the direction our hypotheses predicted. 
-   Row crop showed increasing chlorophyll a in the early season, decreasing in prime, and was not significant in late. If hypothesis 1b, which dealt with agricultural land use, was to be true, we would have predicted to see increasing chlorophyll a for all three seasons. It is worth noting that the China study by Huang et al. (2013) found a similarly complex result from agricultural land use. We found several other noteworthy similarities and differences between our hypotheses 1a, 1b, and 1c:
+
+Row crop showed increasing chlorophyll a in the early season, decreasing in prime, and was not significant in late. If hypothesis 1b, which dealt with agricultural land use, was to be true, we would have predicted to see increasing chlorophyll a for all three seasons. It is worth noting that the China study by Huang et al. (2013) found a similarly complex result from agricultural land use. We found several other noteworthy similarities and differences between our hypotheses 1a, 1b, and 1c:
 
 Similarities to hypotheses:
 
@@ -875,8 +918,9 @@ Differences from hypotheses:
 *	Open urban improves in all seasons
 *	Row crop improves water quality in prime season
 
-   A major limitation of this study is that it does not consider all of the factors contributing to water quality. This can be seen in our relatively low R^2 values for all of our models. Another limitation is the uneven distribution of lakes across the three ecoregions. Ecoregions with less lakes will not be as thoroughly accounted for by this study, and therefore other water quality issues, such as those related to groundwater, are not captured by this dataset. These limitations should be considered when developing further studies and governing policies. Future studies could use more up to date land cover or alternatively examine the effects of changes in land cover over time.
-   Our findings offer potential insight for watershed managers in Minnesota, as well as in the Mississippi River basin. We were able to show in some cases that increasing the amount of developed land in a watershed decreases its water quality. In addition, our analysis found some seasonal variation in water quality. Taken together, these two findings suggest that land use management decisions in Minnesota potentially affect water quality far downstream of state lines. We recommend that managers consider increasing or slowing the decrease of undeveloped land in Minnesota. Managers also ought to be conscious of seasonal patterns in water quality impacts of land use. Potentially, states and Canadian provinces downstream of Minnesota could work together to improve land use practices at a watershed scale. The Mississippi River Basin Healthy Watershed Initiative was founded in 2009 and is a 13-state collaborative effort to pool resources from Farm Bill programs to improve water quality through nutrient management in the Mississippi River basin (Natural Resources Conservation Service, 2019). The Initiative is a strong step towards watershed-scale nutrient management, but it could benefit from an improved understanding of the types of effects different spatial and temporal land use management decisions have on downstream water quality.
+A major limitation of this study is that it does not consider all of the factors contributing to water quality. This can be seen in our relatively low R^2 values for all of our models. Another limitation is the uneven distribution of lakes across the three ecoregions. Ecoregions with less lakes will not be as thoroughly accounted for by this study, and therefore other water quality issues, such as those related to groundwater, are not captured by this dataset. These limitations should be considered when developing further studies and governing policies. Future studies could use more up to date land cover or alternatively examine the effects of changes in land cover over time.
+
+Our findings offer potential insight for watershed managers in Minnesota, as well as in the Mississippi River basin. We were able to show in some cases that increasing the amount of developed land in a watershed decreases its water quality. In addition, our analysis found some seasonal variation in water quality. Taken together, these two findings suggest that land use management decisions in Minnesota potentially affect water quality far downstream of state lines. We recommend that managers consider increasing or slowing the decrease of undeveloped land in Minnesota. Managers also ought to be conscious of seasonal patterns in water quality impacts of land use. Potentially, states and Canadian provinces downstream of Minnesota could work together to improve land use practices at a watershed scale. The Mississippi River Basin Healthy Watershed Initiative was founded in 2009 and is a 13-state collaborative effort to pool resources from Farm Bill programs to improve water quality through nutrient management in the Mississippi River basin (Natural Resources Conservation Service, 2019). The Initiative is a strong step towards watershed-scale nutrient management, but it could benefit from an improved understanding of the types of effects different spatial and temporal land use management decisions have on downstream water quality.
 
 
 

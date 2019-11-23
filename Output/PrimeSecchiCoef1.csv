@@ -1,0 +1,9 @@
+Predictor,Coefficient
+IntenseUrban,1.00%
+OpenUrban,3.70%
+Barren,1.80%
+Forest,3.80%
+GrassShrub,3.40%
+Pasture,0.80%
+RowCrop ,1.10%
+LakeIWS.Ratio,147.90%
