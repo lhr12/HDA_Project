@@ -31,7 +31,11 @@
             breaklinks=true}
 \urlstyle{same}  % don't use monospace font for urls
 \usepackage{longtable,booktabs}
-\usepackage{graphicx,grffile}
+\usepackage{graphicx}
+% grffile has become a legacy package: https://ctan.org/pkg/grffile
+\IfFileExists{grffile.sty}{%
+\usepackage{grffile}
+}{}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
 \def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
@@ -249,7 +253,7 @@ natural ecosystem variation in different parts of the state in our
 statistical models with sufficient water quality data per ecoregion,
 conditions that could not be met with higher resolution ecoregions.
 
-In table 1 is presented a summary of the data structure that we used.
+In Table 1 is presented a summary of the data structure that we used.
 
 \begin{longtable}[]{@{}lllll@{}}
 \caption{Data structure, including variables, descriptions, units,
@@ -421,7 +425,7 @@ We created a dataframe for each of the three seasons.
 
 A summary of the structure of the resulting dataset is shown in table 1.
 
-With figures 3, 4, and 5 we performed a preliminar exploratory
+With Figures 3, 4, and 5 we performed a preliminar exploratory
 visualization of our dataset. It includes a histogram of the variables,
 the relationship, and correlation between them for each season. It can
 be seen that the correlations numbers are in an acceptable range and
@@ -459,11 +463,11 @@ aimed to visually confirm that we might find a relationship between land
 use and our two response variables when we ran our statistical tests in
 our analysis section. Specifically, we expected to see an increase in
 secchi depth and a decrease in chlorophyll a with an increasing
-percentage of undeveloped land. Figures 3 and 4 explore the trends in
+percentage of undeveloped land. Figures 6 and 7 explore the trends in
 secchi depth and chlorophyll a by the percentage of each land use type
 in the late season. The late season was chosen for exploration because
 it had to lowest and highest mean secchi depth and mean chlorophyll a,
-respectively. Observe in Figure 3 (secchi depth) and Figure 4
+respectively. Observe in Figure 6 (secchi depth) and Figure 7
 (chlorophyll a) that some ggplots showed a possible relationship between
 some land uses and our response variables in the directions that we
 predicted in Hypotheses 1a, 1b, and 1c, whereas some ggplots did not
@@ -487,7 +491,7 @@ of trends supports the inclusion of the above land uses in the analysis.
 Note that the x-axes are on different scales.}
 \end{figure}
 
-Because of the presence of some relationships in Figures 3 and 4, we
+Because of the presence of some relationships in Figures 6 and 7, we
 determined that we had, in fact selected useful land use classifications
 and useful seasonal demarcations. We performed a summary function, and
 gave all of our columns useful names and removed NAs. Our statistical
@@ -505,7 +509,7 @@ created three tables, one for each season, with a lake sample count for
 each ecoregion. See Tables 4, 5, and 6. From these tables, we learned
 that we had enough data to proceed with our statistical analysis, and
 therefore Level II ecoregions were the correct resolution for our study.
-We also displayed this information spatially in Figures 5, 6, and 7;
+We also displayed this information spatially in Figures 8, 9, and 10;
 each figure corresponds to a different season. We discovered that there
 are a large number of lake samples around the Twin Cities area, and that
 there is enough spatial variation in our data to capture the three
@@ -671,7 +675,7 @@ Ratio & -0.3086167\tabularnewline
 \end{longtable}
 
 Since the outcome variable of the model is log transformed, the
-coefficients must be exponentiated to be interpreted correctly. In table
+coefficients must be exponentiated to be interpreted correctly. In Table
 8 are presented the percentage increase or decrease that a 1\% increase
 of the explanatory variables have on early season chlorophyll a.
 
@@ -694,7 +698,7 @@ LakeIWS.Ratio & -50.90\%\tabularnewline
 \bottomrule
 \end{longtable}
 
-In figure 8 is shown Early Season log Chlorophyll a vs.~Lake IWS Ratio
+In Figure 11 is shown Early Season log Chlorophyll a vs.~Lake IWS Ratio
 together with the Mixed Effects Model that we determined.
 
 \begin{verbatim}
@@ -740,7 +744,7 @@ Ratio & 0.2144161\tabularnewline
 \end{longtable}
 
 Since the outcome variable of the model is log transformed, the
-coefficients must be exponentiated to be interpreted. In table 10 are
+coefficients must be exponentiated to be interpreted. In Table 10 are
 presented the percentage increase or decrease that a 1\% increase of the
 explanatory variables have on early season secchi depth.
 
@@ -763,7 +767,7 @@ LakeIWS.Ratio & 63.80\%\tabularnewline
 \bottomrule
 \end{longtable}
 
-In figure 9 is shown Early Season log Secchi Depth vs.~Lake IWS Ratio
+In Figure 12 is shown Early Season log Secchi Depth vs.~Lake IWS Ratio
 together with the Mixed Effects Model that we determined.
 
 \begin{figure}
@@ -809,9 +813,11 @@ Ratio & -0.4174341\tabularnewline
 \end{longtable}
 
 Since the outcome variable of the model is log transformed, the
-coefficients must be exponentiated to be interpreted. In table 12 are
+coefficients must be exponentiated to be interpreted. In Table 12 are
 presented the percentage increase or decrease that a 1\% increase of the
 explanatory variables have on prime season chlorophyll a.
+
+\newpage
 
 \begin{longtable}[]{@{}ll@{}}
 \caption{Transformed Model Coefficients. Prime Season Chlorophyll
@@ -834,7 +840,7 @@ LakeIWS.Ratio & -61.80\%\tabularnewline
 \bottomrule
 \end{longtable}
 
-In figure 10 is shown Prime Season log Chlorophyll a vs.~Lake IWS Ratio
+In Figure 13 is shown Prime Season log Chlorophyll a vs.~Lake IWS Ratio
 together with the Mixed Effects Model that we determined.
 
 \begin{figure}
@@ -859,6 +865,8 @@ Urban Percent (p = 3.028 * 10\^{}-7), Open Urban Percent (p \textless{}
 secchi depth can be explained by the variance of ecoregion. Table 13
 shows the coefficients for each significant explanatory variable.
 
+\newpage
+
 \begin{longtable}[]{@{}lr@{}}
 \caption{Model Coefficients. Prime Season Secchi Depth.}\tabularnewline
 \toprule
@@ -881,7 +889,7 @@ Ratio & 0.3943152\tabularnewline
 \end{longtable}
 
 Since the outcome variable of the model is log transformed, the
-coefficients must be exponentiated to be interpreted. In table 14 are
+coefficients must be exponentiated to be interpreted. In Table 14 are
 presented the percentage increase or decrease that a 1\% increase of the
 explanatory variables have on prime season secchi depth.
 
@@ -907,7 +915,7 @@ LakeIWS.Ratio & 147.90\%\tabularnewline
 \bottomrule
 \end{longtable}
 
-In figure 11 is shown Prime Season log Secchi Depth vs.~Lake IWS Ratio
+In Figure 14 is shown Prime Season log Secchi Depth vs.~Lake IWS Ratio
 together with the Mixed Effects Model that we determined.
 
 \begin{figure}
@@ -951,9 +959,11 @@ Ratio & -0.2633484\tabularnewline
 \end{longtable}
 
 Since the outcome variable of the model is log transformed, the
-coefficients must be exponentiated to be interpreted. In table 16 are
+coefficients must be exponentiated to be interpreted. In Table 16 are
 presented the percentage increase or decrease that a 1\% increase of the
 explanatory variables have on late season chlorophyll a.
+
+\newpage
 
 \begin{longtable}[]{@{}ll@{}}
 \caption{Transformed Model Coefficients. Late Season Chlorophyll
@@ -975,7 +985,7 @@ LakeIWS.Ratio & -45.50\%\tabularnewline
 \bottomrule
 \end{longtable}
 
-In figure 12 is shown Late Season log Chlorophyll a vs.~Lake IWS Ratio
+In Figure 15 is shown Late Season log Chlorophyll a vs.~Lake IWS Ratio
 together with the Mixed Effects Model that we determined.
 
 \begin{figure}
@@ -998,6 +1008,8 @@ Percent (p = 8.468 * 10\^{}-5), and Lake IWS ratio (p = 3.170 *
 depth can be explained by the variance of ecoregion. Table 17 shows the
 coefficients for each significant explanatory variable.
 
+\newpage
+
 \begin{longtable}[]{@{}lr@{}}
 \caption{Model Coefficients. Late Season Secchi Depth.}\tabularnewline
 \toprule
@@ -1017,7 +1029,7 @@ Ratio & 0.2467001\tabularnewline
 \end{longtable}
 
 Since the outcome variable of the model is log transformed, the
-coefficients must be exponentiated to be interpreted. In table 18 are
+coefficients must be exponentiated to be interpreted. In Table 18 are
 presented the percentage increase or decrease that a 1\% increase of the
 explanatory variables have on late season secchi.
 
@@ -1040,7 +1052,7 @@ LakeIWS.Ratio & 76.50\%\tabularnewline
 \bottomrule
 \end{longtable}
 
-In figure 13 is shown Late Season log Secchi Depth vs.~Lake IWS Ratio
+In Figure 16 is shown Late Season log Secchi Depth vs.~Lake IWS Ratio
 together with the Mixed Effects Model that we determined.
 
 \begin{figure}
@@ -1169,30 +1181,24 @@ Minnesota River Basin.'' Journal of Environmental Quality, vol.~41, no.
 \url{https://login.proxy.lib.duke.edu/login?url=https://search.proquest.com/docview/1}
 95114913?accountid=10598.
 
-Huang, J., Zhan, J., Yan, H., Wu, F., Xiangzheng Deng, X. ``Evaluation
-of the Impacts of Land Use on Water Quality: A Case Study in The Chaohu
-Lake Basin,'' The Scientific World Journal, vol.~2013, Article ID
-329187, 7 pages, 2013. \url{https://doi.org/10.1155/2013/329187}.
+Huang, J., et al.~``Evaluation of the Impacts of Land Use on Water
+Quality: A Case Study in The Chaohu Lake Basin,'' The Scientific World
+Journal, vol.~2013, Article ID 329187, 7 pages, 2013.
+\url{https://doi.org/10.1155/2013/329187}.
 
-Maalim, Fukhrudin K., Melesse, Assefa M., Belmont, Patrick., Gran, Karen
-B. ``Modeling the impact of land use changes on runoff and sediment
-yield in the Le Sueur watershed, Minnesota using GeoWEPP.'' CATENA
-Volume 107, 2013, Pages 35 45,
+Maalim, Fukhrudin K., et al.~``Modeling the impact of land use changes
+on runoff and sediment yield in the Le Sueur watershed, Minnesota using
+GeoWEPP.'' CATENA Volume 107, 2013, Pages 35-45,
 \url{https://doi.org/10.1016/j.catena.2013.03.004}.
 
 ``Mississippi River Basin Healthy Watersheds Initiative-Natural
 Resources Conservation Service.'' Natural Resources Conservation
 Service,
-\url{https://nrcs.usda.gov/wps/portal/nrcs/detailfull/national/programs/initiatives/?cid=stelprdb1048200}.
+www.nrcs.usda.gov/wps/portal/nrcs/detailfull/national/programs/initiatives/?cid=stelprdb1048200.
 
 ``Nutrient Reduction Strategy.'' Minnesota Pollution Control Agency, 6
 Mar.~2019,
 www.pca.state.mn.us/water/nutrient-reduction-strategy\#resources-b7ca91dc.
-
-Ramstack, Joy M., Sherilyn C. Fritz, and Daniel R. Engstrom. ``Twentieth
-Century Water Quality Trends in Minnesota Lakes Compared with
-Presettlement Variability.'' Canadian Journal of Fisheries and Aquatic
-Sciences, vol.~61, no. 4, 2004, pp.~561-576.
 
 
 \end{document}

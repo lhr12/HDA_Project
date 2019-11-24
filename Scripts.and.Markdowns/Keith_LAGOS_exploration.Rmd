@@ -20,13 +20,14 @@ Questions for the group:
 install.packages("LAGOSNE")
 install.packages("lubridate")
 install.packages("tidyverse")
+install.packages("rgeos")
 
 #load packages
 library(tidyverse)
 library(lubridate)
 library(LAGOSNE)
 library(ggplot2)
-
+library(rgeos)
 
 theme_set(theme_classic())
 
