@@ -1,6 +1,6 @@
-﻿Predictor,Coefficient
-Open Urban,0.01236809
-Barren,0.01956408
-Forest,0.01228808
-Grass Shrub,0.01024311
-Ratio,0.2144161
+Predictor,Coefficient
+OpenUrban,0.01237
+Barren,0.01956
+Forest,0.01229
+GrassShrub,0.01024
+LakeIWS.Ratio,0.21442

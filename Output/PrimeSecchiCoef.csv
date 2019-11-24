@@ -1,9 +1,9 @@
-﻿Predictor,Coefficient
-Intense Urban,0.004230212
-Open Urban,0.01558668
-Barren,0.007596607
-Forest,0.01596932
-Grass Shrub,0.01445791
-Pasture,0.003329809
-Row Crop,0.00463991
-Ratio,0.3943152
+Predictor,Coefficient
+IntenseUrban,0.00423
+OpenUrban,0.01559
+Barren,0.00760
+Forest,0.01597
+GrassShrub,0.01446
+Pasture,0.00333
+RowCrop ,0.00464
+LakeIWS.Ratio,0.39432

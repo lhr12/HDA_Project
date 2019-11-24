@@ -31,11 +31,7 @@
             breaklinks=true}
 \urlstyle{same}  % don't use monospace font for urls
 \usepackage{longtable,booktabs}
-\usepackage{graphicx}
-% grffile has become a legacy package: https://ctan.org/pkg/grffile
-\IfFileExists{grffile.sty}{%
-\usepackage{grffile}
-}{}
+\usepackage{graphicx,grffile}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
 \def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
@@ -659,18 +655,18 @@ the coefficients for each significant explanatory variable.
 \begin{longtable}[]{@{}lr@{}}
 \caption{Model Coefficients. Early Season Chlorophyll a.}\tabularnewline
 \toprule
-ï..Predictor & Coefficient\tabularnewline
+Predictor & Coefficient\tabularnewline
 \midrule
 \endfirsthead
 \toprule
-ï..Predictor & Coefficient\tabularnewline
+Predictor & Coefficient\tabularnewline
 \midrule
 \endhead
-Open Urban & -0.0107689\tabularnewline
-Forest & -0.0152622\tabularnewline
-Pasture & 0.0084965\tabularnewline
-Row Crop & 0.0032011\tabularnewline
-Ratio & -0.3086167\tabularnewline
+Open Urban & -0.01077\tabularnewline
+Forest & -0.01526\tabularnewline
+Pasture & 0.00850\tabularnewline
+Row Crop & 0.00320\tabularnewline
+Ratio & -0.30862\tabularnewline
 \bottomrule
 \end{longtable}
 
@@ -728,18 +724,18 @@ for each significant explanatory variable.
 \begin{longtable}[]{@{}lr@{}}
 \caption{Model Coefficients. Early Season Secchi Depth.}\tabularnewline
 \toprule
-ï..Predictor & Coefficient\tabularnewline
+Predictor & Coefficient\tabularnewline
 \midrule
 \endfirsthead
 \toprule
-ï..Predictor & Coefficient\tabularnewline
+Predictor & Coefficient\tabularnewline
 \midrule
 \endhead
-Open Urban & 0.0123681\tabularnewline
-Barren & 0.0195641\tabularnewline
-Forest & 0.0122881\tabularnewline
-Grass Shrub & 0.0102431\tabularnewline
-Ratio & 0.2144161\tabularnewline
+OpenUrban & 0.01237\tabularnewline
+Barren & 0.01956\tabularnewline
+Forest & 0.01229\tabularnewline
+GrassShrub & 0.01024\tabularnewline
+LakeIWS.Ratio & 0.21442\tabularnewline
 \bottomrule
 \end{longtable}
 
@@ -795,20 +791,20 @@ for each significant explanatory variable.
 \begin{longtable}[]{@{}lr@{}}
 \caption{Model Coefficients. Prime Season Chlorophyll a.}\tabularnewline
 \toprule
-ï..Predictor & Coefficient\tabularnewline
+Predictor & Coefficient\tabularnewline
 \midrule
 \endfirsthead
 \toprule
-ï..Predictor & Coefficient\tabularnewline
+Predictor & Coefficient\tabularnewline
 \midrule
 \endhead
-Intense Urban & -0.0100841\tabularnewline
-Open Urban & -0.0252362\tabularnewline
-Forest & -0.0244790\tabularnewline
-Grass Shrub & -0.0252642\tabularnewline
-Wetland & -0.0125302\tabularnewline
-Row Crop & -0.0069355\tabularnewline
-Ratio & -0.4174341\tabularnewline
+IntenseUrban & -0.01008\tabularnewline
+OpenUrban & -0.02524\tabularnewline
+Forest & -0.02448\tabularnewline
+GrassShrub & -0.02526\tabularnewline
+Wetland & -0.01253\tabularnewline
+RowCrop & -0.00694\tabularnewline
+LakeIWS.Ratio & -0.41743\tabularnewline
 \bottomrule
 \end{longtable}
 
@@ -870,21 +866,21 @@ shows the coefficients for each significant explanatory variable.
 \begin{longtable}[]{@{}lr@{}}
 \caption{Model Coefficients. Prime Season Secchi Depth.}\tabularnewline
 \toprule
-ï..Predictor & Coefficient\tabularnewline
+Predictor & Coefficient\tabularnewline
 \midrule
 \endfirsthead
 \toprule
-ï..Predictor & Coefficient\tabularnewline
+Predictor & Coefficient\tabularnewline
 \midrule
 \endhead
-Intense Urban & 0.0042302\tabularnewline
-Open Urban & 0.0155867\tabularnewline
-Barren & 0.0075966\tabularnewline
-Forest & 0.0159693\tabularnewline
-Grass Shrub & 0.0144579\tabularnewline
-Pasture & 0.0033298\tabularnewline
-Row Crop & 0.0046399\tabularnewline
-Ratio & 0.3943152\tabularnewline
+IntenseUrban & 0.00423\tabularnewline
+OpenUrban & 0.01559\tabularnewline
+Barren & 0.00760\tabularnewline
+Forest & 0.01597\tabularnewline
+GrassShrub & 0.01446\tabularnewline
+Pasture & 0.00333\tabularnewline
+RowCrop & 0.00464\tabularnewline
+LakeIWS.Ratio & 0.39432\tabularnewline
 \bottomrule
 \end{longtable}
 
@@ -942,19 +938,19 @@ for each significant explanatory variable.
 \begin{longtable}[]{@{}lr@{}}
 \caption{Model Coefficients. Late Season Chlorophyll a.}\tabularnewline
 \toprule
-ï..Predictor & Coefficient\tabularnewline
+Predictor & Coefficient\tabularnewline
 \midrule
 \endfirsthead
 \toprule
-ï..Predictor & Coefficient\tabularnewline
+Predictor & Coefficient\tabularnewline
 \midrule
 \endhead
-Intense Urban & -0.0133056\tabularnewline
-Open urban & -0.0237716\tabularnewline
-Forest & -0.0248700\tabularnewline
-Grass Shrub & -0.0281489\tabularnewline
-Wetland & -0.0112842\tabularnewline
-Ratio & -0.2633484\tabularnewline
+IntenseUrban & -0.01331\tabularnewline
+OpenUrban & -0.02377\tabularnewline
+Forest & -0.02487\tabularnewline
+GrassShrub & -0.02815\tabularnewline
+Wetland & -0.01128\tabularnewline
+LakeIWS.Ratio & -0.26335\tabularnewline
 \bottomrule
 \end{longtable}
 
@@ -1013,18 +1009,18 @@ coefficients for each significant explanatory variable.
 \begin{longtable}[]{@{}lr@{}}
 \caption{Model Coefficients. Late Season Secchi Depth.}\tabularnewline
 \toprule
-ï..Predictor & Coefficient\tabularnewline
+Predictor & Coefficient\tabularnewline
 \midrule
 \endfirsthead
 \toprule
-ï..Predictor & Coefficient\tabularnewline
+Predictor & Coefficient\tabularnewline
 \midrule
 \endhead
-Intense Urban & 0.0038627\tabularnewline
-Open Urban & 0.0145363\tabularnewline
-Forest & 0.0161930\tabularnewline
-Grass Shrub & 0.0176166\tabularnewline
-Ratio & 0.2467001\tabularnewline
+IntenseUrban & 0.00386\tabularnewline
+OpenUrban & 0.01454\tabularnewline
+Forest & 0.01619\tabularnewline
+GrassShrub & 0.01762\tabularnewline
+LakeIWS.Ratio & 0.24670\tabularnewline
 \bottomrule
 \end{longtable}
 
@@ -1193,8 +1189,8 @@ GeoWEPP.'' CATENA Volume 107, 2013, Pages 35-45,
 
 ``Mississippi River Basin Healthy Watersheds Initiative-Natural
 Resources Conservation Service.'' Natural Resources Conservation
-Service,
-www.nrcs.usda.gov/wps/portal/nrcs/detailfull/national/programs/initiatives/?cid=stelprdb1048200.
+Service, www.nrcs.usda.gov/wps/portal/nrcs/detailfull
+/national/programs/initiatives/?cid=stelprdb1048200.
 
 ``Nutrient Reduction Strategy.'' Minnesota Pollution Control Agency, 6
 Mar.~2019,
