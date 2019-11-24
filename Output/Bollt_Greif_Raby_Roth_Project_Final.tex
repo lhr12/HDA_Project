@@ -165,7 +165,7 @@ questions to help guide our research:
     significant negative effect on water quality, as measured by higher
     chlorophyll a concentrations and lower secchi depth measurements.
   \item
-    Hypothesis 1c: The precentage of undeveloped land in a lake's
+    Hypothesis 1c: The percentage of undeveloped land in a lake's
     watershed in the state of Minnesota will have a statistically
     significant positive effect on water quality, as measured by lower
     chlorophyll a concentrations and higher secchi depth measurements.
@@ -230,10 +230,10 @@ datasets.
 
 LAGOSNE is a collection of several data modules that contain information
 on lakes in the northern United States. The modules contain data from
-thousands of lakes in 17 states in the northeastern and midwestern
+thousands of lakes in 17 states in the northeastern and Midwestern
 United States, from Missouri to Maine. The dataset includes a complete
-list of all lakes bigger than 4 hectacres in the 17 state area, and
-water quality data on a large number of lakes, spanning every state.
+list of all lakes bigger than 4 hectares in the 17 state area, and water
+quality data on a large number of lakes, spanning every state.
 
 Ecoregions are developed by the US Environmental Protection Agency and
 are used by planning managers to understand the type of land use that
@@ -249,34 +249,42 @@ natural ecosystem variation in different parts of the state in our
 statistical models with sufficient water quality data per ecoregion,
 conditions that could not be met with higher resolution ecoregions.
 
-\begin{longtable}[]{@{}llll@{}}
-\caption{Data structure, including variables, descriptions, units, and
-variable types.}\tabularnewline
+In table 1 is presented a summary of the data structure that we used.
+
+\begin{longtable}[]{@{}lllll@{}}
+\caption{Data structure, including variables, descriptions, units,
+variable types, and source.}\tabularnewline
 \toprule
-Column.Name & Description & Units & Variable.Type\tabularnewline
+Column.Name & Description & Units & Variable.Type &
+Source\tabularnewline
 \midrule
 \endfirsthead
 \toprule
-Column.Name & Description & Units & Variable.Type\tabularnewline
+Column.Name & Description & Units & Variable.Type &
+Source\tabularnewline
 \midrule
 \endhead
-chla & Chlorophyll a & micrograms per liter & Dependent\tabularnewline
-secchi & Secchi depth & meters & Dependent\tabularnewline
-IntenseUrban.pct & \% med. and high intensity urban & \% &
-Independent\tabularnewline
-OpenUrban.pct & \% developed & \% & Independent\tabularnewline
-Barren.pct & \% areas of bedrock and desert pavement & \% &
-Independent\tabularnewline
-Forest.pct & \% deciduous & \% & Independent\tabularnewline
-GrassShrub.pct & \% areas dominated by shrubs & \% &
-Independent\tabularnewline
-Wetland.pct & \% wetlands & \% & Independent\tabularnewline
-Pasture.pct & \% areas of grasses & \% & Independent\tabularnewline
-RowCrop.pct & \% cultivated crops & \% & Independent\tabularnewline
-LakeIWS.Ratio & Lake surface area to watershed area ratio & N/A &
-Independent\tabularnewline
-Season & Early/Prime/Late & N/A & Independent\tabularnewline
-Ecoregion & Level II Ecoregions & N/A & Independent\tabularnewline
+chla & Chlorophyll a & ug/L & Dependent & LAGOS-NE\tabularnewline
+secchi & Secchi depth & meters & Dependent & LAGOS-NE\tabularnewline
+IntenseUrban.pct & \% med. and high intensity urban & \% & Independent &
+LAGOS-NE\tabularnewline
+OpenUrban.pct & \% developed & \% & Independent &
+LAGOS-NE\tabularnewline
+Barren.pct & \% bedrock and desert pavement & \% & Independent &
+LAGOS-NE\tabularnewline
+Forest.pct & \% deciduous & \% & Independent & LAGOS-NE\tabularnewline
+GrassShrub.pct & \% shrubs dominated & \% & Independent &
+LAGOS-NE\tabularnewline
+Wetland.pct & \% wetlands & \% & Independent & LAGOS-NE\tabularnewline
+Pasture.pct & \% areas of grasses & \% & Independent &
+LAGOS-NE\tabularnewline
+RowCrop.pct & \% cultivated crops & \% & Independent &
+LAGOS-NE\tabularnewline
+LakeIWS.Ratio & Lake-watershed area ratio & N/A & Independent &
+LAGOS-NE\tabularnewline
+Season & Early/Prime/Late & N/A & Independent & -\tabularnewline
+Ecoregion & Level II Ecoregions & N/A & Independent & U.S.
+EPA\tabularnewline
 \bottomrule
 \end{longtable}
 
@@ -386,11 +394,22 @@ Season}\label{explore-trends-in-variables-by-land-use-season}}
 
 We decided what land uses we cared about, based on our background
 readings and prior knowledge of water quality and land use, grouped some
-land uses together, and assigned them names in our dataframe. We also
-created an IWS ratio column, which is the lake area divided by watershed
-area. We reasoned a big lake in a small watershed would be affected by
-land use differently than a small lake in a big watershed, and we wanted
-this to be captured in our analysis.
+land uses together, and assigned them names in our dataframe.
+Considering the National Land Cover Database 2011 (NLCD2011) included in
+LAGOS-NE, we defined IntenseUrban as the sum of 23-Developed, Medium
+Intensity and 24-Developed High Intensity; OpenUrban as 21-Developed,
+Open Space; Barren as 31-Barren Land (Rock/Sand/Clay); Forest as the sum
+of 41-Deciduous Forest, 42-Evergreen Forest, and 43-Mixed Forest;
+GrassShrub as the sum of 52-Dwarf Scrub and 71-Grassland/Herbaceous;
+Wetland as the sum of 90-Woody Wetlands and 95-Emergent Herbaceous
+Wetlands; Pasture as 81-Pasture/Hay; and finally RowCrop as
+82-Cultivated Crops.
+
+We also created a lake - interlake watersheds (IWS) ratio column, which
+is the lake area divided by the lake's watershed area. We reasoned a big
+lake in a small watershed would be affected by land use differently than
+a small lake in a big watershed, and we wanted this to be captured in
+our analysis.
 
 Our next step was to create a growing ``seasons'' column in order to
 account for seasonality in our statistical models. We divided up the
@@ -399,6 +418,36 @@ calendar year into three bins: Early (May 15 and Before), Prime (May 16
 designations are somewhat arbitrary, but are based off of our prior
 knowledge of when the prime biological growing season is in Minnesota.
 We created a dataframe for each of the three seasons.
+
+A summary of the structure of the resulting dataset is shown in table 1.
+
+With figures 3, 4, and 5 we performed a preliminar exploratory
+visualization of our dataset. It includes a histogram of the variables,
+the relationship, and correlation between them for each season. It can
+be seen that the correlations numbers are in an acceptable range and
+that the histograms are showing that the variables are not normally
+distributed.
+
+\begin{figure}
+\centering
+\includegraphics{Bollt_Greif_Raby_Roth_Project_Final_files/figure-latex/exploring_the_dataframe1-1.pdf}
+\caption{Plot displaying distributions of variables of interest,
+relationship, and correlations between them for Early Season}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics{Bollt_Greif_Raby_Roth_Project_Final_files/figure-latex/exploring_the_dataframe2-1.pdf}
+\caption{Plot displaying distributions of variables of interest,
+relationship, and correlations between them for Prime Season}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics{Bollt_Greif_Raby_Roth_Project_Final_files/figure-latex/exploring_the_dataframe3-1.pdf}
+\caption{Plot displaying distributions of variables of interest,
+relationship, and correlations between them for Late Season}
+\end{figure}
 
 \hypertarget{visualize-trends-in-variables-by-land-use}{%
 \subsubsection{Visualize Trends in Variables by Land
@@ -422,7 +471,7 @@ appear to show a relationship.
 
 \begin{figure}
 \centering
-\includegraphics{Bollt_Greif_Raby_Roth_Project_Final_files/figure-latex/unnamed-chunk-6-1.pdf}
+\includegraphics{Bollt_Greif_Raby_Roth_Project_Final_files/figure-latex/unnamed-chunk-7-1.pdf}
 \caption{Plots displaying trends in secchi depth relative to the given
 land uses during the `Late Season'. The presence of trends supports the
 inclusion of the above land uses in the analysis. Note that the x-axes
@@ -431,7 +480,7 @@ are on different scales.}
 
 \begin{figure}
 \centering
-\includegraphics{Bollt_Greif_Raby_Roth_Project_Final_files/figure-latex/unnamed-chunk-8-1.pdf}
+\includegraphics{Bollt_Greif_Raby_Roth_Project_Final_files/figure-latex/unnamed-chunk-9-1.pdf}
 \caption{Plots displaying trends in chlorophyll a concentrations
 relative to the given land uses during the `Late Season'. The presence
 of trends supports the inclusion of the above land uses in the analysis.
@@ -466,7 +515,7 @@ dataframes as csv files to our processed data folder.
 
 \begin{figure}
 \centering
-\includegraphics{Bollt_Greif_Raby_Roth_Project_Final_files/figure-latex/unnamed-chunk-10-1.pdf}
+\includegraphics{Bollt_Greif_Raby_Roth_Project_Final_files/figure-latex/unnamed-chunk-11-1.pdf}
 \caption{Visual representation of the available secchi depth and/or
 chlorophyll a data in each Ecoregion during the `Early Season', which
 confirms that there are a suitable number of lakes in each Ecoregion.}
@@ -491,7 +540,7 @@ TEMPERATE PRAIRIES & 37\tabularnewline
 
 \begin{figure}
 \centering
-\includegraphics{Bollt_Greif_Raby_Roth_Project_Final_files/figure-latex/unnamed-chunk-12-1.pdf}
+\includegraphics{Bollt_Greif_Raby_Roth_Project_Final_files/figure-latex/unnamed-chunk-13-1.pdf}
 \caption{Visual representation of the available secchi depth and/or
 chlorophyll a data in each Ecoregion during the `Prime Season', which
 confirms that there are a suitable number of lakes in each Ecoregion.}
@@ -516,7 +565,7 @@ TEMPERATE PRAIRIES & 180\tabularnewline
 
 \begin{figure}
 \centering
-\includegraphics{Bollt_Greif_Raby_Roth_Project_Final_files/figure-latex/unnamed-chunk-14-1.pdf}
+\includegraphics{Bollt_Greif_Raby_Roth_Project_Final_files/figure-latex/unnamed-chunk-15-1.pdf}
 \caption{Visual representation of the amount of lakes with available
 secchi depth and/or chlorophyll a data in each Ecoregion during the
 `Late Season', which confirms that there are a suitable number of lakes
@@ -548,7 +597,7 @@ TEMPERATE PRAIRIES & 19\tabularnewline
 Before creating our models, we tested for autocorrelation between all of
 our variables to make sure none of them needed to be excluded. Then, we
 tested for normality of the distribution of our variables using qqplots
-and Shaprio-Wilkes tests. We used the function BestNormalize to
+and Shapiro-Wilkes tests. We used the function BestNormalize to
 determine what the best transformation for each variable would be if it
 were needed and used that transformation accordingly. We log-transformed
 chlorophyll a and secchi depth. We did not find an effective
@@ -606,11 +655,11 @@ the coefficients for each significant explanatory variable.
 \begin{longtable}[]{@{}lr@{}}
 \caption{Model Coefficients. Early Season Chlorophyll a.}\tabularnewline
 \toprule
-Predictor & Coefficient\tabularnewline
+ï..Predictor & Coefficient\tabularnewline
 \midrule
 \endfirsthead
 \toprule
-Predictor & Coefficient\tabularnewline
+ï..Predictor & Coefficient\tabularnewline
 \midrule
 \endhead
 Open Urban & -0.0107689\tabularnewline
@@ -675,11 +724,11 @@ for each significant explanatory variable.
 \begin{longtable}[]{@{}lr@{}}
 \caption{Model Coefficients. Early Season Secchi Depth.}\tabularnewline
 \toprule
-Predictor & Coefficient\tabularnewline
+ï..Predictor & Coefficient\tabularnewline
 \midrule
 \endfirsthead
 \toprule
-Predictor & Coefficient\tabularnewline
+ï..Predictor & Coefficient\tabularnewline
 \midrule
 \endhead
 Open Urban & 0.0123681\tabularnewline
@@ -742,11 +791,11 @@ for each significant explanatory variable.
 \begin{longtable}[]{@{}lr@{}}
 \caption{Model Coefficients. Prime Season Chlorophyll a.}\tabularnewline
 \toprule
-Predictor & Coefficient\tabularnewline
+ï..Predictor & Coefficient\tabularnewline
 \midrule
 \endfirsthead
 \toprule
-Predictor & Coefficient\tabularnewline
+ï..Predictor & Coefficient\tabularnewline
 \midrule
 \endhead
 Intense Urban & -0.0100841\tabularnewline
@@ -813,11 +862,11 @@ shows the coefficients for each significant explanatory variable.
 \begin{longtable}[]{@{}lr@{}}
 \caption{Model Coefficients. Prime Season Secchi Depth.}\tabularnewline
 \toprule
-Predictor & Coefficient\tabularnewline
+ï..Predictor & Coefficient\tabularnewline
 \midrule
 \endfirsthead
 \toprule
-Predictor & Coefficient\tabularnewline
+ï..Predictor & Coefficient\tabularnewline
 \midrule
 \endhead
 Intense Urban & 0.0042302\tabularnewline
@@ -885,11 +934,11 @@ for each significant explanatory variable.
 \begin{longtable}[]{@{}lr@{}}
 \caption{Model Coefficients. Late Season Chlorophyll a.}\tabularnewline
 \toprule
-Predictor & Coefficient\tabularnewline
+ï..Predictor & Coefficient\tabularnewline
 \midrule
 \endfirsthead
 \toprule
-Predictor & Coefficient\tabularnewline
+ï..Predictor & Coefficient\tabularnewline
 \midrule
 \endhead
 Intense Urban & -0.0133056\tabularnewline
@@ -952,11 +1001,11 @@ coefficients for each significant explanatory variable.
 \begin{longtable}[]{@{}lr@{}}
 \caption{Model Coefficients. Late Season Secchi Depth.}\tabularnewline
 \toprule
-Predictor & Coefficient\tabularnewline
+ï..Predictor & Coefficient\tabularnewline
 \midrule
 \endfirsthead
 \toprule
-Predictor & Coefficient\tabularnewline
+ï..Predictor & Coefficient\tabularnewline
 \midrule
 \endhead
 Intense Urban & 0.0038627\tabularnewline
@@ -1046,7 +1095,7 @@ Row crop showed increasing chlorophyll a in the early season, decreasing
 in prime, and was not significant in late. If hypothesis 1b, which dealt
 with agricultural land use, was to be true, we would have predicted to
 see increasing chlorophyll a for all three seasons. It is worth noting
-that the China study by Huang et al. (2013) found a similarly complex
+that the China study by Huang et al.~(2013) found a similarly complex
 result from agricultural land use. We found several other noteworthy
 similarities and differences between our hypotheses 1a, 1b, and 1c:
 
@@ -1113,7 +1162,7 @@ decisions have on downstream water quality.
 \hypertarget{references}{%
 \section{References}\label{references}}
 
- Christensen, Victoria G., et al. ``Relations between Retired
+Christensen, Victoria G., et al.~``Relations between Retired
 Agricultural Land, Water Quality, and Aquatic-Community Health,
 Minnesota River Basin.'' Journal of Environmental Quality, vol.~41, no.
 5, 2012, pp.~1459-72. ProQuest,

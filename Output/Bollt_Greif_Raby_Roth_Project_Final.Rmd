@@ -80,7 +80,7 @@ In order to evaluate the relationship between land use wand lacustrine water qua
 * 1.	What are the predictors of nutrients based on land use in watersheds in the state of Minnesota?
     + Hypothesis 1a: The percentage of urbanized land in a lake’s watershed in the state of Minnesota will have a statistically significant negative effect on water quality, as measured by higher chlorophyll a concentrations and lower secchi depth measurements.
     + Hypothesis 1b: The percentage of agricultural land in a lake’s watershed in the state of Minnesota will have a statistically significant negative effect on water quality, as measured by higher chlorophyll a concentrations and lower secchi depth measurements.
-    + Hypothesis 1c: The precentage of undeveloped land in a lake’s watershed in the state of Minnesota will have a statistically significant positive effect on water quality, as measured by lower chlorophyll a concentrations and higher secchi depth measurements.
+    + Hypothesis 1c: The percentage of undeveloped land in a lake’s watershed in the state of Minnesota will have a statistically significant positive effect on water quality, as measured by lower chlorophyll a concentrations and higher secchi depth measurements.
 * 2.	How do you characterize seasonal variation between the predictors of nutrients?
     + Hypothesis 2: The water quality in Minnesota lakes will demonstrate a statistically significant seasonal pattern.
 
@@ -99,16 +99,16 @@ By testing our hypotheses, we aim to accomplish the following goals:
 
 The data used in this analysis include data from the Lake Multi-Scaled Geospatial and Temporal Database (LAGOSNE) and the EPA ecoregion spatial datasets.
 
-
-LAGOSNE is a collection of several data modules that contain information on lakes in the northern United States. The modules contain data from thousands of lakes in 17 states in the northeastern and midwestern United States, from Missouri to Maine. The dataset includes a complete list of all lakes bigger than 4 hectacres in the 17 state area, and water quality data on a large number of lakes, spanning every state. 
+LAGOSNE is a collection of several data modules that contain information on lakes in the northern United States. The modules contain data from thousands of lakes in 17 states in the northeastern and Midwestern United States, from Missouri to Maine. The dataset includes a complete list of all lakes bigger than 4 hectares in the 17 state area, and water quality data on a large number of lakes, spanning every state. 
 
 Ecoregions are developed by the US Environmental Protection Agency and are used by planning managers to understand the type of land use that occurs in different regions of the United States. There are different levels of ecoregions. Level I has low resolution, and divides North America into 15 ecological regions, while Level IV offers fine ecological resolution for each state. This data was published by the U.S. EPA Office of Research and Development (ORD) - National Health and Environmental Effects Research Laboratory (NHEERL). Minnesota contains parts of three distinct Level II ecoregions, which we selected for our project. This level of resolution allows us to broadly capture the natural ecosystem variation in different parts of the state in our statistical models with sufficient water quality data per ecoregion, conditions that could not be met with higher resolution ecoregions.
 
+In table 1 is presented a summary of the data structure that we used.
 
-```{r ,echo=FALSE}
+```{r ,echo=FALSE, warning=FALSE}
 Variables.table <- read.csv("./Output/Variable_Descriptions_Table.csv")
 library(knitr)
-kable(Variables.table, caption = "Data structure, including variables, descriptions, units, and variable types.")
+kable(Variables.table, caption = "Data structure, including variables, descriptions, units, variable types, and source.")
 ```
 
 
@@ -237,7 +237,9 @@ kable(chla.count, label="tab:tab2", caption = "Number of chlorophyll a measureme
 ```
 	
 ## Explore Trends in Variables by Land Use & Season
-We decided what land uses we cared about, based on our background readings and prior knowledge of water quality and land use, grouped some land uses together, and assigned them names in our dataframe. We also created an IWS ratio column, which is the lake area divided by watershed area. We reasoned a big lake in a small watershed would be affected by land use differently than a small lake in a big watershed, and we wanted this to be captured in our analysis.
+We decided what land uses we cared about, based on our background readings and prior knowledge of water quality and land use, grouped some land uses together, and assigned them names in our dataframe. Considering the National Land Cover Database 2011 (NLCD2011) included in LAGOS-NE, we defined IntenseUrban as the sum of 23-Developed, Medium Intensity and 24-Developed High Intensity; OpenUrban as 21-Developed, Open Space; Barren as 31-Barren Land (Rock/Sand/Clay); Forest as the sum of 41-Deciduous Forest, 42-Evergreen Forest, and 43-Mixed Forest; GrassShrub as the sum of 52-Dwarf Scrub and 71-Grassland/Herbaceous; Wetland as the sum of 90-Woody Wetlands and 95-Emergent Herbaceous Wetlands; Pasture as 81-Pasture/Hay; and finally RowCrop as 82-Cultivated Crops.
+
+We also created a lake - interlake watersheds (IWS) ratio column, which is the lake area divided by the lake's watershed area. We reasoned a big lake in a small watershed would be affected by land use differently than a small lake in a big watershed, and we wanted this to be captured in our analysis.
 	
 Our next step was to create a growing “seasons” column in order to account for seasonality in our statistical models. We divided up the calendar year into three bins: Early (May 15 and Before), Prime (May 16 - September 30), and Late (October 1 and later). These season designations are somewhat arbitrary, but are based off of our prior knowledge of when the prime biological growing season is in Minnesota. We created a dataframe for each of the three seasons. 
 	
@@ -330,9 +332,10 @@ LAGOS.MN.processed.Prime.sf <- filter(LAGOS.MN.processed.sf, Season == "Prime")
 LAGOS.MN.processed.Late.sf <- filter(LAGOS.MN.processed.sf, Season == "Late")
 
 #Creating regular season files (doesn't have ecoregions column)
-LAGOS.MN.processed.Early <- filter(LAGOS.MN.processed, Season == "Early")
-LAGOS.MN.processed.Prime <- filter(LAGOS.MN.processed, Season == "Prime")
-LAGOS.MN.processed.Late <- filter(LAGOS.MN.processed, Season == "Late")
+LAGOS.MN.processed.Early1 <- filter(LAGOS.MN.processed, Season == "Early")
+LAGOS.MN.processed.Prime1 <- filter(LAGOS.MN.processed, Season == "Prime")
+LAGOS.MN.processed.Late1 <- filter(LAGOS.MN.processed, Season == "Late")
+
 ```
 
 ```{r echo=FALSE, warning=FALSE, eval=FALSE}
@@ -341,9 +344,49 @@ summary(LAGOS.MN.processed.Early.sf$chla)
 summary(LAGOS.MN.processed.Prime.sf$chla)
 summary(LAGOS.MN.processed.Late.sf$chla)
 
+summary(LAGOS.MN.processed.Early.sf$secchi)
 summary(LAGOS.MN.processed.Prime.sf$secchi)
 summary(LAGOS.MN.processed.Late.sf$secchi)
 ```
+
+A summary of the structure of the resulting dataset is shown in table 1. 
+
+With figures 3, 4, and 5 we performed a preliminar exploratory visualization of our dataset. It includes a histogram of the variables, the relationship, and correlation between them for each season. It can be seen that the correlations numbers are in an acceptable range and that the histograms are showing that the variables are not normally distributed.
+
+```{r echo=FALSE, warning=FALSE}
+ LAGOS.MN.processed.Prime <- LAGOS.MN.processed.Prime %>% 
+   filter(chla > 0)
+
+ early.model.variables <- LAGOS.MN.processed.Early %>%
+   select(chla, secchi, IntenseUrban.pct, OpenUrban.pct, Barren.pct, Forest.pct,
+          GrassShrub.pct, Wetland.pct, Pasture.pct, RowCrop.pct, LakeIWS.Ratio, Ecoregion)
+ prime.model.variables <- LAGOS.MN.processed.Prime %>%
+   select(chla, secchi, IntenseUrban.pct, OpenUrban.pct, Barren.pct, Forest.pct,
+          GrassShrub.pct, Wetland.pct, Pasture.pct, RowCrop.pct, LakeIWS.Ratio, Ecoregion)
+ late.model.variables <- LAGOS.MN.processed.Late %>%
+   select(chla, secchi, IntenseUrban.pct, OpenUrban.pct, Barren.pct, Forest.pct,
+          GrassShrub.pct, Wetland.pct, Pasture.pct, RowCrop.pct, LakeIWS.Ratio, Ecoregion)
+```
+
+```{r exploring_the_dataframe1,  fig.cap = "Plot displaying distributions of variables of interest, relationship, and correlations between them for Early Season", echo=FALSE, warning=FALSE}
+source("./Scripts.and.Markdowns/pair.fun.R")
+
+pairs(early.model.variables, lower.panel = panel.smooth,
+     upper.panel = panel.cor, diag.panel = panel.hist)
+```
+
+
+```{r exploring_the_dataframe2,  fig.cap = "Plot displaying distributions of variables of interest, relationship, and correlations between them for Prime Season", echo=FALSE, warning=FALSE}
+pairs(prime.model.variables, lower.panel = panel.smooth,
+      upper.panel = panel.cor, diag.panel = panel.hist)
+```
+
+
+```{r exploring_the_dataframe3,  fig.cap = "Plot displaying distributions of variables of interest, relationship, and correlations between them for Late Season", echo=FALSE, warning=FALSE}
+pairs(late.model.variables, lower.panel = panel.smooth,
+     upper.panel = panel.cor, diag.panel = panel.hist)
+```
+
 
 ### Visualize Trends in Variables by Land Use
 Next, we visualized land use percentage versus secchi depth and versus chlorophyll a for eight representative land uses for the Late season. We aimed to visually confirm that we might find a relationship between land use and our two response variables when we ran our statistical tests in our analysis section. Specifically, we expected to see an increase in secchi depth and a decrease in chlorophyll a with an increasing percentage of undeveloped land. Figures 3 and 4 explore the trends in secchi depth and chlorophyll a by the percentage of each land use type in the late season. The late season was chosen for exploration because it had to lowest and highest mean secchi depth and mean chlorophyll a, respectively. Observe in Figure 3 (secchi depth) and Figure 4 (chlorophyll a) that some ggplots showed a possible relationship between some land uses and our response variables in the directions that we predicted in Hypotheses 1a, 1b, and 1c, whereas some ggplots did not appear to show a relationship.
@@ -522,7 +565,7 @@ st_geometry(LAGOS.MN.LakesperRegion.Late) <- NULL
 
 
 ```{r summary.for.early.season, echo=FALSE, warning=FALSE}
-LAGOS.MN.Summary.Early <- LAGOS.MN.processed.Early %>%
+LAGOS.MN.Summary.Early <- LAGOS.MN.processed.Early1 %>%
 group_by(lagoslakeid) %>%
 summarise(secchi.mean = mean(secchi),
           chla.mean = mean(chla),
@@ -566,7 +609,7 @@ kable(LAGOS.MN.LakesperRegion.Early, caption = "Number of lakes with available s
 ```
 
 ```{r summary.for.prime.season, echo=FALSE, warning=FALSE}
-LAGOS.MN.Summary.Prime <- LAGOS.MN.processed.Prime %>%
+LAGOS.MN.Summary.Prime <- LAGOS.MN.processed.Prime1 %>%
 group_by(lagoslakeid) %>%
 summarise(secchi.mean = mean(secchi),
           chla.mean = mean(chla),
@@ -591,8 +634,8 @@ LAGOS.MN.Summary.Prime.sf <- st_as_sf(LAGOS.MN.Summary.Prime, coords = c("Long",
 ```{r fig.height = 2, fig.width = 3.3,  fig.cap = "Visual representation of the available secchi depth and/or chlorophyll a data in each Ecoregion during the 'Prime Season', which confirms that there are a suitable number of lakes in each Ecoregion.", echo=FALSE, warning=FALSE}
 Prime.MN <- ggplot() +
   geom_sf(data = MN.Ecoregions.sf_UTM_plot, aes(fill = Ecoregion)) +
-  geom_sf(data = LAGOS.MN.Summary.Prime.sf, 
-          alpha = 0.4, show.legend = "point", size = 0.5) +
+  geom_sf(data = LAGOS.MN.Summary.Prime.sf, alpha = 0.4, 
+          show.legend = "point", size = 0.5) +
   theme(legend.position = "right", legend.text = element_text(size = 7),
         legend.title = element_text(size = 8),
         legend.margin = margin(0,0,0,0)) +
@@ -605,7 +648,7 @@ kable(LAGOS.MN.LakesperRegion.Prime, caption = "Number of lakes with available s
 ```
 
 ```{r summary.for.late.season, echo=FALSE, warning=FALSE}
-LAGOS.MN.Summary.Late <- LAGOS.MN.processed.Late %>%
+LAGOS.MN.Summary.Late <- LAGOS.MN.processed.Late1 %>%
 group_by(lagoslakeid) %>%
 summarise(secchi.mean = mean(secchi),
           chla.mean = mean(chla),
@@ -648,37 +691,7 @@ kable(LAGOS.MN.LakesperRegion.Late, caption = "Number of lakes with available se
 
 # Analysis
 
-Before creating our models, we tested for autocorrelation between all of our variables to make sure none of them needed to be excluded. Then, we tested for normality of the distribution of our variables using qqplots and Shaprio-Wilkes tests. We used the function BestNormalize to determine what the best transformation for each variable would be if it were needed and used that transformation accordingly. We log-transformed chlorophyll a and secchi depth. We did not find an effective transformation for our land use variables or the lake IWS ratio, which we expected because they are proportion and ratio values. Therefore, we used them in our models with their original distributions. 
-
-```{r echo=FALSE, warning=FALSE}
- #Early
- LAGOS.MN.processed.Early <- read.csv("./data/processed/LAGOS.MN.processed.Early.csv")
- #Late
- LAGOS.MN.processed.Late <-read.csv("./data/processed/LAGOS.MN.processed.Late.csv")
- #Prime
- LAGOS.MN.processed.Prime <-read.csv("./data/processed/LAGOS.MN.processed.Prime.csv")
- 
- LAGOS.MN.processed.Prime <- LAGOS.MN.processed.Prime %>% 
-   filter(chla > 0)
-
- early.model.variables <- LAGOS.MN.processed.Early %>%
-   select(chla, secchi, IntenseUrban.pct, OpenUrban.pct, Barren.pct, Forest.pct,
-          GrassShrub.pct, Wetland.pct, Pasture.pct, RowCrop.pct, LakeIWS.Ratio, Ecoregion)
- prime.model.variables <- LAGOS.MN.processed.Prime %>%
-   select(chla, secchi, IntenseUrban.pct, OpenUrban.pct, Barren.pct, Forest.pct,
-          GrassShrub.pct, Wetland.pct, Pasture.pct, RowCrop.pct, LakeIWS.Ratio, Ecoregion)
- late.model.variables <- LAGOS.MN.processed.Late %>%
-   select(chla, secchi, IntenseUrban.pct, OpenUrban.pct, Barren.pct, Forest.pct,
-          GrassShrub.pct, Wetland.pct, Pasture.pct, RowCrop.pct, LakeIWS.Ratio, Ecoregion)
-
-# pairs(early.model.variables, lower.panel = panel.smooth,
- #      upper.panel = panel.cor, diag.panel = panel.hist)
- #pairs(prime.model.variables, lower.panel = panel.smooth,
- #       upper.panel = panel.cor, diag.panel = panel.hist)
- #pairs(late.model.variables, lower.panel = panel.smooth,
- #      upper.panel = panel.cor, diag.panel = panel.hist)
-```
-
+Before creating our models, we tested for autocorrelation between all of our variables to make sure none of them needed to be excluded. Then, we tested for normality of the distribution of our variables using qqplots and Shapiro-Wilkes tests. We used the function BestNormalize to determine what the best transformation for each variable would be if it were needed and used that transformation accordingly. We log-transformed chlorophyll a and secchi depth. We did not find an effective transformation for our land use variables or the lake IWS ratio, which we expected because they are proportion and ratio values. Therefore, we used them in our models with their original distributions. 
 
 For our analysis, we ran mixed effect linear models with land use as fixed effects and ecoregion as random effects in order to account for variability between ecoregions without considering each ecoregion as its own factor. We created models for both Chlorophyll a and Secchi depth as response variables for each of the three seasons making a total of six models. To determine the most parsimonious models, we eliminated non-significant variables with the highest p-values one by one until all remaining variables were significant. To check that this model was the best fit for the data, we ran an ANOVA on all of the models together to determine which model had the lowest AIC. If our simplest model had the lowest AIC or it’s AIC was not more than 3 points away from the lowest score, we chose that model as our best fit. 
 
@@ -713,7 +726,7 @@ kable(Variables.table, caption = "Transformed Model Coefficients. Early Season C
 
 In figure 8 is shown Early Season log Chlorophyll a vs. Lake IWS Ratio together with the Mixed Effects Model that we determined.
 
-```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 3.3, fig.cap = "Early Season log Chlorophyll a vs. Lake IWS Ratio and Mixed Effects Model"}
+```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 7, fig.cap = "Early Season log Chlorophyll a vs. Lake IWS Ratio and Mixed Effects Model"}
  early.chla.model3.5 <- lmer(log(chla) ~ OpenUrban.pct + 
                            Forest.pct +  
                            Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
@@ -724,7 +737,8 @@ In figure 8 is shown Early Season log Chlorophyll a vs. Lake IWS Ratio together 
  ggplot(LAGOS.MN.processed.Early) +
    geom_point(aes(x=Forest.pct, y=log(chla)), alpha = 0.3, size = 3) +
    geom_line(aes(x = Forest.pct, y = LMER_Early_Chla), color ="red") +
-   facet_wrap(~Ecoregion)
+   facet_wrap(~Ecoregion) +
+   labs(y = expression("log-Chlorophyll a" (mu*g / L)), x = "LakeIWS Ratio")
 ```
 
 
@@ -746,7 +760,7 @@ kable(Variables.table, caption = "Transformed Model Coefficients. Early Season S
 
 In figure 9 is shown Early Season log Secchi Depth vs. Lake IWS Ratio together with the Mixed Effects Model that we determined.
 
-```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 3.3, fig.cap = "Early Season log Secchi Depth vs. Lake IWS Ratio and Mixed Effects Model"}
+```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 7, fig.cap = "Early Season log Secchi Depth vs. Lake IWS Ratio and Mixed Effects Model"}
 early.secchi.model3.5 <- lmer(log(secchi) ~ OpenUrban.pct + 
                            Barren.pct + Forest.pct + GrassShrub.pct +
                            LakeIWS.Ratio + (1|Ecoregion), 
@@ -757,7 +771,8 @@ early.secchi.model3.5 <- lmer(log(secchi) ~ OpenUrban.pct +
  ggplot(LAGOS.MN.processed.Early, aes(x=LakeIWS.Ratio, y=log(secchi))) +
    geom_point(alpha = 0.3, size = 3) +
    geom_line(aes(y = LMER_Early_Secchi), color ="blue") +
-   facet_wrap(~Ecoregion)
+   facet_wrap(~Ecoregion) +
+   labs(y = "log-Secchi Depth (m)", x = "LakeIWS Ratio")
 ```
 
 
@@ -779,7 +794,7 @@ kable(Variables.table, caption = "Transformed Model Coefficients. Prime Season C
 
 In figure 10 is shown Prime Season log Chlorophyll a vs. Lake IWS Ratio together with the Mixed Effects Model that we determined.
 
-```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 3.3, fig.cap = "Prime Season log Chlorophyll a vs. Lake IWS Ratio and Mixed Effects Model"}
+```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 7, fig.cap = "Prime Season log Chlorophyll a vs. Lake IWS Ratio and Mixed Effects Model"}
  prime.chla.model3.3 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
                            Forest.pct + GrassShrub.pct + Wetland.pct + 
                            RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
@@ -790,7 +805,8 @@ In figure 10 is shown Prime Season log Chlorophyll a vs. Lake IWS Ratio together
  ggplot(LAGOS.MN.processed.Prime, aes(x=LakeIWS.Ratio, y=log(chla))) +
    geom_point(alpha = 0.3, size = 3) +
    geom_line(aes(y = LMER_Prime_Chla), color ="red") +
-   facet_wrap(~Ecoregion)
+   facet_wrap(~Ecoregion) +
+   labs(y = expression("log-Chlorophyll a" (mu*g / L)), x = "LakeIWS Ratio")
 ```
 
 
@@ -812,7 +828,7 @@ kable(Variables.table, caption = "Transformed Model Coefficients. Prime Season S
 
 In figure 11 is shown Prime Season log Secchi Depth vs. Lake IWS Ratio together with the Mixed Effects Model that we determined.
 
-```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 3.3, fig.cap = "Prime Season log Secchi Depth vs. Lake IWS Ratio and Mixed Effects Model"}
+```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 7, fig.cap = "Prime Season log Secchi Depth vs. Lake IWS Ratio and Mixed Effects Model"}
  prime.secchi.model3.2 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
                            Barren.pct + Forest.pct + GrassShrub.pct + 
                            Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
@@ -823,7 +839,8 @@ In figure 11 is shown Prime Season log Secchi Depth vs. Lake IWS Ratio together 
  ggplot(LAGOS.MN.processed.Prime, aes(x=LakeIWS.Ratio, y=log(secchi))) +
    geom_point(alpha = 0.3, size = 3) +
    geom_line(aes(y = LMER_Prime_Secchi), color ="blue") +
-   facet_wrap(~Ecoregion)
+   facet_wrap(~Ecoregion) +
+   labs(y = "log-Secchi Depth (m)", x = "LakeIWS Ratio")
 ```
 
 
@@ -847,7 +864,7 @@ In figure 12 is shown Late Season log Chlorophyll a vs. Lake IWS Ratio together 
 
 
 
-```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 3.3, fig.cap = "Late Season log Chlorophyll a vs. Lake IWS Ratio and Mixed Effects Model"}
+```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 7, fig.cap = "Late Season log Chlorophyll a vs. Lake IWS Ratio and Mixed Effects Model"}
 late.chla.model3.4 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
                            Forest.pct + GrassShrub.pct + Wetland.pct + 
                            LakeIWS.Ratio + (1|Ecoregion), 
@@ -858,7 +875,8 @@ late.chla.model3.4 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct +
  ggplot(LAGOS.MN.processed.Late, aes(x=LakeIWS.Ratio, y=log(chla))) +
    geom_point(alpha = 0.3, size = 3) +
    geom_line(aes(y = LMER_Late_Chla), color ="red") +
-   facet_wrap(~Ecoregion)
+   facet_wrap(~Ecoregion) +
+   labs(y = expression("log-Chlorophyll a" (mu*g / L)), x = "LakeIWS Ratio")
 ```
 
 
@@ -881,7 +899,7 @@ kable(Variables.table, caption = "Transformed Model Coefficients. Late Season Se
 In figure 13 is shown Late Season log Secchi Depth vs. Lake IWS Ratio together with the Mixed Effects Model that we determined.
 
 
-```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 3.3, fig.cap = "Late Season log Secchi Depth vs. Lake IWS Ratio and Mixed Effects Model"}
+```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 7, fig.cap = "Late Season log Secchi Depth vs. Lake IWS Ratio and Mixed Effects Model"}
  late.secchi.model3.5 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
                            Forest.pct + GrassShrub.pct + 
                            LakeIWS.Ratio + (1|Ecoregion), 
@@ -892,7 +910,8 @@ In figure 13 is shown Late Season log Secchi Depth vs. Lake IWS Ratio together w
  ggplot(LAGOS.MN.processed.Late, aes(x=LakeIWS.Ratio, y=log(secchi))) +
    geom_point(alpha = 0.3, size = 3) +
    geom_line(aes(y = LMER_Late_Secchi), color ="blue") +
-   facet_wrap(~Ecoregion)
+   facet_wrap(~Ecoregion) +
+   labs(y = "log-Secchi Depth (m)", x = "LakeIWS Ratio")
 ```
 
 

@@ -1,14 +1,14 @@
-Column Name,Description,Units,Variable Type
-chla,Chlorophyll a,micrograms per liter,Dependent
-secchi,Secchi depth,meters,Dependent
-IntenseUrban.pct,% med. and high intensity urban,%,Independent
-OpenUrban.pct,% developed,%,Independent
-Barren.pct,% areas of bedrock and desert pavement,%,Independent
-Forest.pct,% deciduous,%,Independent
-GrassShrub.pct,% areas dominated by shrubs,%,Independent
-Wetland.pct,% wetlands,%,Independent
-Pasture.pct,% areas of grasses,%,Independent
-RowCrop.pct ,% cultivated crops,%,Independent
-LakeIWS.Ratio,Lake surface area to watershed area ratio,N/A,Independent
-Season,Early/Prime/Late,N/A,Independent
-Ecoregion,Level II Ecoregions,N/A,Independent
+Column Name,Description,Units,Variable Type,Source
+chla,Chlorophyll a,ug/L,Dependent,LAGOS-NE
+secchi,Secchi depth,meters,Dependent,LAGOS-NE
+IntenseUrban.pct,% med. and high intensity urban,%,Independent,LAGOS-NE
+OpenUrban.pct,% developed,%,Independent,LAGOS-NE
+Barren.pct,% bedrock and desert pavement,%,Independent,LAGOS-NE
+Forest.pct,% deciduous,%,Independent,LAGOS-NE
+GrassShrub.pct,% shrubs dominated,%,Independent,LAGOS-NE
+Wetland.pct,% wetlands,%,Independent,LAGOS-NE
+Pasture.pct,% areas of grasses,%,Independent,LAGOS-NE
+RowCrop.pct ,% cultivated crops,%,Independent,LAGOS-NE
+LakeIWS.Ratio,Lake-watershed area ratio,N/A,Independent,LAGOS-NE
+Season,Early/Prime/Late,N/A,Independent,-
+Ecoregion,Level II Ecoregions,N/A,Independent,U.S. EPA
