@@ -691,7 +691,7 @@ kable(LAGOS.MN.LakesperRegion.Late, caption = "Number of lakes with available se
 
 # Analysis
 
-Before creating our models, we tested for autocorrelation between all of our variables to make sure none of them needed to be excluded. Then, we tested for normality of the distribution of our variables using qqplots and Shapiro-Wilkes tests. We used the function BestNormalize to determine what the best transformation for each variable would be if it were needed and used that transformation accordingly. We log-transformed chlorophyll a and secchi depth. We did not find an effective transformation for our land use variables or the lake IWS ratio, which we expected because they are proportion and ratio values. Therefore, we used them in our models with their original distributions. 
+Before creating our models, we tested for correlation between all of our variables to make sure none of them needed to be excluded. Then, we tested for normality of the distribution of our variables using qqplots and Shapiro-Wilkes tests. We used the function BestNormalize to determine what the best transformation for each variable would be if it were needed and used that transformation accordingly. We log-transformed chlorophyll a and secchi depth. We did not find an effective transformation for our land use variables or the lake IWS ratio, which we expected because they are proportion and ratio values. Therefore, we used them in our models with their original distributions. 
 
 For our analysis, we ran mixed effect linear models with land use as fixed effects and ecoregion as random effects in order to account for variability between ecoregions without considering each ecoregion as its own factor. We created models for both Chlorophyll a and Secchi depth as response variables for each of the three seasons making a total of six models. To determine the most parsimonious models, we eliminated non-significant variables with the highest p-values one by one until all remaining variables were significant. To check that this model was the best fit for the data, we ran an ANOVA on all of the models together to determine which model had the lowest AIC. If our simplest model had the lowest AIC or it’s AIC was not more than 3 points away from the lowest score, we chose that model as our best fit. 
 
@@ -726,13 +726,16 @@ kable(Variables.table, caption = "Transformed Model Coefficients. Early Season C
 
 In Figure 11 is shown Early Season log Chlorophyll a vs. Lake IWS Ratio together with the Mixed Effects Model that we determined.
 
-```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 7, fig.cap = "Early Season log Chlorophyll a vs. Lake IWS Ratio and Mixed Effects Model"}
- early.chla.model3.5 <- lmer(log(chla) ~ OpenUrban.pct + 
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.height = 2, fig.width = 7, fig.cap = "Early Season log Chlorophyll a vs. Lake IWS Ratio and Mixed Effects Model"}
+early.chla.model3.5 <- lmer(log(chla) ~ OpenUrban.pct + 
                            Forest.pct +  
                            Pasture.pct + RowCrop.pct + LakeIWS.Ratio + (1|Ecoregion), 
                          data = LAGOS.MN.processed.Early, REML = TRUE)
- 
- LAGOS.MN.processed.Early$LMER_Early_Chla <- fitted(early.chla.model3.5)
+```
+
+
+```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 7, fig.cap = "Early Season log Chlorophyll a vs. Lake IWS Ratio and Mixed Effects Model"}
+LAGOS.MN.processed.Early$LMER_Early_Chla <- fitted(early.chla.model3.5)
  
  ggplot(LAGOS.MN.processed.Early) +
    geom_point(aes(x=Forest.pct, y=log(chla)), alpha = 0.3, size = 3) +
