@@ -75,7 +75,7 @@ We selected the state of Minnesota for our study because it has wide variety of 
 It is important that states like Minnesota have sound nutrient management regimes because they affect water quality downstream of their borders. The Gulf of Mexico has been experiencing hypoxia, or low dissolved oxygen levels, as a result of agricultural runoff in the Mississippi River basin. Minnesota is the source of the Mississippi River and a large agricultural state, so it is important that Minnesota properly manages its agricultural runoff (Minnesota Pollution Control Agency, 2019). Our project hopes to make management recommendations for Minnesota based off our findings.
 
 
-In order to evaluate the relationship between land use wand lacustrine water quality in the state of Minnesota, we asked the following two questions to help guide our research:
+In order to evaluate the relationship between land use and lacustrine water quality in the state of Minnesota, we asked the following two questions to help guide our research:
 
 * 1.	What are the predictors of nutrients based on land use in watersheds in the state of Minnesota?
     + Hypothesis 1a: The percentage of urbanized land in a lake’s watershed in the state of Minnesota will have a statistically significant negative effect on water quality, as measured by higher chlorophyll a concentrations and lower secchi depth measurements.
@@ -103,7 +103,7 @@ LAGOSNE is a collection of several data modules that contain information on lake
 
 Ecoregions are developed by the US Environmental Protection Agency and are used by planning managers to understand the type of land use that occurs in different regions of the United States. There are different levels of ecoregions. Level I has low resolution, and divides North America into 15 ecological regions, while Level IV offers fine ecological resolution for each state. This data was published by the U.S. EPA Office of Research and Development (ORD) - National Health and Environmental Effects Research Laboratory (NHEERL). Minnesota contains parts of three distinct Level II ecoregions, which we selected for our project. This level of resolution allows us to broadly capture the natural ecosystem variation in different parts of the state in our statistical models with sufficient water quality data per ecoregion, conditions that could not be met with higher resolution ecoregions.
 
-In Table 1 is presented a summary of the data structure that we used.
+Table 1 presents a summary of the data structure that is used.
 
 ```{r ,echo=FALSE, warning=FALSE}
 Variables.table <- read.csv("./Output/Variable_Descriptions_Table.csv")
@@ -205,12 +205,12 @@ LAGOSiws.chla.2011.MN <- LAGOSiws.nutrient.2011.MN %>%
 ```
 	
 ## Data	Compilation
-Our first step was to load the LAGOSNE data columns we though we would need and to look at how much data each state in our study contained. We decided on Minnesota because of its high number of lakes in the LAGOSNE dataset, and its high land use variation. We observed that the latest land use classification by USGS was from 2011; the second oldest was from 2006. Therefore, we limited our study to the period from 2009 through 2014 inclusive, so we did not extrapolate too much from our 2011 land use dataset. 
+Our first step was to load the LAGOSNE data columns we thought we would need and to look at how much data each state in our study contained. We decided on Minnesota because of its high number of lakes in the LAGOSNE dataset, and its high land use variation. We observed that the latest land use classification by USGS was from 2011; the next most recent was from 2006. Therefore, we limited our study to the period from 2009 through 2014 inclusive, so we did not extrapolate too much from our 2011 land use dataset. 
 	
 ### Visualize Temporal Distribution & Abundance of Data
-We filtered out just the variables we wanted for our study and created a “LAGOS.MN.processed” dataframe. We decided to use chlorophyll a and secchi depth as proxies of water quality after we visualized our data and confirmed that we had enough data on these two variables in Minnesota between 2009 and 2014 to make claims about land use and water quality; in fact we had over 19,000 lakes with data. Observe in Figure 1 and Table 2 that secchi depth data in Minnesota is available for a large number of lakes and for a large portion of the year, with gaps in the data every winter. Observe in Figure 2 and Table 3 a similar pattern in data availability for chlorophyll a. 
+We filtered out the variables we wanted for our study and created a “LAGOS.MN.processed” dataframe. We decided to use chlorophyll a and secchi depth as proxies of water quality after we visualized our data and confirmed that we had enough data on these two variables in Minnesota between 2009 and 2014 to make claims about land use and water quality; in fact we had over 19,000 lakes with data. Observe in Figure 1 and Table 2 that secchi depth data in Minnesota is available for a large number of lakes and for a large portion of the year, with gaps in the data every winter. Observe in Figure 2 and Table 3 a similar pattern in data availability for chlorophyll a. 
 
-```{r, Visualize_data, echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 3.3, fig.cap = "Secchi Depth a vs. Time.This plot provides a sense of how secchi depth measurements are distributed between and within years, as well as the general range of secchi depth measurements. Sampling occurs during the middle portion of each year, and ceases during the winter season."}
+```{r, Visualize_data, echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 3.3, fig.cap = "Secchi Depth a vs. Time. This plot provides a sense of how secchi depth measurements are distributed between and within years, as well as the general range of secchi depth measurements. Sampling occurs during the middle portion of each year, and ceases during the winter season."}
 ggplot(LAGOSiws.nutrient.2011.MN, 
        aes(x = sampledate, y = secchi)) +
   geom_point(alpha = 0.2) +
@@ -237,11 +237,11 @@ kable(chla.count, label="tab:tab2", caption = "Number of chlorophyll a measureme
 ```
 	
 ## Explore Trends in Variables by Land Use & Season
-We decided what land uses we cared about, based on our background readings and prior knowledge of water quality and land use, grouped some land uses together, and assigned them names in our dataframe. Considering the National Land Cover Database 2011 (NLCD2011) included in LAGOS-NE, we defined IntenseUrban as the sum of 23-Developed, Medium Intensity and 24-Developed High Intensity; OpenUrban as 21-Developed, Open Space; Barren as 31-Barren Land (Rock/Sand/Clay); Forest as the sum of 41-Deciduous Forest, 42-Evergreen Forest, and 43-Mixed Forest; GrassShrub as the sum of 52-Dwarf Scrub and 71-Grassland/Herbaceous; Wetland as the sum of 90-Woody Wetlands and 95-Emergent Herbaceous Wetlands; Pasture as 81-Pasture/Hay; and finally RowCrop as 82-Cultivated Crops.
+We decided which land uses we were interested in, based on our background readings and prior knowledge of water quality and land use, grouped the land uses together, and assigned them names in our dataframe. Considering the National Land Cover Database 2011 (NLCD2011) included in LAGOS-NE, we defined IntenseUrban as the sum of 23-Developed, Medium Intensity and 24-Developed, High Intensity; OpenUrban as 21-Developed, Open Space; Barren as 31-Barren Land (Rock/Sand/Clay); Forest as the sum of 41-Deciduous Forest, 42-Evergreen Forest, and 43-Mixed Forest; GrassShrub as the sum of 52-Dwarf Scrub and 71-Grassland/Herbaceous; Wetland as the sum of 90-Woody Wetlands and 95-Emergent Herbaceous Wetlands; Pasture as 81-Pasture/Hay; and finally RowCrop as 82-Cultivated Crops.
 
 We also created a lake - interlake watersheds (IWS) ratio column, which is the lake area divided by the lake's watershed area. We reasoned a big lake in a small watershed would be affected by land use differently than a small lake in a big watershed, and we wanted this to be captured in our analysis.
 	
-Our next step was to create a growing “seasons” column in order to account for seasonality in our statistical models. We divided up the calendar year into three bins: Early (May 15 and Before), Prime (May 16 - September 30), and Late (October 1 and later). These season designations are somewhat arbitrary, but are based off of our prior knowledge of when the prime biological growing season is in Minnesota. We created a dataframe for each of the three seasons. 
+Our next step was to create a growing “seasons” column in order to account for seasonality in our statistical models. We divided up the calendar year into three bins: Early (January 1 - May 15), Prime (May 16 - September 30), and Late (October 1 - December 31). These season designations are somewhat arbitrary, but are based off of our prior knowledge of when the prime biological growing season is in Minnesota. We created a dataframe for each of the three seasons. 
 	
 ```{r Create_Full_df,echo=FALSE, warning=FALSE}
 LAGOS.MN.processed <- LAGOSiws.nutrient.2011.MN %>%
@@ -538,7 +538,7 @@ grid.arrange(chla.int.urb.late, chla.open.urb.late, chla.barren.late,
              chla.past.late, chla.row.crop.late)
 ```
 	
-Because of the presence of some relationships in Figures 6 and 7, we determined that we had, in fact selected useful land use classifications and useful seasonal demarcations. We performed a summary function, and gave all of our columns useful names and removed NAs. Our statistical tests would not all run if our dataset contained NAs.The next step we performed was to convert our dataframes to sf dataframes so we could add Level II ecoregion column.
+Because of the presence of some relationships in Figures 6 and 7, we determined that we had, in fact selected useful land use classifications and useful seasonal demarcations. We performed a summary function, and gave all of our columns useful names and removed NAs. Our statistical tests would not all run if our dataset contained NAs. The next step we performed was to convert our dataframes to sf dataframes so we could add Level II ecoregion column.
   
 ### Visualize Spatial Distribution of Data in Each Season
 Our final exploratory analysis test was to see if we had enough lake data for each Level II ecoregion for each of our three seasons. We created three tables, one for each season, with a lake sample count for each ecoregion. See Tables 4, 5, and 6. From these tables, we learned that we had enough data to proceed with our statistical analysis, and therefore Level II ecoregions were the correct resolution for our study. We also displayed this information spatially in Figures 8, 9, and 10; each figure corresponds to a different season. We discovered that there are a large number of lake samples around the Twin Cities area, and that there is enough spatial variation in our data to capture the three different Level II ecoregions for all three of our seasons. We concluded our data wrangling by exporting our three non-sf season processed dataframes as csv files to our processed data folder.
@@ -717,14 +717,14 @@ Variables.table <- read.csv("./Output/EarlyChlaCoef.csv")
 kable(Variables.table, caption = "Model Coefficients. Early Season Chlorophyll a.")
 ```
 
-Since the outcome variable of the model is log transformed, the coefficients must be exponentiated to be interpreted correctly. In Table 8 are presented the percentage increase or decrease that a 1% increase of the explanatory variables have on early season chlorophyll a. 
+Since the outcome variable of the model is log transformed, the coefficients must be exponentiated to be interpreted correctly. Table 8 presents the percentage increase or decrease that a 1% increase of the explanatory variables have on early season chlorophyll a. 
 
 ```{r echo=FALSE, warning=FALSE}
 Variables.table <- read.csv("./Output/EarlyChlaCoef1.csv")
 kable(Variables.table, caption = "Transformed Model Coefficients. Early Season Chlorophyll a.")
 ```
 
-In Figure 11 is shown Early Season log Chlorophyll a vs. Lake IWS Ratio together with the Mixed Effects Model that we determined.
+Figure 11 shows Early Season log Chlorophyll a vs. Lake IWS Ratio together with the Mixed Effects Model that we determined.
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, fig.height = 2, fig.width = 7, fig.cap = "Early Season log Chlorophyll a vs. Lake IWS Ratio and Mixed Effects Model"}
 early.chla.model3.5 <- lmer(log(chla) ~ OpenUrban.pct + 
@@ -754,14 +754,14 @@ Variables.table <- read.csv("./Output/EarlySecchiCoef.csv")
 kable(Variables.table, caption = "Model Coefficients. Early Season Secchi Depth.")
 ```
 
-Since the outcome variable of the model is log transformed, the coefficients must be exponentiated to be interpreted. In Table 10 are presented the percentage increase or decrease that a 1% increase of the explanatory variables have on early season secchi depth.
+Since the outcome variable of the model is log transformed, the coefficients must be exponentiated to be interpreted. Table 10 presents the percentage increase or decrease that a 1% increase of the explanatory variables have on early season secchi depth.
 
 ```{r echo=FALSE, warning=FALSE}
 Variables.table <- read.csv("./Output/EarlySecchiCoef1.csv")
 kable(Variables.table, caption = "Transformed Model Coefficients. Early Season Secchi Depth.")
 ```
 
-In Figure 12 is shown Early Season log Secchi Depth vs. Lake IWS Ratio together with the Mixed Effects Model that we determined.
+Figure 12 shows Early Season log Secchi Depth vs. Lake IWS Ratio together with the Mixed Effects Model that we determined.
 
 ```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 7, fig.cap = "Early Season log Secchi Depth vs. Lake IWS Ratio and Mixed Effects Model"}
 early.secchi.model3.5 <- lmer(log(secchi) ~ OpenUrban.pct + 
@@ -788,7 +788,7 @@ Variables.table <- read.csv("./Output/PrimeChlaCoef.csv")
 kable(Variables.table, caption = "Model Coefficients. Prime Season Chlorophyll a.")
 ```
 
-Since the outcome variable of the model is log transformed, the coefficients must be exponentiated to be interpreted. In Table 12 are presented the percentage increase or decrease that a 1% increase of the explanatory variables have on prime season chlorophyll a.
+Since the outcome variable of the model is log transformed, the coefficients must be exponentiated to be interpreted. Table 12 presents the percentage increase or decrease that a 1% increase of the explanatory variables have on prime season chlorophyll a.
 
 \newpage
 
@@ -797,7 +797,7 @@ Variables.table <- read.csv("./Output/PrimeChlaCoef1.csv")
 kable(Variables.table, caption = "Transformed Model Coefficients. Prime Season Chlorophyll a.")
 ```
 
-In Figure 13 is shown Prime Season log Chlorophyll a vs. Lake IWS Ratio together with the Mixed Effects Model that we determined.
+Figure 13 displays Prime Season log Chlorophyll a vs. Lake IWS Ratio together with the Mixed Effects Model that we determined.
 
 ```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 7, fig.cap = "Prime Season log Chlorophyll a vs. Lake IWS Ratio and Mixed Effects Model"}
  prime.chla.model3.3 <- lmer(log(chla) ~ IntenseUrban.pct + OpenUrban.pct + 
@@ -826,14 +826,14 @@ Variables.table <- read.csv("./Output/PrimeSecchiCoef.csv")
 kable(Variables.table, caption = "Model Coefficients. Prime Season Secchi Depth.")
 ```
 
-Since the outcome variable of the model is log transformed, the coefficients must be exponentiated to be interpreted. In Table 14 are presented the percentage increase or decrease that a 1% increase of the explanatory variables have on prime season secchi depth.
+Since the outcome variable of the model is log transformed, the coefficients must be exponentiated to be interpreted. Table 14 presents the percentage increase or decrease that a 1% increase of the explanatory variables have on prime season secchi depth.
 
 ```{r echo=FALSE, warning=FALSE}
 Variables.table <- read.csv("./Output/PrimeSecchiCoef1.csv")
 kable(Variables.table, caption = "Transformed Model Coefficients. Prime Season Secchi Depth.")
 ```
 
-In Figure 14 is shown Prime Season log Secchi Depth vs. Lake IWS Ratio together with the Mixed Effects Model that we determined.
+Figure 14 shows Prime Season log Secchi Depth vs. Lake IWS Ratio together with the Mixed Effects Model that we determined.
 
 ```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 7, fig.cap = "Prime Season log Secchi Depth vs. Lake IWS Ratio and Mixed Effects Model"}
  prime.secchi.model3.2 <- lmer(log(secchi) ~ IntenseUrban.pct + OpenUrban.pct + 
@@ -860,7 +860,7 @@ Variables.table <- read.csv("./Output/LateChlaCoef.csv")
 kable(Variables.table, caption = "Model Coefficients. Late Season Chlorophyll a.")
 ```
 
-Since the outcome variable of the model is log transformed, the coefficients must be exponentiated to be interpreted. In Table 16 are presented the percentage increase or decrease that a 1% increase of the explanatory variables have on late season chlorophyll a.
+Since the outcome variable of the model is log transformed, the coefficients must be exponentiated to be interpreted. Table 16 displays the percentage increase or decrease that a 1% increase of the explanatory variables have on late season chlorophyll a.
 
 \newpage
 
@@ -869,7 +869,7 @@ Variables.table <- read.csv("./Output/LateChlaCoef1.csv")
 kable(Variables.table, caption = "Transformed Model Coefficients. Late Season Chlorophyll a.")
 ```
 
-In Figure 15 is shown Late Season log Chlorophyll a vs. Lake IWS Ratio together with the Mixed Effects Model that we determined.
+Figure 15 shows Late Season log Chlorophyll a vs. Lake IWS Ratio together with the Mixed Effects Model that we determined.
 
 
 
@@ -900,14 +900,14 @@ Variables.table <- read.csv("./Output/LateSecchiCoef.csv")
 kable(Variables.table, caption = "Model Coefficients. Late Season Secchi Depth.")
 ``` 
 
-Since the outcome variable of the model is log transformed, the coefficients must be exponentiated to be interpreted. In Table 18 are presented the percentage increase or decrease that a 1% increase of the explanatory variables have on late season secchi.
+Since the outcome variable of the model is log transformed, the coefficients must be exponentiated to be interpreted. Table 18 presents the percentage increase or decrease that a 1% increase of the explanatory variables have on late season secchi.
 
 ```{r echo=FALSE, warning=FALSE}
 Variables.table <- read.csv("./Output/LateSecchiCoef1.csv")
 kable(Variables.table, caption = "Transformed Model Coefficients. Late Season Secchi Depth.")
 ```
 
-In Figure 16 is shown Late Season log Secchi Depth vs. Lake IWS Ratio together with the Mixed Effects Model that we determined.
+Figure 16 shows Late Season log Secchi Depth vs. Lake IWS Ratio together with the Mixed Effects Model that we determined.
 
 
 ```{r echo=FALSE, warning=FALSE, fig.height = 2, fig.width = 7, fig.cap = "Late Season log Secchi Depth vs. Lake IWS Ratio and Mixed Effects Model"}
@@ -932,7 +932,7 @@ In Figure 16 is shown Late Season log Secchi Depth vs. Lake IWS Ratio together w
 
 # Summary and Conclusions
 
-The aim of this project was to examine the impacts that land use had on water quality in Minnesota and if there was a seasonal characterization of these effects. Our findings support some of our hypotheses and does not support others. Our initial assumption as reflected in hypotheses 1a, 1b, and 1c was that urbanized and agricultural land would negatively impact water quality, and forest and natural lands have positive impact on water quality. We also predicted in hypothesis 2 that we would see seasonal variation in our results. Our results are less clear cut than our hypotheses predicted they would be.
+The aim of this project was to examine the impacts that land use has on water quality in Minnesota and if there was a seasonal characterization of these effects. Our findings support some of our hypotheses and do not support others. Our initial assumption as reflected in hypotheses 1a, 1b, and 1c was that urbanized and agricultural land would negatively impact water quality, and forest and natural lands have positive impact on water quality. We also predicted in hypothesis 2 that we would see seasonal variation in our results. Our results are less clear cut than our hypotheses predicted they would be.
 
 Our second hypothesis is largely supported by our statistical tests. We found a difference between seasons in our dataset. Observe in Table 7 that no two seasons for the two variables we looked at found the exact same variance coefficient. In many cases, the difference in coefficients was quite large, while in other cases the difference was close to negligible and potentially the result of unaccounted for variation or statistical noise. Observe our findings for Forest land cover. Prime and late season have similar results for both chlorophyll a and secchi depth, but these two values are quite different than the value for early season. In many cases, we found different significant land uses for the same dependent variable for different seasons. For example, we found that Intense Urban only has statistically significant coefficients for the prime and late seasons. We also found that prime has highest number of significant variables.
 

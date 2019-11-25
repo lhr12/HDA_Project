@@ -138,7 +138,7 @@ properly manages its agricultural runoff (Minnesota Pollution Control
 Agency, 2019). Our project hopes to make management recommendations for
 Minnesota based off our findings.
 
-In order to evaluate the relationship between land use wand lacustrine
+In order to evaluate the relationship between land use and lacustrine
 water quality in the state of Minnesota, we asked the following two
 questions to help guide our research:
 
@@ -249,7 +249,7 @@ natural ecosystem variation in different parts of the state in our
 statistical models with sufficient water quality data per ecoregion,
 conditions that could not be met with higher resolution ecoregions.
 
-In Table 1 is presented a summary of the data structure that we used.
+Table 1 presents a summary of the data structure that is used.
 
 \begin{longtable}[]{@{}lllll@{}}
 \caption{Data structure, including variables, descriptions, units,
@@ -306,11 +306,11 @@ dataframe to test our research questions and hypotheses.
 \hypertarget{data-compilation}{%
 \subsection{Data Compilation}\label{data-compilation}}
 
-Our first step was to load the LAGOSNE data columns we though we would
+Our first step was to load the LAGOSNE data columns we thought we would
 need and to look at how much data each state in our study contained. We
 decided on Minnesota because of its high number of lakes in the LAGOSNE
 dataset, and its high land use variation. We observed that the latest
-land use classification by USGS was from 2011; the second oldest was
+land use classification by USGS was from 2011; the next most recent was
 from 2006. Therefore, we limited our study to the period from 2009
 through 2014 inclusive, so we did not extrapolate too much from our 2011
 land use dataset.
@@ -319,7 +319,7 @@ land use dataset.
 \subsubsection{Visualize Temporal Distribution \& Abundance of
 Data}\label{visualize-temporal-distribution-abundance-of-data}}
 
-We filtered out just the variables we wanted for our study and created a
+We filtered out the variables we wanted for our study and created a
 ``LAGOS.MN.processed'' dataframe. We decided to use chlorophyll a and
 secchi depth as proxies of water quality after we visualized our data
 and confirmed that we had enough data on these two variables in
@@ -333,7 +333,7 @@ data availability for chlorophyll a.
 \begin{figure}
 \centering
 \includegraphics{Bollt_Greif_Raby_Roth_Project_Final_files/figure-latex/Visualize_data-1.pdf}
-\caption{Secchi Depth a vs.~Time.This plot provides a sense of how
+\caption{Secchi Depth a vs.~Time. This plot provides a sense of how
 secchi depth measurements are distributed between and within years, as
 well as the general range of secchi depth measurements. Sampling occurs
 during the middle portion of each year, and ceases during the winter
@@ -392,18 +392,18 @@ Year & Count\tabularnewline
 \subsection{Explore Trends in Variables by Land Use \&
 Season}\label{explore-trends-in-variables-by-land-use-season}}
 
-We decided what land uses we cared about, based on our background
-readings and prior knowledge of water quality and land use, grouped some
-land uses together, and assigned them names in our dataframe.
-Considering the National Land Cover Database 2011 (NLCD2011) included in
-LAGOS-NE, we defined IntenseUrban as the sum of 23-Developed, Medium
-Intensity and 24-Developed High Intensity; OpenUrban as 21-Developed,
-Open Space; Barren as 31-Barren Land (Rock/Sand/Clay); Forest as the sum
-of 41-Deciduous Forest, 42-Evergreen Forest, and 43-Mixed Forest;
-GrassShrub as the sum of 52-Dwarf Scrub and 71-Grassland/Herbaceous;
-Wetland as the sum of 90-Woody Wetlands and 95-Emergent Herbaceous
-Wetlands; Pasture as 81-Pasture/Hay; and finally RowCrop as
-82-Cultivated Crops.
+We decided which land uses we were interested in, based on our
+background readings and prior knowledge of water quality and land use,
+grouped the land uses together, and assigned them names in our
+dataframe. Considering the National Land Cover Database 2011 (NLCD2011)
+included in LAGOS-NE, we defined IntenseUrban as the sum of
+23-Developed, Medium Intensity and 24-Developed, High Intensity;
+OpenUrban as 21-Developed, Open Space; Barren as 31-Barren Land
+(Rock/Sand/Clay); Forest as the sum of 41-Deciduous Forest, 42-Evergreen
+Forest, and 43-Mixed Forest; GrassShrub as the sum of 52-Dwarf Scrub and
+71-Grassland/Herbaceous; Wetland as the sum of 90-Woody Wetlands and
+95-Emergent Herbaceous Wetlands; Pasture as 81-Pasture/Hay; and finally
+RowCrop as 82-Cultivated Crops.
 
 We also created a lake - interlake watersheds (IWS) ratio column, which
 is the lake area divided by the lake's watershed area. We reasoned a big
@@ -413,8 +413,8 @@ our analysis.
 
 Our next step was to create a growing ``seasons'' column in order to
 account for seasonality in our statistical models. We divided up the
-calendar year into three bins: Early (May 15 and Before), Prime (May 16
-- September 30), and Late (October 1 and later). These season
+calendar year into three bins: Early (January 1 - May 15), Prime (May 16
+- September 30), and Late (October 1 - December 31). These season
 designations are somewhat arbitrary, but are based off of our prior
 knowledge of when the prime biological growing season is in Minnesota.
 We created a dataframe for each of the three seasons.
@@ -491,7 +491,7 @@ Because of the presence of some relationships in Figures 6 and 7, we
 determined that we had, in fact selected useful land use classifications
 and useful seasonal demarcations. We performed a summary function, and
 gave all of our columns useful names and removed NAs. Our statistical
-tests would not all run if our dataset contained NAs.The next step we
+tests would not all run if our dataset contained NAs. The next step we
 performed was to convert our dataframes to sf dataframes so we could add
 Level II ecoregion column.
 
@@ -671,9 +671,9 @@ Ratio & -0.30862\tabularnewline
 \end{longtable}
 
 Since the outcome variable of the model is log transformed, the
-coefficients must be exponentiated to be interpreted correctly. In Table
-8 are presented the percentage increase or decrease that a 1\% increase
-of the explanatory variables have on early season chlorophyll a.
+coefficients must be exponentiated to be interpreted correctly. Table 8
+presents the percentage increase or decrease that a 1\% increase of the
+explanatory variables have on early season chlorophyll a.
 
 \begin{longtable}[]{@{}ll@{}}
 \caption{Transformed Model Coefficients. Early Season Chlorophyll
@@ -694,7 +694,7 @@ LakeIWS.Ratio & -50.90\%\tabularnewline
 \bottomrule
 \end{longtable}
 
-In Figure 11 is shown Early Season log Chlorophyll a vs.~Lake IWS Ratio
+Figure 11 shows Early Season log Chlorophyll a vs.~Lake IWS Ratio
 together with the Mixed Effects Model that we determined.
 
 \begin{figure}
@@ -736,8 +736,8 @@ LakeIWS.Ratio & 0.21442\tabularnewline
 \end{longtable}
 
 Since the outcome variable of the model is log transformed, the
-coefficients must be exponentiated to be interpreted. In Table 10 are
-presented the percentage increase or decrease that a 1\% increase of the
+coefficients must be exponentiated to be interpreted. Table 10 presents
+the percentage increase or decrease that a 1\% increase of the
 explanatory variables have on early season secchi depth.
 
 \begin{longtable}[]{@{}ll@{}}
@@ -759,7 +759,7 @@ LakeIWS.Ratio & 63.80\%\tabularnewline
 \bottomrule
 \end{longtable}
 
-In Figure 12 is shown Early Season log Secchi Depth vs.~Lake IWS Ratio
+Figure 12 shows Early Season log Secchi Depth vs.~Lake IWS Ratio
 together with the Mixed Effects Model that we determined.
 
 \begin{figure}
@@ -805,8 +805,8 @@ LakeIWS.Ratio & -0.41743\tabularnewline
 \end{longtable}
 
 Since the outcome variable of the model is log transformed, the
-coefficients must be exponentiated to be interpreted. In Table 12 are
-presented the percentage increase or decrease that a 1\% increase of the
+coefficients must be exponentiated to be interpreted. Table 12 presents
+the percentage increase or decrease that a 1\% increase of the
 explanatory variables have on prime season chlorophyll a.
 
 \newpage
@@ -832,7 +832,7 @@ LakeIWS.Ratio & -61.80\%\tabularnewline
 \bottomrule
 \end{longtable}
 
-In Figure 13 is shown Prime Season log Chlorophyll a vs.~Lake IWS Ratio
+Figure 13 displays Prime Season log Chlorophyll a vs.~Lake IWS Ratio
 together with the Mixed Effects Model that we determined.
 
 \begin{figure}
@@ -881,8 +881,8 @@ LakeIWS.Ratio & 0.39432\tabularnewline
 \end{longtable}
 
 Since the outcome variable of the model is log transformed, the
-coefficients must be exponentiated to be interpreted. In Table 14 are
-presented the percentage increase or decrease that a 1\% increase of the
+coefficients must be exponentiated to be interpreted. Table 14 presents
+the percentage increase or decrease that a 1\% increase of the
 explanatory variables have on prime season secchi depth.
 
 \begin{longtable}[]{@{}ll@{}}
@@ -907,7 +907,7 @@ LakeIWS.Ratio & 147.90\%\tabularnewline
 \bottomrule
 \end{longtable}
 
-In Figure 14 is shown Prime Season log Secchi Depth vs.~Lake IWS Ratio
+Figure 14 shows Prime Season log Secchi Depth vs.~Lake IWS Ratio
 together with the Mixed Effects Model that we determined.
 
 \begin{figure}
@@ -951,8 +951,8 @@ LakeIWS.Ratio & -0.26335\tabularnewline
 \end{longtable}
 
 Since the outcome variable of the model is log transformed, the
-coefficients must be exponentiated to be interpreted. In Table 16 are
-presented the percentage increase or decrease that a 1\% increase of the
+coefficients must be exponentiated to be interpreted. Table 16 displays
+the percentage increase or decrease that a 1\% increase of the
 explanatory variables have on late season chlorophyll a.
 
 \newpage
@@ -977,7 +977,7 @@ LakeIWS.Ratio & -45.50\%\tabularnewline
 \bottomrule
 \end{longtable}
 
-In Figure 15 is shown Late Season log Chlorophyll a vs.~Lake IWS Ratio
+Figure 15 shows Late Season log Chlorophyll a vs.~Lake IWS Ratio
 together with the Mixed Effects Model that we determined.
 
 \begin{figure}
@@ -1021,8 +1021,8 @@ LakeIWS.Ratio & 0.24670\tabularnewline
 \end{longtable}
 
 Since the outcome variable of the model is log transformed, the
-coefficients must be exponentiated to be interpreted. In Table 18 are
-presented the percentage increase or decrease that a 1\% increase of the
+coefficients must be exponentiated to be interpreted. Table 18 presents
+the percentage increase or decrease that a 1\% increase of the
 explanatory variables have on late season secchi.
 
 \begin{longtable}[]{@{}ll@{}}
@@ -1044,8 +1044,8 @@ LakeIWS.Ratio & 76.50\%\tabularnewline
 \bottomrule
 \end{longtable}
 
-In Figure 16 is shown Late Season log Secchi Depth vs.~Lake IWS Ratio
-together with the Mixed Effects Model that we determined.
+Figure 16 shows Late Season log Secchi Depth vs.~Lake IWS Ratio together
+with the Mixed Effects Model that we determined.
 
 \begin{figure}
 \centering
@@ -1059,11 +1059,11 @@ Effects Model}
 \hypertarget{summary-and-conclusions}{%
 \section{Summary and Conclusions}\label{summary-and-conclusions}}
 
-The aim of this project was to examine the impacts that land use had on
+The aim of this project was to examine the impacts that land use has on
 water quality in Minnesota and if there was a seasonal characterization
-of these effects. Our findings support some of our hypotheses and does
-not support others. Our initial assumption as reflected in hypotheses
-1a, 1b, and 1c was that urbanized and agricultural land would negatively
+of these effects. Our findings support some of our hypotheses and do not
+support others. Our initial assumption as reflected in hypotheses 1a,
+1b, and 1c was that urbanized and agricultural land would negatively
 impact water quality, and forest and natural lands have positive impact
 on water quality. We also predicted in hypothesis 2 that we would see
 seasonal variation in our results. Our results are less clear cut than
@@ -1099,7 +1099,7 @@ Row crop showed increasing chlorophyll a in the early season, decreasing
 in prime, and was not significant in late. If hypothesis 1b, which dealt
 with agricultural land use, was to be true, we would have predicted to
 see increasing chlorophyll a for all three seasons. It is worth noting
-that the China study by Huang et al.~(2013) found a similarly complex
+that the China study by Huang et al. (2013) found a similarly complex
 result from agricultural land use. We found several other noteworthy
 similarities and differences between our hypotheses 1a, 1b, and 1c:
 
@@ -1166,19 +1166,19 @@ decisions have on downstream water quality.
 \hypertarget{references}{%
 \section{References}\label{references}}
 
-Christensen, Victoria G., et al.~``Relations between Retired
+ Christensen, Victoria G., et al. ``Relations between Retired
 Agricultural Land, Water Quality, and Aquatic-Community Health,
 Minnesota River Basin.'' Journal of Environmental Quality, vol.~41, no.
 5, 2012, pp.~1459-72. ProQuest,
 \url{https://login.proxy.lib.duke.edu/login?url=https://search.proquest.com/docview/1}
 95114913?accountid=10598.
 
-Huang, J., et al.~``Evaluation of the Impacts of Land Use on Water
+Huang, J., et al. ``Evaluation of the Impacts of Land Use on Water
 Quality: A Case Study in The Chaohu Lake Basin,'' The Scientific World
 Journal, vol.~2013, Article ID 329187, 7 pages, 2013.
 \url{https://doi.org/10.1155/2013/329187}.
 
-Maalim, Fukhrudin K., et al.~``Modeling the impact of land use changes
+Maalim, Fukhrudin K., et al. ``Modeling the impact of land use changes
 on runoff and sediment yield in the Le Sueur watershed, Minnesota using
 GeoWEPP.'' CATENA Volume 107, 2013, Pages 35-45,
 \url{https://doi.org/10.1016/j.catena.2013.03.004}.
